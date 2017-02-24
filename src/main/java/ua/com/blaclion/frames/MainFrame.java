@@ -1,6 +1,5 @@
 package ua.com.blaclion.frames;
 
-import ua.com.blaclion.classes.Ocean;
 import ua.com.blaclion.panels.InfoPanel;
 import ua.com.blaclion.panels.OceanPanel;
 
@@ -12,12 +11,10 @@ public class MainFrame extends JFrame {
     private final int HEIGHT = 400;
     private InfoPanel infoPanel;
     private OceanPanel oceanPanel;
-    private Ocean ocean;
 
     public MainFrame() {
         infoPanel = new InfoPanel();
-        oceanPanel = new OceanPanel();
-        oceanPanel.setFrame(this);
+        oceanPanel = new OceanPanel(this);
 
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,6 +22,10 @@ public class MainFrame extends JFrame {
         setTitle("Ocean");
         add(oceanPanel.$$$getRootComponent$$$(), BorderLayout.CENTER);
         add(infoPanel.$$$getRootComponent$$$(), BorderLayout.EAST);
+    }
+
+    public InfoPanel getInfoPanel() {
+        return infoPanel;
     }
 
     public static void main(String[] args) {

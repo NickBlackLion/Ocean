@@ -1,19 +1,36 @@
 package ua.com.blaclion.classes;
 
-import javax.swing.*;
-import java.awt.*;
+import org.apache.log4j.Logger;
 
-public class DrawFish extends JComponent {
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+
+public class DrawFish {
     private Fish fish;
+    private Ellipse2D fishShape;
+    private Logger logger = Logger.getLogger(this.getClass());
 
     public DrawFish(Fish fish) {
+        logger.info("Create DrawFish");
         this.fish = fish;
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
+    public Ellipse2D getFishShape() {
 
-        super.paintComponent(g2);
+        fishShape = new Ellipse2D.Double(fish.getxPoint(),
+                fish.getyPoint(),
+                fish.getFishWidth(),
+                fish.getFishHeight()
+        );
+
+        return fishShape;
+    }
+
+    public Color getColor() {
+        return fish.getFishColor();
+    }
+
+    public Fish getFish() {
+        return fish;
     }
 }

@@ -56,10 +56,6 @@ public class Ocean extends JComponent {
             for (DrawFish drawFish: drawFishes){
                 moveFishes.add(new MoveFish(drawFish.getFish(), this));
             }
-
-            for (MoveFish moveFish: moveFishes){
-                new Thread(moveFish).start();
-            }
         }
 
         if (!firstDraw) {
@@ -75,5 +71,9 @@ public class Ocean extends JComponent {
 
     public void setDrawFishes(java.util.List<DrawFish> drawFishes) {
         this.drawFishes = drawFishes;
+    }
+
+    public List<MoveFish> getMoveFishes() {
+        return moveFishes;
     }
 }

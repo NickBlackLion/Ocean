@@ -13,16 +13,18 @@ public class MoveFish implements Runnable {
     private JFrame frame;
     private Ocean ocean;
     private Logger logger = Logger.getLogger(this.getClass());
+    private boolean isRunning = false;
 
     public MoveFish(Fish fish, Ocean ocean) {
         this.fish = fish;
         this.frame = null;
         this.ocean = ocean;
+        isRunning = true;
     }
 
     @Override
     public void run() {
-        while(true) {
+        while(isRunning) {
             fish.swim(8, 0);
             ocean.repaint();
             logger.info("sleep");
@@ -32,5 +34,13 @@ public class MoveFish implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void kill(){
+        isRunning = false;
+    }
+
+    public void wakeUp(){
+        isRunning = true;
     }
 }

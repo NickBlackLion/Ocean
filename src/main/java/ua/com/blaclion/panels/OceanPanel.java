@@ -1,30 +1,29 @@
 package ua.com.blaclion.panels;
 
 import org.apache.log4j.Logger;
-import ua.com.blaclion.classes.DrawFish;
-import ua.com.blaclion.classes.Fish;
-import ua.com.blaclion.classes.FishFactory;
-import ua.com.blaclion.classes.Ocean;
+import ua.com.blaclion.classes.*;
 import ua.com.blaclion.frames.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 public class OceanPanel {
     private JPanel mainPanel;
     private JPanel insPanel;
     private Ocean ocean;
     private Logger logger = Logger.getLogger(this.getClass());
-    private java.util.List<DrawFish> drawFishes;
+    private List<DrawFish> drawFishes;
+    private InfoPanel infoPanel;
 
     public OceanPanel(MainFrame frame) {
         ocean = new Ocean();
         ocean.setMainFrame(frame);
-        int amounOfFishes = (int) 2; //(Math.random() * 15);
+        int amountOfFishes = (int) 2; //(Math.random() * 15);
 
         drawFishes = new ArrayList<>();
-        for (int i = 0; i < amounOfFishes; i++) {
+        for (int i = 0; i < amountOfFishes; i++) {
             drawFishes.add(new DrawFish(new FishFactory().getNewFish(Fish.class)));
         }
 
@@ -32,6 +31,14 @@ public class OceanPanel {
 
         insPanel.setLayout(new GridLayout(1, 1));
         insPanel.add(ocean);
+    }
+
+    public void setInfoPanel(InfoPanel infoPanel) {
+        this.infoPanel = infoPanel;
+    }
+
+    public Ocean getOcean() {
+        return ocean;
     }
 
     {

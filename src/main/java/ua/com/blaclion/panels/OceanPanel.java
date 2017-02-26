@@ -20,11 +20,12 @@ public class OceanPanel {
     public OceanPanel(MainFrame frame) {
         ocean = new Ocean();
         ocean.setMainFrame(frame);
-        int amountOfFishes = (int) 2; //(Math.random() * 15);
+        int amountOfFishes = (int) 4; //(Math.random() * 15);
 
         drawFishes = new ArrayList<>();
         for (int i = 0; i < amountOfFishes; i++) {
             drawFishes.add(new DrawFish(new FishFactory().getNewFish(Fish.class)));
+            drawFishes.get(i).getFish().setDrawFishes(drawFishes);
         }
 
         ocean.setDrawFishes(drawFishes);

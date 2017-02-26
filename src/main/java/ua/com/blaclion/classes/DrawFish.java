@@ -16,7 +16,6 @@ public class DrawFish {
     }
 
     public Ellipse2D getFishShape() {
-
         fishShape = new Ellipse2D.Double(fish.getxPoint(),
                 fish.getyPoint(),
                 fish.getFishWidth(),

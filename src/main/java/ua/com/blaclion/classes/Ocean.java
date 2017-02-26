@@ -39,16 +39,27 @@ public class Ocean extends JComponent {
         g2.fill(rect);
         g2.draw(rect);
 
-        logger.info(rect);
+        for (int i = 0; i < drawFishes.size(); i++){
+            Fish fish = drawFishes.get(i).getFish();
 
-        for (DrawFish drawFish: drawFishes){
             if (!firstDraw) {
-                drawFish.getFish().setxPoint((int) rect.getWidth());
-                drawFish.getFish().setyPoint((int) rect.getHeight(), (int) pointY);
+                if (i == 0) {
+                    fish.setOceanShape(rect);
+                    fish.setxPoint((int) rect.getWidth());
+                    fish.setyPoint((int) rect.getHeight(), (int) pointY);
+                } else {
+                    Fish fishPrev = drawFishes.get(i - 1).getFish();
+                    fish.setOceanShape(rect);
+                    fish.setxPoint((int) rect.getWidth());
+                    fish.setyPoint((int) rect.getHeight(), (int) pointY);
+
+                    fish = CheckFishNear.isFishNear(fishPrev, fish, (int) pointY);
+                }
             }
-            g2.setColor(drawFish.getColor());
-            g2.fill(drawFish.getFishShape());
-            g2.draw(drawFish.getFishShape());
+
+            g2.setColor(drawFishes.get(i).getColor());
+            g2.fill(drawFishes.get(i).getFishShape());
+            g2.draw(drawFishes.get(i).getFishShape());
         }
 
         if (moveFishes == null){

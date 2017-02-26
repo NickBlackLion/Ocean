@@ -18,8 +18,6 @@ public class FishFactory {
             insFish = new PredatorFish();
         }
 
-        logger.info(insFish.getClass());
-
         return insFish;
     }
 }

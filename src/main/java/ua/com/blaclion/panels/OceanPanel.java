@@ -16,16 +16,26 @@ public class OceanPanel {
     private Logger logger = Logger.getLogger(this.getClass());
     private List<DrawFish> drawFishes;
     private InfoPanel infoPanel;
+    private int startAmountOfFishes = 0;
+    private int startAmountOfPredators = 0;
+    private int amountOfBarriers = 0;
 
     public OceanPanel(MainFrame frame) {
         ocean = new Ocean();
         ocean.setMainFrame(frame);
-        int amountOfFishes = (int) 4; //(Math.random() * 15);
+        int amountOfFishes = (int) 7; //(Math.random() * 15);
 
         drawFishes = new ArrayList<>();
         for (int i = 0; i < amountOfFishes; i++) {
             drawFishes.add(new DrawFish(new FishFactory().getNewFish(Fish.class)));
             drawFishes.get(i).getFish().setDrawFishes(drawFishes);
+            if (drawFishes.get(i).getFish().getClass() == Fish.class) {
+                startAmountOfFishes++;
+            }
+
+            if (drawFishes.get(i).getFish().getClass() == PredatorFish.class) {
+                startAmountOfPredators++;
+            }
         }
 
         ocean.setDrawFishes(drawFishes);
@@ -40,6 +50,18 @@ public class OceanPanel {
 
     public Ocean getOcean() {
         return ocean;
+    }
+
+    public Integer getStartAmountOfFishes() {
+        return startAmountOfFishes;
+    }
+
+    public Integer getStartAmountOfPredators() {
+        return startAmountOfPredators;
+    }
+
+    public Integer getAmountOfBarriers() {
+        return amountOfBarriers;
     }
 
     {

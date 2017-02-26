@@ -44,14 +44,10 @@ public class Ocean extends JComponent {
 
             if (!firstDraw) {
                 if (i == 0) {
-                    fish.setOceanShape(rect);
-                    fish.setxPoint((int) rect.getWidth());
-                    fish.setyPoint((int) rect.getHeight(), (int) pointY);
+                    fish = setFishsStartPoint(fish, rect, pointY);
                 } else {
                     Fish fishPrev = drawFishes.get(i - 1).getFish();
-                    fish.setOceanShape(rect);
-                    fish.setxPoint((int) rect.getWidth());
-                    fish.setyPoint((int) rect.getHeight(), (int) pointY);
+                    fish = setFishsStartPoint(fish, rect, pointY);
 
                     fish = CheckFishNear.isFishNear(fishPrev, fish, (int) pointY);
                 }
@@ -60,6 +56,9 @@ public class Ocean extends JComponent {
             g2.setColor(drawFishes.get(i).getColor());
             g2.fill(drawFishes.get(i).getFishShape());
             g2.draw(drawFishes.get(i).getFishShape());
+            g2.drawString(Integer.toString(i+1),
+                    (float) drawFishes.get(i).getFish().getxPoint(),
+                    (float) drawFishes.get(i).getFish().getyPoint());
         }
 
         if (moveFishes == null){
@@ -86,5 +85,12 @@ public class Ocean extends JComponent {
 
     public List<MoveFish> getMoveFishes() {
         return moveFishes;
+    }
+
+    private Fish setFishsStartPoint(Fish fish, Rectangle2D rect, double pointY) {
+        fish.setOceanShape(rect);
+        fish.setxPoint((int) rect.getWidth());
+        fish.setyPoint((int) rect.getHeight(), (int) pointY);
+        return fish;
     }
 }

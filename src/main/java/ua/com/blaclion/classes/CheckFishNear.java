@@ -1,6 +1,10 @@
 package ua.com.blaclion.classes;
 
+import org.apache.log4j.Logger;
+
 public class CheckFishNear {
+    private static Logger logger = Logger.getLogger(CheckFishNear.class);
+
     public static Fish isFishNear(Fish prevFish, Fish currentFish, int deltaY) {
         //Define x point of the new currentFish in relation to previous currentFish
         if (prevFish.getxPoint() <= currentFish.getxPoint()
@@ -28,22 +32,38 @@ public class CheckFishNear {
     }
 
     public static boolean isCanMove(Fish prevFish, Fish currentFish, int xMove, int yMove) {
-        int InsXMove = currentFish.getxPoint() + xMove;
-        int InsYMove = currentFish.getyPoint() + yMove;
+        int InsXMoveCur = currentFish.getxPoint() + xMove;
+        int InsYMoveCur = currentFish.getyPoint() + yMove;
 
-        //Define x point of the new currentFish in relation to previous currentFish
-        if (prevFish.getxPoint() <= InsXMove
-                && InsXMove <= (prevFish.getxPoint() + prevFish.getFishWidth())
-                && prevFish.getyPoint() <= InsYMove
-                && InsYMove <= (prevFish.getyPoint() + prevFish.getFishHeight())) {
+        if (InsXMoveCur >= prevFish.getxPoint()
+                && InsXMoveCur <= prevFish.getxPoint() + prevFish.getFishWidth()*2
+                && InsYMoveCur >= prevFish.getyPoint()
+                && InsYMoveCur <= prevFish.getyPoint() + prevFish.getFishHeight()*2) {
+            logger.info("First prevFish " + prevFish.getExemplar() + " currentFish " + currentFish.getExemplar());
             return false;
         }
 
-        //Define y point of the new currentFish in relation to previous currentFish
-        if (prevFish.getxPoint() <= (InsXMove + currentFish.getFishWidth())
-                && (InsXMove + currentFish.getFishWidth()) <= (prevFish.getxPoint() + prevFish.getFishWidth())
-                && prevFish.getyPoint() <= (InsYMove + currentFish.getFishHeight())
-                && (InsYMove + currentFish.getFishHeight()) <= (prevFish.getxPoint() + prevFish.getFishHeight())) {
+        if(InsXMoveCur + currentFish.getFishWidth()*2 >= prevFish.getxPoint()
+                && InsXMoveCur + currentFish.getFishWidth()*2 <= prevFish.getxPoint() + prevFish.getFishWidth()*2
+                && InsYMoveCur >= prevFish.getyPoint()
+                && InsYMoveCur <= prevFish.getyPoint() + prevFish.getFishHeight()*2){
+            logger.info("Second prevFish " + prevFish.getExemplar() + " currentFish " + currentFish.getExemplar());
+            return false;
+        }
+
+        if(InsXMoveCur >= prevFish.getxPoint()
+                && InsXMoveCur <= prevFish.getxPoint() + prevFish.getFishWidth()*2
+                && InsYMoveCur >= prevFish.getyPoint()
+                && InsYMoveCur <= prevFish.getyPoint() + prevFish.getFishHeight()*2){
+            logger.info("Third prevFish " + prevFish.getExemplar() + " currentFish " + currentFish.getExemplar());
+            return false;
+        }
+
+        if(InsXMoveCur >= prevFish.getxPoint()
+                && InsXMoveCur <= prevFish.getxPoint() + prevFish.getFishWidth()
+                && InsYMoveCur + currentFish.getFishHeight() >= prevFish.getyPoint()
+                && InsYMoveCur <= prevFish.getyPoint() + prevFish.getFishHeight()){
+            logger.info("Fourth prevFish " + prevFish.getExemplar() + " currentFish " + currentFish.getExemplar());
             return false;
         }
 

@@ -2,12 +2,6 @@ package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
 
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
-/**
- * Created by nick on 24.02.17.
- */
 public class MoveFish implements Runnable {
     private Fish fish;
     private Ocean ocean;
@@ -22,16 +16,7 @@ public class MoveFish implements Runnable {
 
     @Override
     public void run() {
-        /*Random random = new Random(System.currentTimeMillis());
-        int seconds = random.nextInt(5);*/
-
         while(isRunning) {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             fish.swim();
             ocean.repaint();
         }

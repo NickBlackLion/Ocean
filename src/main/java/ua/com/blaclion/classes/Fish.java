@@ -7,6 +7,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Fish {
     private int fishWidth;
@@ -19,11 +20,15 @@ public class Fish {
     private Color fishColor;
     private Rectangle2D oceanShape;
     private java.util.List<DrawFish> drawFishes;
-    private static int counter = 0;
+    private static int counter = 1;
     private int exemplar;
-    private Timer timer = new Timer();
+    private Timer timer;
+    private boolean deathTimerStart = false;
+    private DrawFish thisFish;
 
     public Fish() {
+        timer = new Timer();
+
         xStartPoint = new Random(System.currentTimeMillis()*2);
         yStartPoint = new Random(System.currentTimeMillis()*5);
 
@@ -40,30 +45,51 @@ public class Fish {
         exemplar = counter++;
 
         logger.info("counter = " + counter);
-
-        //deathTimer();
     }
 
     public void swim(){
-        int xDirection = (int)(Math.random()*20 - 5);
-        int yDirection = (int)(Math.random()*20 - 5);
+        int xDirection = (int)(Math.random()*20 - 10);
+        int yDirection = (int)(Math.random()*20 - 10);
+
+        if(!deathTimerStart){
+            deathTimer();
+            deathTimerStart = true;
+        }
 
         for (DrawFish drawFish: drawFishes){
-            if(!drawFish.getFish().equals(this)){
-                if (CheckFishNear.isCanMove(drawFish.getFish(), this, xDirection, yDirection)){
-                    if (oceanShape.getMaxX() <= xPoint + xDirection + this.getFishWidth()) {
-                        xPoint -= xDirection;
-                    } else {
-                        xPoint += xDirection;
-                    }
-
-                    if (oceanShape.getMaxY() <= yPoint + yDirection + this.getFishHeight()) {
-                        yPoint -= yDirection;
-                    } else {
-                        yPoint += yDirection;
-                    }
+            if (!drawFish.getFish().equals(this)){
+                if (!CheckFishNear.isCanMove(drawFish.getFish(), this, xDirection, yDirection)){
+                    xDirection = 0;
+                    yDirection = 0;
+                    logger.info("In current position");
                 }
+            } else {
+                thisFish = drawFish;
             }
+        }
+
+        if (oceanShape.getMaxX() <= xPoint + xDirection + this.getFishWidth()
+                    || oceanShape.getMaxX() - oceanShape.getWidth() >= xPoint + xDirection) {
+            xPoint -= xDirection;
+        } else {
+            xPoint += xDirection;
+        }
+
+        if (oceanShape.getMaxY() <= yPoint + yDirection + this.getFishHeight()
+                    || oceanShape.getMaxY() - oceanShape.getHeight() >= yPoint + yDirection) {
+            yPoint -= yDirection;
+            logger.info("yPoint -= yDirection; " + yPoint
+                    + " oceanShape.getMaxY() " + oceanShape.getMaxY()
+                    + " oceanShape.getHeight() " + oceanShape.getHeight()
+                    + " exemplar " + this.getExemplar());
+        } else {
+            yPoint += yDirection;
+        }
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -167,19 +193,22 @@ public class Fish {
     }
 
     private void deathTimer(){
-        timer.schedule(new UnitTask(), (int) (Math.random()*50000), 100);
+        Random random = new Random(System.currentTimeMillis());
+        timer.schedule(new UnitTask(), random.nextInt(500000), 100);
     }
 
     private void killFish(){
         fishWidth = 0;
         fishHeight = 0;
         timer.cancel();
+        logger.info("Exemplar " + this.getExemplar() + " is dead");
     }
 
     private class UnitTask extends TimerTask{
         @Override
         public void run() {
             killFish();
+            drawFishes.remove(thisFish);
         }
     }
 }

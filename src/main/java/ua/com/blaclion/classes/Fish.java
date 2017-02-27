@@ -3,11 +3,11 @@ package ua.com.blaclion.classes;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class Fish {
     private int fishWidth;
@@ -25,6 +25,7 @@ public class Fish {
     private Timer timer;
     private boolean deathTimerStart = false;
     private DrawFish thisFish;
+    private PointsCommonContainer pointContainer;
 
     public Fish() {
         timer = new Timer();
@@ -52,20 +53,22 @@ public class Fish {
         int yDirection = (int)(Math.random()*20 - 10);
 
         if(!deathTimerStart){
-            deathTimer();
+            //deathTimer();
             deathTimerStart = true;
+            for (DrawFish drawFish: drawFishes) {
+                if (drawFish.getFish().equals(this)) {
+                    thisFish = drawFish;
+                }
+            }
         }
 
-        for (DrawFish drawFish: drawFishes){
-            if (!drawFish.getFish().equals(this)){
-                if (!CheckFishNear.isCanMove(drawFish.getFish(), this, xDirection, yDirection)){
-                    xDirection = 0;
-                    yDirection = 0;
-                    logger.info("In current position");
-                }
-            } else {
-                thisFish = drawFish;
-            }
+        Point2D fishNextPoint = new Point2D.Double(this.getxPoint() + xDirection, this.getyPoint() + yDirection);
+        Point2D fishCurrentPoint = new Point2D.Double(this.getxPoint(), this.getyPoint());
+
+        if (pointContainer.isEqualsPoint(fishNextPoint, fishCurrentPoint, this)){
+            xDirection = 0;
+            yDirection = 0;
+            logger.info("It's existed fish near exemplar " + this.getExemplar());
         }
 
         if (oceanShape.getMaxX() <= xPoint + xDirection + this.getFishWidth()
@@ -86,8 +89,11 @@ public class Fish {
             yPoint += yDirection;
         }
 
+        Point2D currentFishPoint = new Point2D.Double(xPoint, yPoint);
+        pointContainer.setPoint(this.getExemplar(), currentFishPoint);
+
         try {
-            TimeUnit.MILLISECONDS.sleep(5000);
+            TimeUnit.MILLISECONDS.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -190,6 +196,10 @@ public class Fish {
 
     public int getExemplar() {
         return exemplar;
+    }
+
+    public void setPointContainer(PointsCommonContainer pointContainer) {
+        this.pointContainer = pointContainer;
     }
 
     private void deathTimer(){

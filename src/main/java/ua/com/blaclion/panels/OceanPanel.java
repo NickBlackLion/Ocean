@@ -19,16 +19,20 @@ public class OceanPanel {
     private int startAmountOfFishes = 0;
     private int startAmountOfPredators = 0;
     private int amountOfBarriers = 0;
+    private PointsCommonContainer pointsContainer;
 
     public OceanPanel(MainFrame frame) {
         ocean = new Ocean();
         ocean.setMainFrame(frame);
-        int amountOfFishes = (int) 7; //(Math.random() * 15);
+        int amountOfFishes = (int) 15; //(Math.random() * 15);
+        pointsContainer = new PointsCommonContainer();
+        ocean.setPointContainer(pointsContainer);
 
         drawFishes = new ArrayList<>();
         for (int i = 0; i < amountOfFishes; i++) {
             drawFishes.add(new DrawFish(new FishFactory().getNewFish(Fish.class)));
             drawFishes.get(i).getFish().setDrawFishes(drawFishes);
+            drawFishes.get(i).getFish().setPointContainer(pointsContainer);
             if (drawFishes.get(i).getFish().getClass() == Fish.class) {
                 startAmountOfFishes++;
             }

@@ -5,6 +5,7 @@ import ua.com.blaclion.frames.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Ocean extends JComponent {
     private List<DrawFish> drawFishes;
     private List<MoveFish> moveFishes;
     private boolean firstDraw = false;
+    private PointsCommonContainer pointContainer;
 
     public Ocean() {
         drawFishes = new ArrayList<>();
@@ -45,18 +47,27 @@ public class Ocean extends JComponent {
             if (!firstDraw) {
                 if (i == 0) {
                     fish = setFishsStartPoint(fish, rect, pointY);
+                    setPointToContainer(fish);
                 } else {
-                    Fish fishPrev = drawFishes.get(i - 1).getFish();
                     fish = setFishsStartPoint(fish, rect, pointY);
 
-                    fish = CheckFishNear.isFishNear(fishPrev, fish, (int) pointY);
+                    for (DrawFish drawFish : drawFishes) {
+                        if (!drawFish.getFish().equals(fish)) {
+                            if (CheckFishNear.isFishNear(fish, drawFish.getFish())) {
+                                fish.setxPoint(fish.getxPoint() + fish.getFishWidth() * 2);
+                                logger.info("fish is " + fish);
+                            }
+                        }
+                    }
+
+                    setPointToContainer(fish);
                 }
             }
 
             g2.setColor(drawFishes.get(i).getColor());
             g2.fill(drawFishes.get(i).getFishShape());
             g2.draw(drawFishes.get(i).getFishShape());
-            g2.drawString(Integer.toString(i+1),
+            g2.drawString(Integer.toString(drawFishes.get(i).getFish().getExemplar()),
                     (float) drawFishes.get(i).getFish().getxPoint(),
                     (float) drawFishes.get(i).getFish().getyPoint());
         }
@@ -87,10 +98,19 @@ public class Ocean extends JComponent {
         return moveFishes;
     }
 
+    public void setPointContainer(PointsCommonContainer pointContainer) {
+        this.pointContainer = pointContainer;
+    }
+
     private Fish setFishsStartPoint(Fish fish, Rectangle2D rect, double pointY) {
         fish.setOceanShape(rect);
         fish.setxPoint((int) rect.getWidth());
         fish.setyPoint((int) rect.getHeight(), (int) pointY);
         return fish;
+    }
+
+    private void setPointToContainer(Fish fish) {
+        Point2D fishPoint = new Point2D.Double(fish.getxPoint(), fish.getyPoint());
+        pointContainer.setPoint(fish.getExemplar(), fishPoint);
     }
 }

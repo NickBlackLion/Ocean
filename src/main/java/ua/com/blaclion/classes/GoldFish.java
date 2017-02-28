@@ -1,6 +1,7 @@
 package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
+import ua.com.blaclion.interfaces.Fish;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -9,9 +10,9 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Fish {
-    private int fishWidth;
-    private int fishHeight;
+public class GoldFish implements Fish {
+    private int width;
+    private int height;
     private int xPoint;
     private int yPoint;
     private Random xStartPoint;
@@ -27,7 +28,7 @@ public class Fish {
     private DrawFish thisFish;
     private PointsCommonContainer pointContainer;
 
-    public Fish() {
+    public GoldFish() {
         timer = new Timer();
 
         xStartPoint = new Random(System.currentTimeMillis()*2);
@@ -36,8 +37,8 @@ public class Fish {
         xPoint = 0;
         yPoint = 0;
 
-        fishWidth = 20;
-        fishHeight = 10;
+        width = 20;
+        height = 10;
 
         fishColor = new Color(255,215,0);
 
@@ -48,6 +49,7 @@ public class Fish {
         logger.info("counter = " + counter);
     }
 
+    @Override
     public void swim(){
         int xDirection = (int)(Math.random()*20 - 10);
         int yDirection = (int)(Math.random()*20 - 10);
@@ -62,23 +64,25 @@ public class Fish {
             }
         }
 
-        Point2D fishNextPoint = new Point2D.Double(this.getxPoint() + xDirection, this.getyPoint() + yDirection);
-        Point2D fishCurrentPoint = new Point2D.Double(this.getxPoint(), this.getyPoint());
+        Point2D fishNextPoint = new Point2D.Double(this.getXPoint() + xDirection, this.getYPoint() + yDirection);
+        Point2D fishCurrentPoint = new Point2D.Double(this.getXPoint(), this.getYPoint());
 
-        if (pointContainer.isEqualsPoint(fishNextPoint, fishCurrentPoint, this)){
+        if (pointContainer.isEqualsPoint(fishNextPoint, fishCurrentPoint, this.getWidth(), this.getHeight())){
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + this.getExemplar());
+
+            holdNextStep();
         }
 
-        if (oceanShape.getMaxX() <= xPoint + xDirection + this.getFishWidth()
+        if (oceanShape.getMaxX() <= xPoint + xDirection + this.getWidth()
                     || oceanShape.getMaxX() - oceanShape.getWidth() >= xPoint + xDirection) {
             xPoint -= xDirection;
         } else {
             xPoint += xDirection;
         }
 
-        if (oceanShape.getMaxY() <= yPoint + yDirection + this.getFishHeight()
+        if (oceanShape.getMaxY() <= yPoint + yDirection + this.getHeight()
                     || oceanShape.getMaxY() - oceanShape.getHeight() >= yPoint + yDirection) {
             yPoint -= yDirection;
             logger.info("yPoint -= yDirection; " + yPoint
@@ -92,35 +96,36 @@ public class Fish {
         Point2D currentFishPoint = new Point2D.Double(xPoint, yPoint);
         pointContainer.setPoint(this.getExemplar(), currentFishPoint);
 
-        try {
-            TimeUnit.MILLISECONDS.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        holdNextStep();
     }
 
-    public Fish makeNewFish(){
-        return new Fish();
+    @Override
+    public void makeNewFish(){
+        return;
     }
 
-    public int getFishWidth() {
-        return fishWidth;
+    @Override
+    public int getWidth() {
+        return width;
     }
 
-    public int getFishHeight() {
-        return fishHeight;
+    @Override
+    public int getHeight() {
+        return height;
     }
 
-    public int getxPoint() {
+    @Override
+    public int getXPoint() {
         return xPoint;
     }
 
-    public void setxPoint(int xPoint) {
+    @Override
+    public void setXPoint(int xPoint) {
         if (this.xPoint == 0) {
             int transitXPoint = xStartPoint.nextInt(xPoint);
 
-            if (oceanShape.getMaxX() <= transitXPoint + this.getFishWidth()) {
-                this.xPoint = transitXPoint - this.getFishWidth();
+            if (oceanShape.getMaxX() <= transitXPoint + this.getWidth()) {
+                this.xPoint = transitXPoint - this.getWidth();
             } else {
                 this.xPoint = transitXPoint;
             }
@@ -131,15 +136,17 @@ public class Fish {
         logger.info("xPoint = " + this.xPoint);
     }
 
-    public int getyPoint() {
+    @Override
+    public int getYPoint() {
         return yPoint;
     }
 
-    public void setyPoint(int yPoint, int delta) {
+    @Override
+    public void setYPoint(int yPoint, int delta) {
         if (this.yPoint == 0) {
             int transitYPoint = yStartPoint.nextInt(yPoint) + delta;
-            if (oceanShape.getMaxY() <= transitYPoint + this.getFishHeight()) {
-                this.yPoint = transitYPoint - this.getFishHeight();
+            if (oceanShape.getMaxY() <= transitYPoint + this.getHeight()) {
+                this.yPoint = transitYPoint - this.getHeight();
             } else {
                 this.yPoint = transitYPoint;
             }
@@ -150,7 +157,7 @@ public class Fish {
         logger.info("yPoint = " + this.yPoint);
     }
 
-    public Color getFishColor() {
+    public Color getColor() {
         return fishColor;
     }
 
@@ -176,13 +183,13 @@ public class Fish {
             return false;
         }
 
-        Fish fish = (Fish) obj;
+        GoldFish fish = (GoldFish) obj;
 
-        if (fish.getxPoint() != getxPoint()){
+        if (fish.getXPoint() != getXPoint()){
             return false;
         }
 
-        if (fish.getyPoint() != getyPoint()){
+        if (fish.getYPoint() != getYPoint()){
             return false;
         }
 
@@ -191,7 +198,7 @@ public class Fish {
 
     @Override
     public String toString() {
-        return "Xpoint = " + this.getxPoint() + " Ypoint = " + this.getyPoint();
+        return "Xpoint = " + this.getXPoint() + " Ypoint = " + this.getYPoint();
     }
 
     public int getExemplar() {
@@ -208,8 +215,8 @@ public class Fish {
     }
 
     private void killFish(){
-        fishWidth = 0;
-        fishHeight = 0;
+        width = 0;
+        height = 0;
         timer.cancel();
         logger.info("Exemplar " + this.getExemplar() + " is dead");
     }
@@ -219,6 +226,14 @@ public class Fish {
         public void run() {
             killFish();
             drawFishes.remove(thisFish);
+        }
+    }
+
+    private void holdNextStep() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

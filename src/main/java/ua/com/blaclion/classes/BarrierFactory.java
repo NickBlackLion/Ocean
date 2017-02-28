@@ -1,7 +1,7 @@
 package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
-import ua.com.blaclion.interfaces.Barrier;
+import ua.com.blaclion.interfaces.OceanShape;
 
 /**
  * Created by nick on 26.02.17.
@@ -9,13 +9,13 @@ import ua.com.blaclion.interfaces.Barrier;
 public class BarrierFactory {
     private Logger logger = Logger.getLogger(this.getClass());
 
-    public Barrier getNewFish(Class<?> barrierClass){
-        Barrier insBarrier = null;
+    public OceanShape getNewShape(Class<?> barrierClass){
+        OceanShape insBarrier = null;
 
-        if (barrierClass == Fish.class){
+        if (barrierClass == Rock.class){
             insBarrier = new Rock();
         }
-        if (barrierClass == PredatorFish.class){
+        if (barrierClass == Algae.class){
             insBarrier = new Algae();
         }
 

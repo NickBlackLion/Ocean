@@ -27,12 +27,12 @@ public class PointsCommonContainer {
         }
     }
 
-    public boolean isEqualsPoint(Point2D futurePoint, Point2D currentPoint, Fish fish){
+    public boolean isEqualsPoint(Point2D futurePoint, Point2D currentPoint, int width, int height){
         lock.lock();
         try {
             for (Point2D point2D: pointsOfObjectsInSea.values()){
                 if (!currentPoint.equals(point2D)) {
-                    if (CheckFishNear.isFishNear(futurePoint, point2D, fish)) {
+                    if (CheckFishNear.isFishNear(futurePoint, point2D, width, height)) {
                         logger.info("Point " + futurePoint + " point2D " + point2D);
                         return true;
                     }

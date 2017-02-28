@@ -7,19 +7,21 @@ import java.awt.geom.Point2D;
 public class CheckFishNear {
     private static Logger logger = Logger.getLogger(CheckFishNear.class);
 
-    public static boolean isFishNear(Fish prevFish, Fish currentFish) {
-        Point2D currentFishPoint = new Point2D.Double(currentFish.getxPoint(), currentFish.getyPoint());
-        Point2D prevFishPoint = new Point2D.Double(prevFish.getxPoint(), prevFish.getyPoint());
+    /*
+    public static boolean isFishNear(GoldFish prevFish, GoldFish currentFish) {
+        Point2D currentFishPoint = new Point2D.Double(currentFish.getXPoint(), currentFish.getYPoint());
+        Point2D prevFishPoint = new Point2D.Double(prevFish.getXPoint(), prevFish.getYPoint());
         return isFishAround(currentFishPoint, prevFishPoint,  currentFish);
     }
+    */
 
-    public static boolean isFishNear(Point2D currentFishPoint, Point2D prevFishPoint, Fish fish) {
-        return isFishAround(currentFishPoint, prevFishPoint, fish);
+    public static boolean isFishNear(Point2D currentFishPoint, Point2D prevFishPoint, int width, int height) {
+        return isFishAround(currentFishPoint, prevFishPoint, width, height);
     }
 
-    private static boolean isFishAround(Point2D currentFishPoint, Point2D prevFishPoint, Fish fish) {
-        int width = fish.getFishWidth()*2;
-        int height = fish.getFishHeight()*2;
+    private static boolean isFishAround(Point2D currentFishPoint, Point2D prevFishPoint, int shapeWidth, int shapeHeight) {
+        int width = shapeWidth*2;
+        int height = shapeHeight*2;
 
         if (currentFishPoint.getX() >= prevFishPoint.getX()
                 && currentFishPoint.getX() <= prevFishPoint.getX() + width

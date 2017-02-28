@@ -15,7 +15,6 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         infoPanel = new InfoPanel();
         oceanPanel = new OceanPanel(this);
-        oceanPanel.setInfoPanel(infoPanel);
         infoPanel.setParameters(oceanPanel);
 
         setSize(WIDTH, HEIGHT);

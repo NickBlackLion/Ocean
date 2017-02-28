@@ -42,7 +42,7 @@ public class Ocean extends JComponent {
         g2.draw(rect);
 
         for (int i = 0; i < drawFishes.size(); i++){
-            Fish fish = drawFishes.get(i).getFish();
+            GoldFish fish = drawFishes.get(i).getFish();
 
             if (!firstDraw) {
                 if (i == 0) {
@@ -52,11 +52,11 @@ public class Ocean extends JComponent {
                     fish = setFishsStartPoint(fish, rect, pointY);
 
                     for (DrawFish drawFish : drawFishes) {
-                        if (!drawFish.getFish().equals(fish)) {
-                            if (CheckFishNear.isFishNear(fish, drawFish.getFish())) {
-                                fish.setxPoint(fish.getxPoint() + fish.getFishWidth() * 2);
-                                logger.info("fish is " + fish);
-                            }
+                        if (pointContainer.isEqualsPoint(new Point2D.Double(fish.getXPoint(), fish.getYPoint()),
+                                new Point2D.Double(drawFish.getFish().getXPoint(), drawFish.getFish().getYPoint()),
+                                fish.getWidth(), fish.getHeight())) {
+                            fish.setXPoint(fish.getXPoint() + fish.getWidth() * 2);
+                            logger.info("fish is " + fish);
                         }
                     }
 
@@ -68,8 +68,8 @@ public class Ocean extends JComponent {
             g2.fill(drawFishes.get(i).getFishShape());
             g2.draw(drawFishes.get(i).getFishShape());
             g2.drawString(Integer.toString(drawFishes.get(i).getFish().getExemplar()),
-                    (float) drawFishes.get(i).getFish().getxPoint(),
-                    (float) drawFishes.get(i).getFish().getyPoint());
+                    (float) drawFishes.get(i).getFish().getXPoint(),
+                    (float) drawFishes.get(i).getFish().getYPoint());
         }
 
         if (moveFishes == null){
@@ -102,15 +102,15 @@ public class Ocean extends JComponent {
         this.pointContainer = pointContainer;
     }
 
-    private Fish setFishsStartPoint(Fish fish, Rectangle2D rect, double pointY) {
+    private GoldFish setFishsStartPoint(GoldFish fish, Rectangle2D rect, double pointY) {
         fish.setOceanShape(rect);
-        fish.setxPoint((int) rect.getWidth());
-        fish.setyPoint((int) rect.getHeight(), (int) pointY);
+        fish.setXPoint((int) rect.getWidth());
+        fish.setYPoint((int) rect.getHeight(), (int) pointY);
         return fish;
     }
 
-    private void setPointToContainer(Fish fish) {
-        Point2D fishPoint = new Point2D.Double(fish.getxPoint(), fish.getyPoint());
+    private void setPointToContainer(GoldFish fish) {
+        Point2D fishPoint = new Point2D.Double(fish.getXPoint(), fish.getYPoint());
         pointContainer.setPoint(fish.getExemplar(), fishPoint);
     }
 }

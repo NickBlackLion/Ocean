@@ -3,12 +3,12 @@ package ua.com.blaclion.classes;
 import org.apache.log4j.Logger;
 
 public class MoveFish implements Runnable {
-    private Fish fish;
+    private GoldFish fish;
     private Ocean ocean;
     private Logger logger = Logger.getLogger(this.getClass());
     private boolean isRunning = false;
 
-    public MoveFish(Fish fish, Ocean ocean) {
+    public MoveFish(GoldFish fish, Ocean ocean) {
         this.fish = fish;
         this.ocean = ocean;
         isRunning = true;

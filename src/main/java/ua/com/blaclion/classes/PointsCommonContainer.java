@@ -17,10 +17,10 @@ public class PointsCommonContainer {
         lock = new ReentrantLock();
     }
 
-    public void setPoint(int fishExemplar, Point2D point){
+    public void setPoint(int shapeExemplar, Point2D point){
         lock.lock();
         try {
-            pointsOfObjectsInSea.put(fishExemplar, point);
+            pointsOfObjectsInSea.put(shapeExemplar, point);
         }
         finally {
             lock.unlock();
@@ -32,7 +32,7 @@ public class PointsCommonContainer {
         try {
             for (Point2D point2D: pointsOfObjectsInSea.values()){
                 if (!currentPoint.equals(point2D)) {
-                    if (CheckFishNear.isFishNear(futurePoint, point2D, width, height)) {
+                    if (CheckObjectNear.isObjectNear(futurePoint, point2D, width, height)) {
                         logger.info("Point " + futurePoint + " point2D " + point2D);
                         return true;
                     }

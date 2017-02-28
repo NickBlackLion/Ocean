@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 
 import java.awt.geom.Point2D;
 
-public class CheckFishNear {
-    private static Logger logger = Logger.getLogger(CheckFishNear.class);
+public class CheckObjectNear {
+    private static Logger logger = Logger.getLogger(CheckObjectNear.class);
 
     /*
     public static boolean isFishNear(GoldFish prevFish, GoldFish currentFish) {
@@ -15,11 +15,11 @@ public class CheckFishNear {
     }
     */
 
-    public static boolean isFishNear(Point2D currentFishPoint, Point2D prevFishPoint, int width, int height) {
-        return isFishAround(currentFishPoint, prevFishPoint, width, height);
+    public static boolean isObjectNear(Point2D currentFishPoint, Point2D prevFishPoint, int width, int height) {
+        return isObjectAround(currentFishPoint, prevFishPoint, width, height);
     }
 
-    private static boolean isFishAround(Point2D currentFishPoint, Point2D prevFishPoint, int shapeWidth, int shapeHeight) {
+    private static boolean isObjectAround(Point2D currentFishPoint, Point2D prevFishPoint, int shapeWidth, int shapeHeight) {
         int width = shapeWidth*2;
         int height = shapeHeight*2;
 

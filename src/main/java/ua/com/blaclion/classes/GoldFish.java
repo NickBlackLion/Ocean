@@ -1,7 +1,7 @@
 package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
-import ua.com.blaclion.interfaces.Fish;
+import ua.com.blaclion.abstract_classes.Fish;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -10,19 +10,11 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class GoldFish implements Fish {
-    private int width;
-    private int height;
-    private int xPoint;
-    private int yPoint;
-    private Random xStartPoint;
-    private Random yStartPoint;
+public class GoldFish extends Fish {
     private Logger logger = Logger.getLogger(this.getClass());
     private Color fishColor;
     private Rectangle2D oceanShape;
     private java.util.List<DrawFish> drawFishes;
-    private static int counter = 1;
-    private int exemplar;
     private Timer timer;
     private boolean deathTimerStart = false;
     private DrawFish thisFish;
@@ -31,22 +23,12 @@ public class GoldFish implements Fish {
     public GoldFish() {
         timer = new Timer();
 
-        xStartPoint = new Random(System.currentTimeMillis()*2);
-        yStartPoint = new Random(System.currentTimeMillis()*5);
-
-        xPoint = 0;
-        yPoint = 0;
-
-        width = 20;
-        height = 10;
+        setWidth(20);
+        setHeight(10);
 
         fishColor = new Color(255,215,0);
 
         timer = new Timer();
-
-        exemplar = counter++;
-
-        logger.info("counter = " + counter);
     }
 
     @Override
@@ -64,36 +46,36 @@ public class GoldFish implements Fish {
             }
         }
 
-        Point2D fishNextPoint = new Point2D.Double(this.getXPoint() + xDirection, this.getYPoint() + yDirection);
-        Point2D fishCurrentPoint = new Point2D.Double(this.getXPoint(), this.getYPoint());
+        Point2D fishNextPoint = new Point2D.Double(getXPoint() + xDirection, getYPoint() + yDirection);
+        Point2D fishCurrentPoint = new Point2D.Double(getXPoint(), getYPoint());
 
-        if (pointContainer.isEqualsPoint(fishNextPoint, fishCurrentPoint, this.getWidth(), this.getHeight())){
+        if (pointContainer.isEqualsPoint(fishNextPoint, fishCurrentPoint, getWidth(), getHeight())){
             xDirection = 0;
             yDirection = 0;
-            logger.info("It's existed fish near exemplar " + this.getExemplar());
+            logger.info("It's existed fish near exemplar " + getExemplar());
 
             holdNextStep();
         }
 
-        if (oceanShape.getMaxX() <= xPoint + xDirection + this.getWidth()
-                    || oceanShape.getMaxX() - oceanShape.getWidth() >= xPoint + xDirection) {
-            xPoint -= xDirection;
+        if (oceanShape.getMaxX() <= getXPoint() + xDirection + getWidth()
+                    || oceanShape.getMaxX() - oceanShape.getWidth() >= getXPoint() + xDirection) {
+            setXPoint(getXPoint() - xDirection);
         } else {
-            xPoint += xDirection;
+            setXPoint(getXPoint() + xDirection);
         }
 
-        if (oceanShape.getMaxY() <= yPoint + yDirection + this.getHeight()
-                    || oceanShape.getMaxY() - oceanShape.getHeight() >= yPoint + yDirection) {
-            yPoint -= yDirection;
-            logger.info("yPoint -= yDirection; " + yPoint
+        if (oceanShape.getMaxY() <= getYPoint() + yDirection + getHeight()
+                    || oceanShape.getMaxY() - oceanShape.getHeight() >= getYPoint() + yDirection) {
+            setYPoint(getYPoint() - yDirection, 0);
+            logger.info("yPoint -= yDirection; " + getYPoint()
                     + " oceanShape.getMaxY() " + oceanShape.getMaxY()
                     + " oceanShape.getHeight() " + oceanShape.getHeight()
                     + " exemplar " + this.getExemplar());
         } else {
-            yPoint += yDirection;
+            setYPoint(getYPoint() + yDirection, 0);
         }
 
-        Point2D currentFishPoint = new Point2D.Double(xPoint, yPoint);
+        Point2D currentFishPoint = new Point2D.Double(getXPoint(), getYPoint());
         pointContainer.setPoint(this.getExemplar(), currentFishPoint);
 
         holdNextStep();
@@ -104,65 +86,13 @@ public class GoldFish implements Fish {
         return;
     }
 
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
-    }
-
-    @Override
-    public int getXPoint() {
-        return xPoint;
-    }
-
-    @Override
-    public void setXPoint(int xPoint) {
-        if (this.xPoint == 0) {
-            int transitXPoint = xStartPoint.nextInt(xPoint);
-
-            if (oceanShape.getMaxX() <= transitXPoint + this.getWidth()) {
-                this.xPoint = transitXPoint - this.getWidth();
-            } else {
-                this.xPoint = transitXPoint;
-            }
-        } else {
-            this.xPoint = xPoint;
-        }
-
-        logger.info("xPoint = " + this.xPoint);
-    }
-
-    @Override
-    public int getYPoint() {
-        return yPoint;
-    }
-
-    @Override
-    public void setYPoint(int yPoint, int delta) {
-        if (this.yPoint == 0) {
-            int transitYPoint = yStartPoint.nextInt(yPoint) + delta;
-            if (oceanShape.getMaxY() <= transitYPoint + this.getHeight()) {
-                this.yPoint = transitYPoint - this.getHeight();
-            } else {
-                this.yPoint = transitYPoint;
-            }
-        } else {
-            this.yPoint = yPoint;
-        }
-
-        logger.info("yPoint = " + this.yPoint);
-    }
-
     public Color getColor() {
         return fishColor;
     }
 
     public void setOceanShape(Rectangle2D oceanShape) {
         this.oceanShape = oceanShape;
+        setOceanSize(oceanShape);
     }
 
     public void setDrawFishes(List<DrawFish> drawFishes) {
@@ -201,10 +131,6 @@ public class GoldFish implements Fish {
         return "Xpoint = " + this.getXPoint() + " Ypoint = " + this.getYPoint();
     }
 
-    public int getExemplar() {
-        return exemplar;
-    }
-
     public void setPointContainer(PointsCommonContainer pointContainer) {
         this.pointContainer = pointContainer;
     }
@@ -215,8 +141,6 @@ public class GoldFish implements Fish {
     }
 
     private void killFish(){
-        width = 0;
-        height = 0;
         timer.cancel();
         logger.info("Exemplar " + this.getExemplar() + " is dead");
     }

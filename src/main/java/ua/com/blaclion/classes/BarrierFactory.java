@@ -1,7 +1,7 @@
 package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
-import ua.com.blaclion.interfaces.OceanShape;
+import ua.com.blaclion.abstract_classes.OceanShape;
 
 /**
  * Created by nick on 26.02.17.

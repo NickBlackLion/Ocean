@@ -1,6 +1,7 @@
 package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
+import ua.com.blaclion.abstract_classes.Fish;
 
 /**
  * Created by nick on 24.02.17.
@@ -8,7 +9,7 @@ import org.apache.log4j.Logger;
 public class FishFactory {
     private Logger logger = Logger.getLogger(this.getClass());
 
-    public GoldFish getNewFish(Class<?> fishClass){
+    public Fish getNewFish(Class<?> fishClass){
         GoldFish insFish = null;
 
         if (fishClass == GoldFish.class){

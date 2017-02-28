@@ -1,16 +1,17 @@
 package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
+import ua.com.blaclion.abstract_classes.Fish;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 public class DrawFish {
-    private GoldFish fish;
+    private Fish fish;
     private Ellipse2D fishShape;
     private Logger logger = Logger.getLogger(this.getClass());
 
-    public DrawFish(GoldFish fish) {
+    public DrawFish(Fish fish) {
         logger.info("Create DrawFish");
         this.fish = fish;
     }
@@ -29,7 +30,7 @@ public class DrawFish {
         return fish.getColor();
     }
 
-    public GoldFish getFish() {
+    public Fish getFish() {
         return fish;
     }
 }

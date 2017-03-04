@@ -2,6 +2,7 @@ package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.Fish;
+import ua.com.blaclion.abstract_classes.OceanShape;
 import ua.com.blaclion.frames.MainFrame;
 
 import javax.swing.*;
@@ -21,6 +22,7 @@ public class Ocean extends JComponent {
     private List<DrawRock> drawRocks;
     private boolean firstDraw = false;
     private PointsCommonContainer pointContainer;
+    private int deltaY;
 
     public Ocean() {
         drawFishes = new ArrayList<>();
@@ -35,71 +37,17 @@ public class Ocean extends JComponent {
             mainPanelHeight = mainFrame.getHeight();
         }
 
-        double pointY = 70;
+        deltaY = 70;
 
-        Rectangle2D rect = new Rectangle2D.Double(0, pointY, mainPanelWidth, mainPanelHeight - pointY);
+        Rectangle2D rect = new Rectangle2D.Double(0, deltaY, mainPanelWidth, mainPanelHeight - deltaY);
 
         g2.setColor(new Color(15, 150, 233));
         g2.fill(rect);
         g2.draw(rect);
 
-        for (int i = 0; i < drawRocks.size(); i++) {
-            Rock rock = drawRocks.get(i).getRock();
+        drawRocksOnPanel(rect, g2);
 
-            if (!firstDraw) {
-                rock.setOceanSize(rect);
-                rock.setXPoint(mainPanelWidth);
-                rock.setYPoint(mainPanelHeight, rock.getHeight());
-
-                for (DrawFish drawFish : drawFishes) {
-                    if (pointContainer.isEqualsPoint(new Point2D.Double(rock.getXPoint(), rock.getYPoint()),
-                            new Point2D.Double(drawFish.getFish().getXPoint(), drawFish.getFish().getYPoint()),
-                            rock.getWidth(), rock.getHeight())) {
-                        rock.setXPoint(rock.getXPoint() + rock.getWidth());
-                    }
-                }
-            }
-
-            g2.setColor(drawRocks.get(i).getColor());
-            g2.fill(drawRocks.get(i).getRockShape());
-            g2.draw(drawRocks.get(i).getRockShape());
-
-            g2.drawString(Integer.toString(rock.getExemplar()),
-                    (float) drawRocks.get(i).getRock().getXPoint(),
-                    (float) drawRocks.get(i).getRock().getYPoint());
-
-            setPointToContainer(rock.getXPoint(), rock.getYPoint(), rock.getExemplar());
-        }
-
-        for (int i = 0; i < drawFishes.size(); i++) {
-            Fish fish = drawFishes.get(i).getFish();
-
-            if (!firstDraw) {
-                if (fish.getClass() == GoldFish.class) {
-                    GoldFish fish1 = (GoldFish) fish;
-                    fish1.setOceanShape(rect);
-                }
-                fish.setXPoint((int) rect.getWidth());
-                fish.setYPoint((int) rect.getHeight(), (int) pointY);
-
-                for (DrawFish drawFish : drawFishes) {
-                    if (pointContainer.isEqualsPoint(new Point2D.Double(fish.getXPoint(), fish.getYPoint()),
-                            new Point2D.Double(drawFish.getFish().getXPoint(), drawFish.getFish().getYPoint()),
-                            fish.getWidth(), fish.getHeight())) {
-                        fish.setXPoint(fish.getXPoint() + fish.getWidth() * 2);
-                    }
-                }
-
-                setPointToContainer(fish.getXPoint(), fish.getYPoint(), fish.getExemplar());
-            }
-
-            g2.setColor(drawFishes.get(i).getColor());
-            g2.fill(drawFishes.get(i).getFishShape());
-            g2.draw(drawFishes.get(i).getFishShape());
-            g2.drawString(Integer.toString(fish.getExemplar()),
-                    (float) drawFishes.get(i).getFish().getXPoint(),
-                    (float) drawFishes.get(i).getFish().getYPoint());
-        }
+        drawFishesOnPanel(rect, g2);
 
         if (moveFishes == null){
             moveFishes = new ArrayList<>();
@@ -135,8 +83,59 @@ public class Ocean extends JComponent {
         this.pointContainer = pointContainer;
     }
 
-    private void setPointToContainer(int pointX, int pointY, int exemplar) {
-        Point2D fishPoint = new Point2D.Double(pointX, pointY);
-        pointContainer.setPoint(exemplar, fishPoint);
+    private void setPointToContainer(int pointX, int pointY, OceanShape oceanShape) {
+        Point2D objectPoint = new Point2D.Double(pointX, pointY);
+        pointContainer.setPoint(oceanShape.getExemplar(), objectPoint);
+        pointContainer.setClass(oceanShape.getExemplar(), oceanShape.getClass());
+    }
+
+    private void drawRocksOnPanel(Rectangle2D rect, Graphics2D g2) {
+        for (int i = 0; i < drawRocks.size(); i++) {
+            Rock rock = drawRocks.get(i).getRock();
+
+            if (!firstDraw) {
+                SetCoordinate startCoordinate = new SetCoordinate(mainFrame, rect, rock, deltaY);
+                startCoordinate.setStartX();
+                startCoordinate.setStartY();
+
+                ArrayList<Point2D> points = new ArrayList<>(pointContainer.getPoints());
+                Point2D thisObjecctPoint = new Point2D.Double(rock.getXPoint(), rock.getYPoint());
+
+                for (Point2D point2D: points) {
+
+                }
+
+                setPointToContainer(rock.getXPoint(), rock.getYPoint(), rock);
+            }
+
+            g2.setColor(drawRocks.get(i).getColor());
+            g2.fill(drawRocks.get(i).getRockShape());
+            g2.draw(drawRocks.get(i).getRockShape());
+
+            g2.drawString(Integer.toString(rock.getExemplar()),
+                    (float) drawRocks.get(i).getRock().getXPoint(),
+                    (float) drawRocks.get(i).getRock().getYPoint());
+        }
+    }
+
+    private void drawFishesOnPanel(Rectangle2D rect, Graphics2D g2) {
+        for (int i = 0; i < drawFishes.size(); i++) {
+            Fish fish = drawFishes.get(i).getFish();
+
+            if (!firstDraw) {
+                SetCoordinate startCoordinate = new SetCoordinate(mainFrame, rect, fish, deltaY);
+                startCoordinate.setStartX();
+                startCoordinate.setStartY();
+
+                setPointToContainer(fish.getXPoint(), fish.getYPoint(), fish);
+            }
+
+            g2.setColor(drawFishes.get(i).getColor());
+            g2.fill(drawFishes.get(i).getFishShape());
+            g2.draw(drawFishes.get(i).getFishShape());
+            g2.drawString(Integer.toString(fish.getExemplar()),
+                    (float) drawFishes.get(i).getFish().getXPoint(),
+                    (float) drawFishes.get(i).getFish().getYPoint());
+        }
     }
 }

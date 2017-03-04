@@ -7,14 +7,6 @@ import java.awt.geom.Point2D;
 public class CheckObjectNear {
     private static Logger logger = Logger.getLogger(CheckObjectNear.class);
 
-    /*
-    public static boolean isFishNear(GoldFish prevFish, GoldFish currentFish) {
-        Point2D currentFishPoint = new Point2D.Double(currentFish.getXPoint(), currentFish.getYPoint());
-        Point2D prevFishPoint = new Point2D.Double(prevFish.getXPoint(), prevFish.getYPoint());
-        return isFishAround(currentFishPoint, prevFishPoint,  currentFish);
-    }
-    */
-
     public static boolean isObjectNear(Point2D currentFishPoint, Point2D prevFishPoint, int width, int height) {
         return isObjectAround(currentFishPoint, prevFishPoint, width, height);
     }

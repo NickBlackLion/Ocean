@@ -37,16 +37,17 @@ public class OceanPanel {
             drawFishes.add(new DrawFish(new FishFactory().getNewFish(GoldFish.class)));
             GoldFish fish = (GoldFish) drawFishes.get(i).getFish();
             fish.setDrawFishes(drawFishes);
-            fish.setPointContainer(pointsContainer);
+            fish.setContainer(pointsContainer);
             startAmountOfFishes++;
         }
 
-        //TODO рыбки наплывают на камни
         drawRocks = new ArrayList<>();
         for (int i = 0; i < amountOfBarriers; i++) {
             OceanShape oceanBarrier = new BarrierFactory().getNewShape(Rock.class);
             Rock rock = (Rock) oceanBarrier;
             drawRocks.add(new DrawRock(rock));
+            rock.setContainer(pointsContainer);
+            startAmountOfBarriers++;
         }
 
         ocean.setDrawFishes(drawFishes);

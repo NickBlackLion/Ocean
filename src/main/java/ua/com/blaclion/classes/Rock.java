@@ -8,7 +8,6 @@ import java.awt.*;
 public class Rock extends OceanShape {
     private Logger logger = Logger.getLogger(this.getClass());
     private Color rockColor;
-    private int yPoint;
 
     public Rock() {
         rockColor = Color.gray;
@@ -19,16 +18,5 @@ public class Rock extends OceanShape {
     @Override
     public Color getColor() {
         return rockColor;
-    }
-
-    @Override
-    public void setYPoint(int yPoint, int delta) {
-        this.yPoint = yPoint - (delta/2);
-        logger.info("yPoint = " + this.yPoint);
-    }
-
-    @Override
-    public int getYPoint() {
-        return yPoint;
     }
 }

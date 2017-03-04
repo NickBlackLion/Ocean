@@ -18,7 +18,6 @@ public class GoldFish extends Fish {
     private Timer timer;
     private boolean deathTimerStart = false;
     private DrawFish thisFish;
-    private PointsCommonContainer pointContainer;
 
     public GoldFish() {
         timer = new Timer();
@@ -49,7 +48,7 @@ public class GoldFish extends Fish {
         Point2D fishNextPoint = new Point2D.Double(getXPoint() + xDirection, getYPoint() + yDirection);
         Point2D fishCurrentPoint = new Point2D.Double(getXPoint(), getYPoint());
 
-        if (pointContainer.isEqualsPoint(fishNextPoint, fishCurrentPoint, getWidth(), getHeight())){
+        if (getContainer().isPointNear(fishNextPoint, fishCurrentPoint, getWidth(), getHeight())){
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + getExemplar());
@@ -66,17 +65,13 @@ public class GoldFish extends Fish {
 
         if (oceanShape.getMaxY() <= getYPoint() + yDirection + getHeight()
                     || oceanShape.getMaxY() - oceanShape.getHeight() >= getYPoint() + yDirection) {
-            setYPoint(getYPoint() - yDirection, 0);
-            logger.info("yPoint -= yDirection; " + getYPoint()
-                    + " oceanShape.getMaxY() " + oceanShape.getMaxY()
-                    + " oceanShape.getHeight() " + oceanShape.getHeight()
-                    + " exemplar " + this.getExemplar());
+            setYPoint(getYPoint() - yDirection);
         } else {
-            setYPoint(getYPoint() + yDirection, 0);
+            setYPoint(getYPoint() + yDirection);
         }
 
         Point2D currentFishPoint = new Point2D.Double(getXPoint(), getYPoint());
-        pointContainer.setPoint(this.getExemplar(), currentFishPoint);
+        getContainer().setPoint(this.getExemplar(), currentFishPoint);
 
         holdNextStep();
     }
@@ -92,7 +87,6 @@ public class GoldFish extends Fish {
 
     public void setOceanShape(Rectangle2D oceanShape) {
         this.oceanShape = oceanShape;
-        setOceanSize(oceanShape);
     }
 
     public void setDrawFishes(List<DrawFish> drawFishes) {
@@ -129,10 +123,6 @@ public class GoldFish extends Fish {
     @Override
     public String toString() {
         return "Xpoint = " + this.getXPoint() + " Ypoint = " + this.getYPoint();
-    }
-
-    public void setPointContainer(PointsCommonContainer pointContainer) {
-        this.pointContainer = pointContainer;
     }
 
     private void deathTimer(){

@@ -1,22 +1,24 @@
 package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
+import ua.com.blaclion.abstract_classes.OceanShape;
 
 import java.awt.geom.Point2D;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PointsCommonContainer {
     private Map<Integer, Point2D> pointsOfObjectsInSea;
-    private Map<Integer, Class<?>> classOfObjectsInSea;
+    private Set<Class> setOfClasses;
     private ReentrantLock lock;
     private Logger logger = Logger.getLogger(PointsCommonContainer.class);
 
     public PointsCommonContainer(){
         pointsOfObjectsInSea = new HashMap<>();
-        classOfObjectsInSea = new HashMap<>();
+        setOfClasses = new HashSet<>();
         lock = new ReentrantLock();
     }
 
@@ -24,16 +26,15 @@ public class PointsCommonContainer {
         lock.lock();
         try {
             pointsOfObjectsInSea.put(shapeExemplar, point);
-        }
-        finally {
+        } finally {
             lock.unlock();
         }
     }
 
-    public void setClass(int shapeExemplar, Class<?> classOfObjectInSea){
+    public void setClass(Class<?> classOfObjectInSea){
         lock.lock();
         try {
-            classOfObjectsInSea.put(shapeExemplar, classOfObjectInSea);
+            setOfClasses.add(classOfObjectInSea);
         }
         finally {
             lock.unlock();
@@ -44,23 +45,48 @@ public class PointsCommonContainer {
         lock.lock();
         try {
             for (Point2D point2D: pointsOfObjectsInSea.values()){
-                if (!currentPoint.equals(point2D)) {
-                    if (CheckObjectNear.isObjectNear(futurePoint, point2D, width, height)) {
-                        logger.info("Point " + futurePoint + " point2D " + point2D);
+                if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D, width, height)) {
+                    logger.info("Point " + futurePoint + " point2D " + point2D);
+                    return true;
+                }
+            }
+        } finally {
+            lock.unlock();
+        }
+
+        return false;
+    }
+
+    public boolean isPointNear(Point2D currentPoint) {
+        lock.lock();
+        try {
+            OceanShape oceanShape = null;
+
+            for (Class<?> classOfObj: setOfClasses) {
+                if (classOfObj == Rock.class) {
+                    oceanShape = (Rock) classOfObj.newInstance();
+                }
+
+                if (classOfObj == GoldFish.class) {
+                    oceanShape = (GoldFish) classOfObj.newInstance();
+                }
+
+                for (Point2D point2D : pointsOfObjectsInSea.values()) {
+                    if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(currentPoint, point2D,
+                            oceanShape.getWidth(), oceanShape.getHeight())) {
                         return true;
                     }
                 }
             }
-
-            return false;
-        }
-        finally {
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } finally {
             lock.unlock();
         }
-    }
 
-    public Collection<Point2D> getPoints() {
-        return pointsOfObjectsInSea.values();
+        return false;
     }
 
     public void printContainer(){

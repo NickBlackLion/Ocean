@@ -7,43 +7,43 @@ import java.awt.geom.Point2D;
 public class CheckObjectNear {
     private static Logger logger = Logger.getLogger(CheckObjectNear.class);
 
-    public static boolean isObjectNear(Point2D currentFishPoint, Point2D prevFishPoint, int width, int height) {
-        return isObjectAround(currentFishPoint, prevFishPoint, width, height);
+    public static boolean isObjectNear(Point2D currentPoint, Point2D prevPoint, int width, int height) {
+        return isObjectAround(currentPoint, prevPoint, width, height);
     }
 
-    private static boolean isObjectAround(Point2D currentFishPoint, Point2D prevFishPoint, int shapeWidth, int shapeHeight) {
-        int width = shapeWidth*2;
-        int height = shapeHeight*2;
+    private static boolean isObjectAround(Point2D currentPoint, Point2D prevPoint, int shapeWidth, int shapeHeight) {
+        int width = shapeWidth;
+        int height = shapeHeight;
 
-        if (currentFishPoint.getX() >= prevFishPoint.getX()
-                && currentFishPoint.getX() <= prevFishPoint.getX() + width
-                && currentFishPoint.getY() >= prevFishPoint.getY()
-                && currentFishPoint.getY() <= prevFishPoint.getY() + height) {
-            logger.info("First if");
+        if (currentPoint.getX() >= prevPoint.getX()
+                && currentPoint.getX() <= prevPoint.getX() + width
+                && currentPoint.getY() >= prevPoint.getY()
+                && currentPoint.getY() <= prevPoint.getY() + height) {
+            logger.info("First if " + currentPoint + " " + prevPoint);
             return true;
         }
 
-        if (currentFishPoint.getX() + width >= prevFishPoint.getX()
-                && currentFishPoint.getX() + width <= prevFishPoint.getX() + width
-                && currentFishPoint.getY() >= prevFishPoint.getY()
-                && currentFishPoint.getY() <= prevFishPoint.getY() + height){
-            logger.info("Second if");
+        if (currentPoint.getX() + width >= prevPoint.getX()
+                && currentPoint.getX() + width <= prevPoint.getX() + width
+                && currentPoint.getY() >= prevPoint.getY()
+                && currentPoint.getY() <= prevPoint.getY() + height){
+            logger.info("Second if " + currentPoint + " " + prevPoint);
             return true;
         }
 
-        if (currentFishPoint.getX() >= prevFishPoint.getX()
-                && currentFishPoint.getX() <= prevFishPoint.getX() + width
-                && currentFishPoint.getY() + height >= prevFishPoint.getY()
-                && currentFishPoint.getY() + height <= prevFishPoint.getY() + height){
-            logger.info("Third if");
+        if (currentPoint.getX() >= prevPoint.getX()
+                && currentPoint.getX() <= prevPoint.getX() + width
+                && currentPoint.getY() + height >= prevPoint.getY()
+                && currentPoint.getY() + height <= prevPoint.getY() + height){
+            logger.info("Third if " + currentPoint + " " + prevPoint);
             return true;
         }
 
-        if (currentFishPoint.getX() + width >= prevFishPoint.getX()
-                && currentFishPoint.getX() + width <= prevFishPoint.getX() + width
-                && currentFishPoint.getY() + height >= prevFishPoint.getY()
-                && currentFishPoint.getY() + height <= prevFishPoint.getY() + height){
-            logger.info("Fourth if");
+        if (currentPoint.getX() + width >= prevPoint.getX()
+                && currentPoint.getX() + width <= prevPoint.getX() + width
+                && currentPoint.getY() + height >= prevPoint.getY()
+                && currentPoint.getY() + height <= prevPoint.getY() + height){
+            logger.info("Fourth if " + currentPoint + " " + prevPoint);
             return true;
         }
 

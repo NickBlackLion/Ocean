@@ -13,6 +13,12 @@ public class SetCoordinate {
     private int oceanHeightDelta;
     private int moveDelta;
     private MainFrame mainFrame;
+    private int pointUnbounded;
+    private int transitPoint;
+    private boolean checkZeroXBound;
+    private boolean checkZeroYBound;
+    private boolean checkMaxXBound;
+    private boolean checkMaxYBound;
 
     private Logger logger = Logger.getLogger(this.getClass());
 
@@ -22,64 +28,105 @@ public class SetCoordinate {
         this.oceanShape = oceanShape;
         this.oceanHeightDelta = oceanHeightDelta;
         moveDelta = 10;
+        checkZeroXBound = false;
+        checkZeroYBound = false;
+        checkMaxXBound = false;
+        checkMaxYBound = false;
     }
 
     public void setStartX () {
         Random xStartPoint = new Random(System.currentTimeMillis() * 2);
-        int transitXPoint = xStartPoint.nextInt((int) oceanSize.getMaxX());
-        int pointUnbounded = transitXPoint + oceanShape.getWidth();
+        transitPoint = xStartPoint.nextInt((int) oceanSize.getMaxX());
+        pointUnbounded = transitPoint + oceanShape.getWidth();
 
-        oceanShape.setXPoint(checkXBounds(pointUnbounded, transitXPoint));
+        checkXBounds();
+        oceanShape.setXPoint(transitPoint);
+
 
         logger.info(oceanShape.getClass().getSimpleName() + " exemplar " + oceanShape.getExemplar() + " point x " + oceanShape.getXPoint());
     }
 
     public void setStartY () {
         Random yStartPoint = new Random(System.currentTimeMillis() * 5);
-        int transitYPoint = yStartPoint.nextInt((int) oceanSize.getMaxY() + oceanHeightDelta);
+        transitPoint = yStartPoint.nextInt((int) oceanSize.getMaxY() + oceanHeightDelta);
 
         if (oceanShape.getClass() == Rock.class) {
             oceanShape.setYPoint((int)oceanSize.getMaxY() - oceanShape.getHeight()/2);
         } else {
-            int pointUnbounded = transitYPoint + oceanShape.getHeight();
+            pointUnbounded = transitPoint + oceanShape.getHeight();
 
-            oceanShape.setYPoint(checkYBounds(pointUnbounded, transitYPoint));
+            checkYBounds();
+            oceanShape.setYPoint(transitPoint);
 
             logger.info(oceanShape.getClass().getSimpleName() + " exemplar " + oceanShape.getExemplar() + " point y " + oceanShape.getYPoint());
         }
     }
 
-    private int checkXBounds(int pointUnbounded, int transitXPoint) {
-        while (oceanSize.getMaxX() < pointUnbounded) {
-            pointUnbounded -= moveDelta;
-            transitXPoint -= moveDelta;
-            logger.info("OceanShape exemplar " + oceanShape.getExemplar()
-                    + " oceanSize.getMaxX() < pointUnbounded transitXPoint = " + transitXPoint);
+    public void correctXCoordinate() {
+        int move = moveDelta;
+
+        pointUnbounded = oceanShape.getXPoint() + oceanShape.getWidth();
+
+        checkXBounds();
+
+        if (checkMaxXBound) {
+            move *= -1;
         }
 
-        while (oceanSize.getMinX() > transitXPoint) {
-            transitXPoint += moveDelta;
-            logger.info("OceanShape exemplar " + oceanShape.getExemplar()
-                    + " oceanSize.getMaxX() < pointUnbounded transitXPoint = " + transitXPoint);
-        }
+        transitPoint = oceanShape.getXPoint() + move;
 
-        return transitXPoint;
+        oceanShape.setXPoint(transitPoint);
+
+        logger.info(oceanShape.getXPoint());
     }
 
-    private int checkYBounds(int pointUnbounded, int transitYPoint) {
+    public void correctYCoordinate() {
+        int move = moveDelta;
+
+        pointUnbounded = oceanShape.getYPoint() + oceanShape.getHeight();
+
+        checkYBounds();
+
+        if (checkMaxYBound) {
+            move *= -1;
+        }
+
+        transitPoint = oceanShape.getYPoint() + move;
+
+        oceanShape.setYPoint(transitPoint);
+
+        logger.info(oceanShape.getYPoint());
+    }
+
+    private void checkXBounds() {
+        while (oceanSize.getMaxX() < pointUnbounded) {
+            pointUnbounded -= moveDelta;
+            transitPoint -= moveDelta;
+            logger.info("OceanShape exemplar " + oceanShape.getExemplar()
+                    + " oceanSize.getMaxX() < pointUnbounded transitPoint = " + transitPoint);
+            checkMaxXBound = true;
+        }
+
+        while (oceanSize.getMinX() > transitPoint) {
+            transitPoint += moveDelta;
+            logger.info("OceanShape exemplar " + oceanShape.getExemplar()
+                    + " oceanSize.getMinX() > transitPoint transitPoint = " + transitPoint);
+        }
+    }
+
+    private void checkYBounds() {
         while (mainFrame.getHeight() < pointUnbounded) {
             pointUnbounded -= moveDelta;
-            transitYPoint -= moveDelta;
+            transitPoint -= moveDelta;
             logger.info("OceanShape exemplar " + oceanShape.getExemplar()
-                    + " mainFrame.getHeight() < pointUnbounded transitYPoint = " + transitYPoint);
+                    + " mainFrame.getHeight() < pointUnbounded transitPoint = " + transitPoint);
+            checkMaxYBound = true;
         }
 
-        while (oceanHeightDelta + oceanShape.getHeight() > transitYPoint) {
-            transitYPoint += moveDelta;
+        while (oceanHeightDelta + oceanShape.getHeight() > transitPoint) {
+            transitPoint += moveDelta;
             logger.info("OceanShape exemplar " + oceanShape.getExemplar()
-                    + " oceanSize.getMinY() < transitYPoint && transitYPoint < oceanSize.getMinY() = " + transitYPoint);
+                    + " oceanHeightDelta + oceanShape.getHeight() > transitPoint transitPoint = " + transitPoint);
         }
-
-        return transitYPoint;
     }
 }

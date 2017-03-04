@@ -86,27 +86,14 @@ public class Ocean extends JComponent {
     private void setPointToContainer(int pointX, int pointY, OceanShape oceanShape) {
         Point2D objectPoint = new Point2D.Double(pointX, pointY);
         pointContainer.setPoint(oceanShape.getExemplar(), objectPoint);
-        pointContainer.setClass(oceanShape.getExemplar(), oceanShape.getClass());
+        pointContainer.setClass(oceanShape.getClass());
     }
 
     private void drawRocksOnPanel(Rectangle2D rect, Graphics2D g2) {
         for (int i = 0; i < drawRocks.size(); i++) {
             Rock rock = drawRocks.get(i).getRock();
 
-            if (!firstDraw) {
-                SetCoordinate startCoordinate = new SetCoordinate(mainFrame, rect, rock, deltaY);
-                startCoordinate.setStartX();
-                startCoordinate.setStartY();
-
-                ArrayList<Point2D> points = new ArrayList<>(pointContainer.getPoints());
-                Point2D thisObjecctPoint = new Point2D.Double(rock.getXPoint(), rock.getYPoint());
-
-                for (Point2D point2D: points) {
-
-                }
-
-                setPointToContainer(rock.getXPoint(), rock.getYPoint(), rock);
-            }
+            firstDrawMethod(rect, rock);
 
             g2.setColor(drawRocks.get(i).getColor());
             g2.fill(drawRocks.get(i).getRockShape());
@@ -121,14 +108,10 @@ public class Ocean extends JComponent {
     private void drawFishesOnPanel(Rectangle2D rect, Graphics2D g2) {
         for (int i = 0; i < drawFishes.size(); i++) {
             Fish fish = drawFishes.get(i).getFish();
+            GoldFish fish1 = (GoldFish) fish;
+            fish1.setOceanShape(rect);
 
-            if (!firstDraw) {
-                SetCoordinate startCoordinate = new SetCoordinate(mainFrame, rect, fish, deltaY);
-                startCoordinate.setStartX();
-                startCoordinate.setStartY();
-
-                setPointToContainer(fish.getXPoint(), fish.getYPoint(), fish);
-            }
+            firstDrawMethod(rect, fish);
 
             g2.setColor(drawFishes.get(i).getColor());
             g2.fill(drawFishes.get(i).getFishShape());
@@ -136,6 +119,27 @@ public class Ocean extends JComponent {
             g2.drawString(Integer.toString(fish.getExemplar()),
                     (float) drawFishes.get(i).getFish().getXPoint(),
                     (float) drawFishes.get(i).getFish().getYPoint());
+        }
+    }
+
+    private void firstDrawMethod(Rectangle2D rect, OceanShape oceanShape) {
+        if (!firstDraw) {
+            SetCoordinate startCoordinate = new SetCoordinate(mainFrame, rect, oceanShape, deltaY);
+            startCoordinate.setStartX();
+            startCoordinate.setStartY();
+
+            Point2D thisObjectPoint = new Point2D.Double(oceanShape.getXPoint(), oceanShape.getYPoint());
+
+            while (pointContainer.isPointNear(thisObjectPoint)) {
+                startCoordinate.correctXCoordinate();
+                if (oceanShape.getClass() != Rock.class) {
+                    startCoordinate.correctYCoordinate();
+                    thisObjectPoint.setLocation(oceanShape.getXPoint(), oceanShape.getYPoint());
+                }
+                thisObjectPoint.setLocation(oceanShape.getXPoint(), oceanShape.getYPoint());
+            }
+
+            setPointToContainer(oceanShape.getXPoint(), oceanShape.getYPoint(), oceanShape);
         }
     }
 }

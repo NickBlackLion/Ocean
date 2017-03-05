@@ -20,6 +20,7 @@ public class Ocean extends JComponent {
     private List<DrawFish> drawFishes;
     private List<MoveFish> moveFishes;
     private List<DrawRock> drawRocks;
+    private List<DrawAlgae> drawAlgae;
     private boolean firstDraw = false;
     private PointsCommonContainer pointContainer;
     private int deltaY;
@@ -46,6 +47,8 @@ public class Ocean extends JComponent {
         g2.draw(rect);
 
         drawRocksOnPanel(rect, g2);
+
+        drawAlgaeOnPanel(rect, g2);
 
         drawFishesOnPanel(rect, g2);
 
@@ -75,6 +78,10 @@ public class Ocean extends JComponent {
         this.drawRocks = drawRocks;
     }
 
+    public void setDrawAlgae(List<DrawAlgae> drawAlgae) {
+        this.drawAlgae = drawAlgae;
+    }
+
     public List<MoveFish> getMoveFishes() {
         return moveFishes;
     }
@@ -86,7 +93,7 @@ public class Ocean extends JComponent {
     private void setPointToContainer(int pointX, int pointY, OceanShape oceanShape) {
         Point2D objectPoint = new Point2D.Double(pointX, pointY);
         pointContainer.setPoint(oceanShape.getExemplar(), objectPoint);
-        pointContainer.setClass(oceanShape.getClass());
+        pointContainer.setClass(oceanShape.getExemplar(), oceanShape.getClass());
     }
 
     private void drawRocksOnPanel(Rectangle2D rect, Graphics2D g2) {
@@ -102,6 +109,22 @@ public class Ocean extends JComponent {
             g2.drawString(Integer.toString(rock.getExemplar()),
                     (float) drawRocks.get(i).getRock().getXPoint(),
                     (float) drawRocks.get(i).getRock().getYPoint());
+        }
+    }
+
+    private void drawAlgaeOnPanel(Rectangle2D rect, Graphics2D g2) {
+        for (int i = 0; i < drawAlgae.size(); i++) {
+            Algae algae = drawAlgae.get(i).getAlgae();
+
+            firstDrawMethod(rect, algae);
+
+            g2.setColor(drawAlgae.get(i).getColor());
+            g2.fill(drawAlgae.get(i).getAlgaeShape());
+            g2.draw(drawAlgae.get(i).getAlgaeShape());
+
+            g2.drawString(Integer.toString(algae.getExemplar()),
+                    (float) drawAlgae.get(i).getAlgae().getXPoint(),
+                    (float) drawAlgae.get(i).getAlgae().getYPoint());
         }
     }
 
@@ -130,7 +153,7 @@ public class Ocean extends JComponent {
 
             Point2D thisObjectPoint = new Point2D.Double(oceanShape.getXPoint(), oceanShape.getYPoint());
 
-            while (pointContainer.isPointNear(thisObjectPoint)) {
+            while (pointContainer.isPointNear(thisObjectPoint, thisObjectPoint, oceanShape.getClass())) {
                 startCoordinate.correctXCoordinate();
                 if (oceanShape.getClass() != Rock.class) {
                     startCoordinate.correctYCoordinate();

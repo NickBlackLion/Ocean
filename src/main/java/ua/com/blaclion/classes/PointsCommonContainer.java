@@ -5,20 +5,18 @@ import ua.com.blaclion.abstract_classes.OceanShape;
 
 import java.awt.geom.Point2D;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PointsCommonContainer {
     private Map<Integer, Point2D> pointsOfObjectsInSea;
-    private Set<Class> setOfClasses;
+    private Map<Integer, Class<?>> whatObjectClass;
     private ReentrantLock lock;
     private Logger logger = Logger.getLogger(PointsCommonContainer.class);
 
     public PointsCommonContainer(){
         pointsOfObjectsInSea = new HashMap<>();
-        setOfClasses = new HashSet<>();
+        whatObjectClass = new HashMap<>();
         lock = new ReentrantLock();
     }
 
@@ -31,57 +29,55 @@ public class PointsCommonContainer {
         }
     }
 
-    public void setClass(Class<?> classOfObjectInSea){
+    public void setClass(int shapeExemplar, Class<?> objClass){
         lock.lock();
         try {
-            setOfClasses.add(classOfObjectInSea);
-        }
-        finally {
-            lock.unlock();
-        }
-    }
-
-    public boolean isPointNear(Point2D futurePoint, Point2D currentPoint, int width, int height){
-        lock.lock();
-        try {
-            for (Point2D point2D: pointsOfObjectsInSea.values()){
-                if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D, width, height)) {
-                    logger.info("Point " + futurePoint + " point2D " + point2D);
-                    return true;
-                }
-            }
+            whatObjectClass.put(shapeExemplar, objClass);
         } finally {
             lock.unlock();
         }
-
-        return false;
     }
 
-    public boolean isPointNear(Point2D currentPoint) {
+    public boolean isPointNear(Point2D currentPoint, Point2D futurePoint, Class<?> currObjClass) {
         lock.lock();
         try {
-            OceanShape oceanShape = null;
+            OceanShape currentShape = null;
 
-            for (Class<?> classOfObj: setOfClasses) {
-                if (classOfObj == Rock.class) {
-                    oceanShape = (Rock) classOfObj.newInstance();
+            if (currObjClass == Rock.class) {
+                currentShape = new Rock();
+            }
+
+            if (currObjClass == Algae.class) {
+                currentShape = new Algae();
+            }
+
+            if (currObjClass == GoldFish.class) {
+                currentShape = new GoldFish();
+            }
+
+            for (Map.Entry<Integer, Class<?>> entry: whatObjectClass.entrySet()) {
+                OceanShape oceanShape = null;
+
+                if (entry.getValue() == Rock.class) {
+                    oceanShape = new Rock();
                 }
 
-                if (classOfObj == GoldFish.class) {
-                    oceanShape = (GoldFish) classOfObj.newInstance();
+                if (entry.getValue() == Algae.class) {
+                    oceanShape = new Algae();
                 }
 
-                for (Point2D point2D : pointsOfObjectsInSea.values()) {
-                    if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(currentPoint, point2D,
-                            oceanShape.getWidth(), oceanShape.getHeight())) {
-                        return true;
-                    }
+                if (entry.getValue() == GoldFish.class) {
+                    oceanShape = new GoldFish();
+                }
+
+                Point2D point2D = pointsOfObjectsInSea.get(entry.getKey());
+
+                if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D,
+                        currentShape.getWidth(), currentShape.getHeight(),
+                        oceanShape.getWidth(), oceanShape.getHeight())) {
+                    return true;
                 }
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
         } finally {
             lock.unlock();
         }

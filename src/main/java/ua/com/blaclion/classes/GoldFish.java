@@ -15,19 +15,16 @@ public class GoldFish extends Fish {
     private Color fishColor;
     private Rectangle2D oceanShape;
     private java.util.List<DrawFish> drawFishes;
-    private Timer timer;
-    private boolean deathTimerStart = false;
     private DrawFish thisFish;
+    public int lifeDays;
 
     public GoldFish() {
-        timer = new Timer();
-
         setWidth(20);
         setHeight(10);
 
         fishColor = new Color(255,215,0);
 
-        timer = new Timer();
+        lifeDays = new Random(System.currentTimeMillis()).nextInt(1000);
     }
 
     @Override
@@ -35,9 +32,7 @@ public class GoldFish extends Fish {
         int xDirection = (int)(Math.random()*20 - 10);
         int yDirection = (int)(Math.random()*20 - 10);
 
-        if(!deathTimerStart){
-            //deathTimer();
-            deathTimerStart = true;
+        if(thisFish == null){
             for (DrawFish drawFish: drawFishes) {
                 if (drawFish.getFish().equals(this)) {
                     thisFish = drawFish;
@@ -45,10 +40,16 @@ public class GoldFish extends Fish {
             }
         }
 
+        deathCounter();
+
+        if (lifeDays == 0) {
+            killFish();
+        }
+
         Point2D fishNextPoint = new Point2D.Double(getXPoint() + xDirection, getYPoint() + yDirection);
         Point2D fishCurrentPoint = new Point2D.Double(getXPoint(), getYPoint());
 
-        if (getContainer().isPointNear(fishNextPoint, fishCurrentPoint, getWidth(), getHeight())){
+        if (getContainer().isPointNear(fishCurrentPoint, fishNextPoint, this.getClass())){
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + getExemplar());
@@ -59,15 +60,19 @@ public class GoldFish extends Fish {
         if (oceanShape.getMaxX() <= getXPoint() + xDirection + getWidth()
                     || oceanShape.getMaxX() - oceanShape.getWidth() >= getXPoint() + xDirection) {
             setXPoint(getXPoint() - xDirection);
+            logger.info("Exemplar " + this.getExemplar() + " -xDirection");
         } else {
             setXPoint(getXPoint() + xDirection);
+            logger.info("Exemplar " + this.getExemplar() + " +xDirection");
         }
 
         if (oceanShape.getMaxY() <= getYPoint() + yDirection + getHeight()
                     || oceanShape.getMaxY() - oceanShape.getHeight() >= getYPoint() + yDirection) {
             setYPoint(getYPoint() - yDirection);
+            logger.info("Exemplar " + this.getExemplar() + " -yDirection");
         } else {
             setYPoint(getYPoint() + yDirection);
+            logger.info("Exemplar " + this.getExemplar() + " +yDirection");
         }
 
         Point2D currentFishPoint = new Point2D.Double(getXPoint(), getYPoint());
@@ -125,22 +130,13 @@ public class GoldFish extends Fish {
         return "Xpoint = " + this.getXPoint() + " Ypoint = " + this.getYPoint();
     }
 
-    private void deathTimer(){
-        Random random = new Random(System.currentTimeMillis());
-        timer.schedule(new UnitTask(), random.nextInt(500000), 100);
+    private void deathCounter(){
+        lifeDays--;
     }
 
     private void killFish(){
-        timer.cancel();
+        drawFishes.remove(thisFish);
         logger.info("Exemplar " + this.getExemplar() + " is dead");
-    }
-
-    private class UnitTask extends TimerTask{
-        @Override
-        public void run() {
-            killFish();
-            drawFishes.remove(thisFish);
-        }
     }
 
     private void holdNextStep() {

@@ -5,9 +5,6 @@ import org.apache.log4j.Logger;
 import java.awt.*;
 import java.awt.geom.Arc2D;
 
-/**
- * Created by nick on 28.02.17.
- */
 public class DrawRock {
     private Rock rock;
     private Arc2D rockShape;

@@ -15,8 +15,6 @@ public class SetCoordinate {
     private MainFrame mainFrame;
     private int pointUnbounded;
     private int transitPoint;
-    private boolean checkZeroXBound;
-    private boolean checkZeroYBound;
     private boolean checkMaxXBound;
     private boolean checkMaxYBound;
 
@@ -28,8 +26,6 @@ public class SetCoordinate {
         this.oceanShape = oceanShape;
         this.oceanHeightDelta = oceanHeightDelta;
         moveDelta = 10;
-        checkZeroXBound = false;
-        checkZeroYBound = false;
         checkMaxXBound = false;
         checkMaxYBound = false;
     }
@@ -57,9 +53,9 @@ public class SetCoordinate {
 
             checkYBounds();
             oceanShape.setYPoint(transitPoint);
-
-            logger.info(oceanShape.getClass().getSimpleName() + " exemplar " + oceanShape.getExemplar() + " point y " + oceanShape.getYPoint());
         }
+
+        logger.info(oceanShape.getClass().getSimpleName() + " exemplar " + oceanShape.getExemplar() + " point y " + oceanShape.getYPoint());
     }
 
     public void correctXCoordinate() {

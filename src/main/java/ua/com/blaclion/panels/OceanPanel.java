@@ -1,6 +1,7 @@
 package ua.com.blaclion.panels;
 
 import org.apache.log4j.Logger;
+import ua.com.blaclion.abstract_classes.Fish;
 import ua.com.blaclion.abstract_classes.OceanShape;
 import ua.com.blaclion.classes.*;
 import ua.com.blaclion.frames.MainFrame;
@@ -17,6 +18,7 @@ public class OceanPanel {
     private Logger logger = Logger.getLogger(this.getClass());
     private List<DrawFish> drawFishes;
     private List<DrawRock> drawRocks;
+    private List<DrawAlgae> drawAlgaes;
     private int startAmountOfFishes = 0;
     private int startAmountOfPredators = 0;
     private int startAmountOfBarriers = 0;
@@ -27,22 +29,24 @@ public class OceanPanel {
         ocean.setMainFrame(frame);
 
         int amountOfFishes = (int) 9; //(Math.random() * 15);
-        int amountOfBarriers = (int) 3; //(Math.random() * 15);
+        int amountOfRocks = (int) 3; //(Math.random() * 15);
+        int amountOfAlgaes = (int) 7; //(Math.random() * 15);
 
         pointsContainer = new PointsCommonContainer();
         ocean.setPointContainer(pointsContainer);
 
         drawFishes = new ArrayList<>();
         for (int i = 0; i < amountOfFishes; i++) {
-            drawFishes.add(new DrawFish(new FishFactory().getNewFish(GoldFish.class)));
-            GoldFish fish = (GoldFish) drawFishes.get(i).getFish();
-            fish.setDrawFishes(drawFishes);
-            fish.setContainer(pointsContainer);
+            Fish fish = new FishFactory().getNewFish(GoldFish.class);
+            GoldFish fish1 = (GoldFish) fish;
+            drawFishes.add(new DrawFish(fish1));
+            fish1.setDrawFishes(drawFishes);
+            fish1.setContainer(pointsContainer);
             startAmountOfFishes++;
         }
 
         drawRocks = new ArrayList<>();
-        for (int i = 0; i < amountOfBarriers; i++) {
+        for (int i = 0; i < amountOfRocks; i++) {
             OceanShape oceanBarrier = new BarrierFactory().getNewShape(Rock.class);
             Rock rock = (Rock) oceanBarrier;
             drawRocks.add(new DrawRock(rock));
@@ -50,8 +54,18 @@ public class OceanPanel {
             startAmountOfBarriers++;
         }
 
+        drawAlgaes = new ArrayList<>();
+        for (int i = 0; i < amountOfAlgaes; i++) {
+            OceanShape oceanBarrier = new BarrierFactory().getNewShape(Algae.class);
+            Algae algae = (Algae) oceanBarrier;
+            drawAlgaes.add(new DrawAlgae(algae));
+            algae.setContainer(pointsContainer);
+            startAmountOfBarriers++;
+        }
+
         ocean.setDrawFishes(drawFishes);
         ocean.setDrawRocks(drawRocks);
+        ocean.setDrawAlgae(drawAlgaes);
 
         insPanel.setLayout(new GridLayout(1, 1));
         insPanel.add(ocean);

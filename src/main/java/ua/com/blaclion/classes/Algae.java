@@ -13,6 +13,8 @@ public class Algae extends OceanShape {
         algaeColor = Color.green;
         setWidth(2);
         setHeight(80);
+
+        logger.info("Algae created " + getExemplar());
     }
 
     @Override

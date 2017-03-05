@@ -23,10 +23,12 @@ public class OceanPanel {
     private int startAmountOfPredators = 0;
     private int startAmountOfBarriers = 0;
     private PointsCommonContainer pointsContainer;
+    private InfoPanel infoPanel;
 
-    public OceanPanel(MainFrame frame) {
+    public OceanPanel(MainFrame frame, InfoPanel infoPanel) {
         ocean = new Ocean();
         ocean.setMainFrame(frame);
+        this.infoPanel = infoPanel;
 
         int amountOfFishes = (int) 9; //(Math.random() * 15);
         int amountOfRocks = (int) 3; //(Math.random() * 15);
@@ -42,6 +44,7 @@ public class OceanPanel {
             drawFishes.add(new DrawFish(fish1));
             fish1.setDrawFishes(drawFishes);
             fish1.setContainer(pointsContainer);
+            fish1.setExecutor(infoPanel.getExecutor());
             startAmountOfFishes++;
         }
 

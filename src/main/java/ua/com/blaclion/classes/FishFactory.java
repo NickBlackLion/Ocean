@@ -7,7 +7,7 @@ public class FishFactory {
     private Logger logger = Logger.getLogger(this.getClass());
 
     public Fish getNewFish(Class<?> fishClass){
-        GoldFish insFish = null;
+        Fish insFish = null;
 
         if (fishClass == GoldFish.class){
             insFish = new GoldFish();

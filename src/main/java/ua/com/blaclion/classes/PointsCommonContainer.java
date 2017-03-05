@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class PointsCommonContainer {
     private Map<Integer, Point2D> pointsOfObjectsInSea;
-    private Map<Integer, Class<?>> whatObjectClass;
+    private Map<Integer, OceanShape> whatObjectClass;
     private ReentrantLock lock;
     private Logger logger = Logger.getLogger(PointsCommonContainer.class);
 
@@ -29,52 +29,28 @@ public class PointsCommonContainer {
         }
     }
 
-    public void setClass(int shapeExemplar, Class<?> objClass){
+    public void setObject(int shapeExemplar, OceanShape oceanShape) {
         lock.lock();
         try {
-            whatObjectClass.put(shapeExemplar, objClass);
+            whatObjectClass.put(shapeExemplar, oceanShape);
         } finally {
             lock.unlock();
         }
     }
 
-    public boolean isPointNear(Point2D currentPoint, Point2D futurePoint, Class<?> currObjClass) {
+    public boolean isPointNear(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
         lock.lock();
         try {
-            OceanShape currentShape = null;
+            OceanShape currentShape = oceanShape;
 
-            if (currObjClass == Rock.class) {
-                currentShape = new Rock();
-            }
-
-            if (currObjClass == Algae.class) {
-                currentShape = new Algae();
-            }
-
-            if (currObjClass == GoldFish.class) {
-                currentShape = new GoldFish();
-            }
-
-            for (Map.Entry<Integer, Class<?>> entry: whatObjectClass.entrySet()) {
-                OceanShape oceanShape = null;
-
-                if (entry.getValue() == Rock.class) {
-                    oceanShape = new Rock();
-                }
-
-                if (entry.getValue() == Algae.class) {
-                    oceanShape = new Algae();
-                }
-
-                if (entry.getValue() == GoldFish.class) {
-                    oceanShape = new GoldFish();
-                }
+            for (Map.Entry<Integer, OceanShape> entry: whatObjectClass.entrySet()) {
+                OceanShape oceanShapeFromContainer = entry.getValue();
 
                 Point2D point2D = pointsOfObjectsInSea.get(entry.getKey());
 
                 if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D,
                         currentShape.getWidth(), currentShape.getHeight(),
-                        oceanShape.getWidth(), oceanShape.getHeight())) {
+                        oceanShapeFromContainer.getWidth(), oceanShapeFromContainer.getHeight())) {
                     return true;
                 }
             }

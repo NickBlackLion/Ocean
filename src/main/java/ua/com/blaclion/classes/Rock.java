@@ -13,6 +13,8 @@ public class Rock extends OceanShape {
         rockColor = Color.gray;
         setWidth(70);
         setHeight(50);
+
+        logger.info("Rock created " + getExemplar());
     }
 
     @Override

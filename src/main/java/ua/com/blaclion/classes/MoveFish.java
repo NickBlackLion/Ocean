@@ -30,4 +30,8 @@ public class MoveFish implements Runnable {
     public void wakeUp(){
         isRunning = true;
     }
+
+    public Fish getFish() {
+        return fish;
+    }
 }

@@ -147,6 +147,10 @@ public class Ocean extends JComponent {
 
             while (pointContainer.isPointNear(thisObjectPoint, oceanShape)) {
                 startCoordinate.correctXCoordinate();
+                thisObjectPoint.setLocation(oceanShape.getXPoint(), oceanShape.getYPoint());
+            }
+
+            while (pointContainer.isPointNear(thisObjectPoint, oceanShape)) {
                 if (oceanShape.getClass() != Rock.class) {
                     startCoordinate.correctYCoordinate();
                     thisObjectPoint.setLocation(oceanShape.getXPoint(), oceanShape.getYPoint());

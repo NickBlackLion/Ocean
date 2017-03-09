@@ -1,11 +1,11 @@
 package ua.com.blaclion.panels;
 
 import org.apache.log4j.Logger;
+import ua.com.blaclion.abstract_classes.Fish;
 import ua.com.blaclion.classes.MoveFish;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,7 +15,7 @@ public class InfoPanel {
     private JLabel startAmountFishes;
     private JLabel startAmountPredators;
     private JLabel startAmountBarriers;
-    private JLabel FinishAmountFishes;
+    private JLabel finishAmountFishes;
     private JLabel finishAmountPredators;
     private JButton startFishesButton;
     private JButton stopFishesButton;
@@ -39,6 +39,9 @@ public class InfoPanel {
                 }
             }
 
+            startAmountFishes.setText(Fish.getAmountOfFishes().toString());
+            startAmountPredators.setText(Fish.getAmountOfPredators().toString());
+            startAmountBarriers.setText(oceanPanel.getAmountOfBarriers().toString());
             started = true;
         });
 
@@ -47,15 +50,15 @@ public class InfoPanel {
             for (MoveFish moveFish : moveFishes) {
                 moveFish.kill();
             }
+
+            finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
+            finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
             started = false;
         });
     }
 
-    public void setParameters(OceanPanel oceanPanel) {
+    public void setStartAmounts(OceanPanel oceanPanel) {
         this.oceanPanel = oceanPanel;
-        startAmountFishes.setText(oceanPanel.getStartAmountOfFishes().toString());
-        startAmountPredators.setText(oceanPanel.getStartAmountOfPredators().toString());
-        startAmountBarriers.setText(oceanPanel.getAmountOfBarriers().toString());
     }
 
     public ExecutorService getExecutor() {
@@ -114,9 +117,9 @@ public class InfoPanel {
         startAmountBarriers = new JLabel();
         startAmountBarriers.setText("");
         mainPanel.add(startAmountBarriers, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        FinishAmountFishes = new JLabel();
-        FinishAmountFishes.setText("");
-        mainPanel.add(FinishAmountFishes, new com.intellij.uiDesigner.core.GridConstraints(6, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        finishAmountFishes = new JLabel();
+        finishAmountFishes.setText("");
+        mainPanel.add(finishAmountFishes, new com.intellij.uiDesigner.core.GridConstraints(6, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         finishAmountPredators = new JLabel();
         finishAmountPredators.setText("");
         mainPanel.add(finishAmountPredators, new com.intellij.uiDesigner.core.GridConstraints(7, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

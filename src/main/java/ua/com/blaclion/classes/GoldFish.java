@@ -6,7 +6,6 @@ import ua.com.blaclion.abstract_classes.Fish;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class GoldFish extends Fish {
     private Logger logger = Logger.getLogger(this.getClass());
@@ -109,20 +108,22 @@ public class GoldFish extends Fish {
         return "Xpoint = " + this.getXPoint() + " Ypoint = " + this.getYPoint();
     }
 
+    public void fishAte() {
+        kill();
+    }
+
     private void killFish() {
         if (getLifeDays() == 0) {
-            getDrawFishes().remove(thisDrawFish);
-            getMoveFishes().remove(thisMoveFish);
-            thisMoveFish.kill();
-            logger.info("Exemplar " + this.getExemplar() + " is dead");
+            kill();
         }
     }
 
-    private void holdNextStep() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private void kill() {
+        thisMoveFish.kill();
+        getContainer().remove(getExemplar());
+        getDrawFishes().remove(thisDrawFish);
+        getMoveFishes().remove(thisMoveFish);
+        decreaseAmountOfFishes();
+        logger.info("Exemplar " + this.getExemplar() + " is dead");
     }
 }

@@ -2,11 +2,11 @@ package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.Fish;
+import ua.com.blaclion.abstract_classes.OceanShape;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class PredatorFish extends Fish {
     private Logger logger = Logger.getLogger(this.getClass());
@@ -25,9 +25,9 @@ public class PredatorFish extends Fish {
 
         setNewFishDays(new Random(System.currentTimeMillis()).nextInt(100));
 
-        hungryDeath = 30;
-
         logger.info("Fish created " + getExemplar());
+
+        setToHungryDeath();
     }
 
     @Override
@@ -61,7 +61,13 @@ public class PredatorFish extends Fish {
         Point2D fishNextPoint = new Point2D.Double(getXPoint() + xDirection, getYPoint() + yDirection);
         Point2D fishCurrentPoint = new Point2D.Double(getXPoint(), getYPoint());
 
-        if (getContainer().isPointNear(fishCurrentPoint, fishNextPoint, this)) {
+        OceanShape maybeGoldFish = getContainer().isPoint(fishCurrentPoint, fishNextPoint, this);
+        if (maybeGoldFish != null) {
+            GoldFish goldFish = (GoldFish) maybeGoldFish;
+            goldFish.fishAte();
+            setToHungryDeath();
+            logger.info("Fish " + goldFish.getExemplar() + " has eaten");
+        } else if (getContainer().isPointNear(fishCurrentPoint, fishNextPoint, this)) {
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + getExemplar());
@@ -113,6 +119,10 @@ public class PredatorFish extends Fish {
         return "Xpoint = " + this.getXPoint() + " Ypoint = " + this.getYPoint();
     }
 
+    private void setToHungryDeath() {
+        hungryDeath = 30;
+    }
+
     private void hungryDeathCounter() {
         hungryDeath--;
     }
@@ -122,15 +132,8 @@ public class PredatorFish extends Fish {
             getDrawFishes().remove(thisDrawFish);
             getMoveFishes().remove(thisMoveFish);
             thisMoveFish.kill();
+            decreaseAmountOfPredators();
             logger.info("Exemplar " + this.getExemplar() + " is dead");
-        }
-    }
-
-    private void holdNextStep() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 }

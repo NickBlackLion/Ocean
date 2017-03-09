@@ -80,6 +80,41 @@ public class PointsCommonContainer {
         return false;
     }
 
+    public OceanShape isPoint(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
+        lock.lock();
+        try {
+            for (Map.Entry<Integer, OceanShape> entry: whatObjectClass.entrySet()) {
+                OceanShape oceanShapeFromContainer = entry.getValue();
+
+                Point2D point2D = pointsOfObjectsInSea.get(entry.getKey());
+
+                if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D,
+                        oceanShape.getWidth(), oceanShape.getHeight(),
+                        oceanShapeFromContainer.getWidth(), oceanShapeFromContainer.getHeight())
+                        && oceanShape.getClass() == PredatorFish.class
+                        && oceanShapeFromContainer.getClass() == GoldFish.class) {
+                    return oceanShapeFromContainer;
+                }
+
+            }
+        } finally {
+            lock.unlock();
+        }
+
+        return null;
+    }
+
+    public void remove(int exemplar) {
+        lock.lock();
+        try {
+            whatObjectClass.remove(exemplar);
+            pointsOfObjectsInSea.remove(exemplar);
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+
     public void printContainer(){
         lock.lock();
         try {

@@ -20,8 +20,6 @@ public class OceanPanel {
     private List<DrawRock> drawRocks;
     private List<DrawAlgae> drawAlgaes;
     private List<MoveFish> moveFishes;
-    private int startAmountOfFishes = 0;
-    private int startAmountOfPredators = 0;
     private int startAmountOfBarriers = 0;
     private PointsCommonContainer pointsContainer;
 
@@ -48,7 +46,7 @@ public class OceanPanel {
             fish.setExecutor(infoPanel.getExecutor());
             fish.setMoveFishes(moveFishes);
             moveFishes.add(new MoveFish(fish, ocean));
-            startAmountOfFishes++;
+            Fish.increaseAmountOfFishes();
         }
 
         for (int i = 0; i < amountOfPredators; i++) {
@@ -59,7 +57,7 @@ public class OceanPanel {
             fish.setExecutor(infoPanel.getExecutor());
             fish.setMoveFishes(moveFishes);
             moveFishes.add(new MoveFish(fish, ocean));
-            startAmountOfFishes++;
+            Fish.increaseAmountOfPredators();
         }
 
         drawRocks = new ArrayList<>();
@@ -86,13 +84,6 @@ public class OceanPanel {
 
         insPanel.setLayout(new GridLayout(1, 1));
         insPanel.add(ocean);
-    }
-    public Integer getStartAmountOfFishes() {
-        return startAmountOfFishes;
-    }
-
-    public Integer getStartAmountOfPredators() {
-        return startAmountOfPredators;
     }
 
     public Integer getAmountOfBarriers() {

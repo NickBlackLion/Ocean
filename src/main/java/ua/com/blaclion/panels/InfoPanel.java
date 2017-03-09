@@ -31,7 +31,7 @@ public class InfoPanel {
 
         startFishesButton.addActionListener(e -> {
             logger.info("Start pressed");
-            moveFishes = oceanPanel.getOcean().getMoveFishes();
+            moveFishes = oceanPanel.getMoveFishes();
             if (!started) {
                 for (MoveFish moveFish : moveFishes) {
                     moveFish.wakeUp();

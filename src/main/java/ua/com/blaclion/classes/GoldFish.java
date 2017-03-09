@@ -13,9 +13,6 @@ public class GoldFish extends Fish {
     private Color fishColor;
     private DrawFish thisDrawFish;
     private MoveFish thisMoveFish;
-    private int lifeDays;
-    private int newFishDays;
-    private SetCoordinate setCoordinate;
 
     public GoldFish() {
         setWidth(20);
@@ -23,9 +20,9 @@ public class GoldFish extends Fish {
 
         fishColor = new Color(255,215,0);
 
-        lifeDays = new Random(System.currentTimeMillis()).nextInt(300);
+        setLifeDays(new Random(System.currentTimeMillis()).nextInt(300));
 
-        newFishDays = new Random(System.currentTimeMillis()).nextInt(100);
+        setNewFishDays(new Random(System.currentTimeMillis()).nextInt(100));
 
         logger.info("Fish created " + getExemplar());
     }
@@ -76,39 +73,6 @@ public class GoldFish extends Fish {
         holdNextStep();
     }
 
-    @Override
-    public void makeNewFish() {
-        Point2D newFishPoint = new Point2D.Double(this.getXPoint() + this.getWidth(), this.getYPoint());
-
-        if (newFishDays == 0 && !getContainer().isPointNear(newFishPoint, newFishPoint, this)) {
-            Fish newFish = new FishFactory().getNewFish(GoldFish.class);
-            setCoordinate = new SetCoordinate(getMainFrame(), getOceanShape(), newFish, getPointYDelta());
-            while (getContainer().isPointNear(newFishPoint, newFishPoint, this)) {
-                setCoordinate.correctXCoordinate();
-                setCoordinate.correctYCoordinate();
-            }
-            newFish.setXPoint((int) newFishPoint.getX());
-            newFish.setYPoint((int) newFishPoint.getY());
-            newFish.setDrawFishes(getDrawFishes());
-            newFish.setContainer(getContainer());
-            newFish.setExecutor(getExecutor());
-            newFish.setOceanShape(getOceanShape());
-            newFish.setMoveFishes(getMoveFishes());
-
-            getDrawFishes().add(new DrawFish(newFish));
-
-            getContainer().setPoint(newFish.getExemplar(), new Point2D.Double(newFish.getXPoint(), newFish.getYPoint()));
-            getContainer().setObject(newFish.getExemplar(), newFish);
-            MoveFish moveFish = new MoveFish(newFish, getOcean());
-            getMoveFishes().add(moveFish);
-            getExecutor().execute(moveFish);
-
-            newFishDays = new Random(System.currentTimeMillis()).nextInt(100);
-        } else {
-            newFishCounter();
-        }
-    }
-
     public Color getColor() {
         return fishColor;
     }
@@ -145,16 +109,8 @@ public class GoldFish extends Fish {
         return "Xpoint = " + this.getXPoint() + " Ypoint = " + this.getYPoint();
     }
 
-    private void deathCounter(){
-        lifeDays--;
-    }
-
-    private void newFishCounter() {
-        newFishDays--;
-    }
-
     private void killFish() {
-        if (lifeDays == 0) {
+        if (getLifeDays() == 0) {
             getDrawFishes().remove(thisDrawFish);
             getMoveFishes().remove(thisMoveFish);
             thisMoveFish.kill();
@@ -167,22 +123,6 @@ public class GoldFish extends Fish {
             TimeUnit.MILLISECONDS.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void checkOceanBounds(int xDirection, int yDirection) {
-        if (getOceanShape().getMaxX() <= getXPoint() + xDirection + getWidth()
-                || getOceanShape().getMaxX() - getOceanShape().getWidth() >= getXPoint() + xDirection) {
-            setXPoint(getXPoint() - xDirection);
-        } else {
-            setXPoint(getXPoint() + xDirection);
-        }
-
-        if (getOceanShape().getMaxY() <= getYPoint() + yDirection + getHeight()
-                || getOceanShape().getMaxY() - getOceanShape().getHeight() >= getYPoint() + yDirection) {
-            setYPoint(getYPoint() - yDirection);
-        } else {
-            setYPoint(getYPoint() + yDirection);
         }
     }
 }

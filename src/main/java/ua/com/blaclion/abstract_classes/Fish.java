@@ -1,12 +1,12 @@
 package ua.com.blaclion.abstract_classes;
 
-import ua.com.blaclion.classes.DrawFish;
-import ua.com.blaclion.classes.MoveFish;
-import ua.com.blaclion.classes.Ocean;
+import ua.com.blaclion.classes.*;
 import ua.com.blaclion.frames.MainFrame;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
 //Parent class for all fishes in the ocean
@@ -18,12 +18,48 @@ public abstract class Fish extends OceanShape {
     private List<MoveFish> moveFishes;
     private MainFrame mainFrame;
     private int pointYDelta;
+    private int lifeDays;
+    private int newFishDays;
+    private SetCoordinate setCoordinate;
 
     public abstract void swim();
 
-    public abstract void makeNewFish();
+    protected void makeNewFish() {
+        Point2D newFishPoint = new Point2D.Double(this.getXPoint() + this.getWidth(), this.getYPoint());
 
-    public void setOceanShape(Rectangle2D oceanShape) {
+        if (newFishDays == 0 && !getContainer().isPointNear(newFishPoint, this)) {
+            Fish newFish = new FishFactory().getNewFish(getClass());
+
+            setCoordinate = new SetCoordinate(getMainFrame(), getOceanSize(), newFish, getPointYDelta());
+            while (newFish.getXPoint() + newFish.getWidth() >= getOceanSize().getMaxX()) {
+                setCoordinate.correctXCoordinate();
+            }
+
+            newFish.setXPoint((int) newFishPoint.getX());
+            newFish.setYPoint((int) newFishPoint.getY());
+            newFish.setDrawFishes(getDrawFishes());
+            newFish.setContainer(getContainer());
+            newFish.setExecutor(getExecutor());
+            newFish.setOceanSize(getOceanSize());
+            newFish.setMoveFishes(getMoveFishes());
+
+            getDrawFishes().add(new DrawFish(newFish));
+
+            getContainer().setPoint(newFish.getExemplar(), new Point2D.Double(newFish.getXPoint(), newFish.getYPoint()));
+            getContainer().setObject(newFish.getExemplar(), newFish);
+            MoveFish moveFish = new MoveFish(newFish, getOcean());
+            getMoveFishes().add(moveFish);
+            getExecutor().execute(moveFish);
+
+            newFishDays = new Random(System.currentTimeMillis()).nextInt(100);
+        }
+
+        if (newFishDays > 0) {
+            newFishCounter();
+        }
+    }
+
+    public void setOceanSize(Rectangle2D oceanShape) {
         this.oceanShape = oceanShape;
     }
 
@@ -44,7 +80,7 @@ public abstract class Fish extends OceanShape {
     }
 
     //Get ocean size for positioning fish inside it
-    public Rectangle2D getOceanShape() {
+    public Rectangle2D getOceanSize() {
         return oceanShape;
     }
 
@@ -82,5 +118,41 @@ public abstract class Fish extends OceanShape {
 
     public void setPointYDelta(int pointYDelta) {
         this.pointYDelta = pointYDelta;
+    }
+
+    public void setLifeDays(int lifeDays) {
+        this.lifeDays = lifeDays;
+    }
+
+    public void setNewFishDays(int newFishDays) {
+        this.newFishDays = newFishDays;
+    }
+
+    public int getLifeDays() {
+        return lifeDays;
+    }
+
+    protected void deathCounter(){
+        lifeDays--;
+    }
+
+    protected void newFishCounter() {
+        newFishDays--;
+    }
+
+    protected void checkOceanBounds(int xDirection, int yDirection) {
+        if (getOceanSize().getMaxX() <= getXPoint() + xDirection + getWidth()
+                || getOceanSize().getMaxX() - getOceanSize().getWidth() >= getXPoint() + xDirection) {
+            setXPoint(getXPoint() - xDirection);
+        } else {
+            setXPoint(getXPoint() + xDirection);
+        }
+
+        if (getOceanSize().getMaxY() <= getYPoint() + yDirection + getHeight()
+                || getOceanSize().getMaxY() - getOceanSize().getHeight() >= getYPoint() + yDirection) {
+            setYPoint(getYPoint() - yDirection);
+        } else {
+            setYPoint(getYPoint() + yDirection);
+        }
     }
 }

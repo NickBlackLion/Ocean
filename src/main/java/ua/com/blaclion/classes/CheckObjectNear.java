@@ -4,6 +4,9 @@ import org.apache.log4j.Logger;
 
 import java.awt.geom.Point2D;
 
+/**
+ * Class with static method that checks is some object near current object
+ */
 public class CheckObjectNear {
     private static Logger logger = Logger.getLogger(CheckObjectNear.class);
 

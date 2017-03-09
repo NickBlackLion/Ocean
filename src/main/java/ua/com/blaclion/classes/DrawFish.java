@@ -6,6 +6,9 @@ import ua.com.blaclion.abstract_classes.Fish;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
+/**
+ * Class that create fish shape
+ */
 public class DrawFish {
     private Fish fish;
     private Ellipse2D fishShape;

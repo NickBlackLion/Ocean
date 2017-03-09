@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Random;
 
+/**
+ * Class that create predator fish
+ */
 public class PredatorFish extends Fish {
     private Logger logger = Logger.getLogger(this.getClass());
     private Color fishColor;
@@ -61,13 +64,13 @@ public class PredatorFish extends Fish {
         Point2D fishNextPoint = new Point2D.Double(getXPoint() + xDirection, getYPoint() + yDirection);
         Point2D fishCurrentPoint = new Point2D.Double(getXPoint(), getYPoint());
 
-        OceanShape maybeGoldFish = getContainer().isPoint(fishCurrentPoint, fishNextPoint, this);
+        OceanShape maybeGoldFish = getContainer().isPredatorNearGoldFish(fishCurrentPoint, fishNextPoint, this);
         if (maybeGoldFish != null) {
             GoldFish goldFish = (GoldFish) maybeGoldFish;
             goldFish.fishAte();
             setToHungryDeath();
             logger.info("Fish " + goldFish.getExemplar() + " has eaten");
-        } else if (getContainer().isPointNear(fishCurrentPoint, fishNextPoint, this)) {
+        } else if (getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this)) {
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + getExemplar());
@@ -119,14 +122,23 @@ public class PredatorFish extends Fish {
         return "Xpoint = " + this.getXPoint() + " Ypoint = " + this.getYPoint();
     }
 
+    /**
+     * Method that set up steps counter to death moment
+     */
     private void setToHungryDeath() {
         hungryDeath = 30;
     }
 
+    /**
+     * Method that decrease counter to death moment
+     */
     private void hungryDeathCounter() {
         hungryDeath--;
     }
 
+    /**
+     * Delete this fish from all common containers and stop is thread
+     */
     private void killFish() {
         if (getLifeDays() == 0 || hungryDeath == 0) {
             getDrawFishes().remove(thisDrawFish);

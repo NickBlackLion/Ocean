@@ -11,6 +11,10 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Class that create the ocean, random amount of all objects in the ocean
+ * and pass them to the ocean
+ */
 public class OceanPanel {
     private JPanel mainPanel;
     private JPanel insPanel;
@@ -27,10 +31,10 @@ public class OceanPanel {
         ocean = new Ocean();
         ocean.setMainFrame(frame);
 
-        int amountOfFishes = (int) 9; //(Math.random() * 15);
-        int amountOfRocks = (int) 3; //(Math.random() * 15);
-        int amountOfAlgaes = (int) 7; //(Math.random() * 15);
-        int amountOfPredators = (int) 4; //(Math.random() * 15);
+        int amountOfFishes = new Random(System.currentTimeMillis()).nextInt(10);
+        int amountOfRocks = new Random(System.currentTimeMillis()).nextInt(5);
+        int amountOfAlgaes = new Random(System.currentTimeMillis()).nextInt(10);
+        int amountOfPredators = new Random(System.currentTimeMillis()).nextInt(5);
 
         pointsContainer = new PointsCommonContainer();
         ocean.setPointContainer(pointsContainer);

@@ -9,6 +9,10 @@ import java.awt.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Class that makes right panel with buttons and
+ * current info about shapes in the ocean
+ */
 public class InfoPanel {
     private JPanel mainPanel;
     private JButton nextDayButton;
@@ -29,6 +33,7 @@ public class InfoPanel {
     public InfoPanel() {
         executor = Executors.newCachedThreadPool();
 
+        //Run all fishes move threads and show current info
         startFishesButton.addActionListener(e -> {
             logger.info("Start pressed");
             moveFishes = oceanPanel.getMoveFishes();
@@ -45,6 +50,7 @@ public class InfoPanel {
             started = true;
         });
 
+        //Stop all fishes move threads and show current info
         stopFishesButton.addActionListener(e -> {
             logger.info("Stop pressed");
             for (MoveFish moveFish : moveFishes) {

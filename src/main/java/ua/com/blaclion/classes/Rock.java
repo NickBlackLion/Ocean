@@ -5,6 +5,9 @@ import ua.com.blaclion.abstract_classes.OceanShape;
 
 import java.awt.*;
 
+/**
+ * Class that create algae
+ */
 public class Rock extends OceanShape {
     private Logger logger = Logger.getLogger(this.getClass());
     private Color rockColor;

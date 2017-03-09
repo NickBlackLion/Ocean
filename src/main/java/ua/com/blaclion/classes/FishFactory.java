@@ -3,6 +3,9 @@ package ua.com.blaclion.classes;
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.Fish;
 
+/**
+ * Factory for creating fishes and predators
+ */
 public class FishFactory {
     private Logger logger = Logger.getLogger(this.getClass());
 

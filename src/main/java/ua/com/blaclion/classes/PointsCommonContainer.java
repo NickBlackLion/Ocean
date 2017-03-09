@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Common class-container for all objects in the sea
+ */
 public class PointsCommonContainer {
     private Map<Integer, Point2D> pointsOfObjectsInSea;
     private Map<Integer, OceanShape> whatObjectClass;
@@ -38,7 +41,13 @@ public class PointsCommonContainer {
         }
     }
 
-    public boolean isPointNear(Point2D currentPoint, OceanShape oceanShape) {
+    /**
+     * Method checks is some another ocean object near current object
+     * @param currentPoint point of current object
+     * @param oceanShape current checked object
+     * @return
+     */
+    public boolean isSomeObjectNear(Point2D currentPoint, OceanShape oceanShape) {
         lock.lock();
         try {
             for (Map.Entry<Integer, OceanShape> entry: whatObjectClass.entrySet()) {
@@ -59,7 +68,14 @@ public class PointsCommonContainer {
         return false;
     }
 
-    public boolean isPointNear(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
+    /**
+     * Method checks is some another ocean object near future point of current object
+     * @param currentPoint point of current object
+     * @param futurePoint future point of current object
+     * @param oceanShape current checked object
+     * @return
+     */
+    public boolean isFuturePosNearSomeObject(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
         lock.lock();
         try {
             for (Map.Entry<Integer, OceanShape> entry: whatObjectClass.entrySet()) {
@@ -80,7 +96,14 @@ public class PointsCommonContainer {
         return false;
     }
 
-    public OceanShape isPoint(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
+    /**
+     * Method checks is predator future point near gold fish
+     * @param currentPoint point of current object
+     * @param futurePoint future point of current object
+     * @param oceanShape current checked object
+     * @return
+     */
+    public OceanShape isPredatorNearGoldFish(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
         lock.lock();
         try {
             for (Map.Entry<Integer, OceanShape> entry: whatObjectClass.entrySet()) {

@@ -5,6 +5,9 @@ import org.apache.log4j.Logger;
 import java.awt.*;
 import java.awt.geom.Arc2D;
 
+/**
+ * Class that create rock shape
+ */
 public class DrawRock {
     private Rock rock;
     private Arc2D rockShape;

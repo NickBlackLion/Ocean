@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.*;
 
+/**
+ * Class that create gold fish
+ */
 public class GoldFish extends Fish {
     private Logger logger = Logger.getLogger(this.getClass());
     private Color fishColor;
@@ -26,11 +29,13 @@ public class GoldFish extends Fish {
         logger.info("Fish created " + getExemplar());
     }
 
+
     @Override
     public void swim(){
         int xDirection = (int)(Math.random()*20 - 10);
         int yDirection = (int)(Math.random()*20 - 10);
 
+        //Find this fish in common container of drew fishes
         if(thisDrawFish == null){
             for (DrawFish drawFish: getDrawFishes()) {
                 if (drawFish.getFish().equals(this)) {
@@ -39,6 +44,7 @@ public class GoldFish extends Fish {
             }
         }
 
+        //Find this fish in common container of moving fishes
         if(thisMoveFish == null){
             for (MoveFish moveFish: getMoveFishes()) {
                 if (moveFish.getFish().equals(this)) {
@@ -56,7 +62,7 @@ public class GoldFish extends Fish {
         Point2D fishNextPoint = new Point2D.Double(getXPoint() + xDirection, getYPoint() + yDirection);
         Point2D fishCurrentPoint = new Point2D.Double(getXPoint(), getYPoint());
 
-        if (getContainer().isPointNear(fishCurrentPoint, fishNextPoint, this)){
+        if (getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this)){
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + getExemplar());
@@ -108,16 +114,26 @@ public class GoldFish extends Fish {
         return "Xpoint = " + this.getXPoint() + " Ypoint = " + this.getYPoint();
     }
 
+    /**
+     *Signalizes from outside if this fish is eaten
+     *kill this fish
+     */
     public void fishAte() {
         kill();
     }
 
+    /**
+     *Kill fish if days are left
+     */
     private void killFish() {
         if (getLifeDays() == 0) {
             kill();
         }
     }
 
+    /**
+     * Delete this fish from all common containers and stop is thread
+     */
     private void kill() {
         thisMoveFish.kill();
         getContainer().remove(getExemplar());

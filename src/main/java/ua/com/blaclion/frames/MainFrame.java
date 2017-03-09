@@ -6,6 +6,9 @@ import ua.com.blaclion.panels.OceanPanel;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Main run class for all application
+ */
 public class MainFrame extends JFrame {
     private final int WIDTH = 900;
     private final int HEIGHT = 400;

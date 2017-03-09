@@ -38,7 +38,7 @@ public abstract class Fish extends OceanShape {
     protected void makeNewFish() {
         Point2D newFishPoint = new Point2D.Double(this.getXPoint() + this.getWidth(), this.getYPoint());
 
-        if (newFishDays == 0 && !getContainer().isPointNear(newFishPoint, this)) {
+        if (newFishDays == 0 && !getContainer().isSomeObjectNear(newFishPoint, this)) {
             Fish newFish = new FishFactory().getNewFish(getClass());
 
             //Increase counter for Gold fishes
@@ -88,64 +88,42 @@ public abstract class Fish extends OceanShape {
         }
     }
 
-    /**
-     * Method for setting ocean size
-     */
     public void setOceanSize(Rectangle2D oceanShape) {
         this.oceanShape = oceanShape;
     }
 
-    /**
-     * Method for setting container of drawing fishes
-     */
     public void setDrawFishes(List<DrawFish> drawFishes) {
         this.drawFishes = drawFishes;
     }
 
-    /**
-     * Method for setting common panel where the fishes will be drawing
-     */
     public void setOcean(Ocean ocean) {
         this.ocean = ocean;
     }
 
-    /**
-     * Method for setting common pool of threads for all fishes
-     */
     public void setExecutor(ExecutorService executor) {
         this.executor = executor;
     }
 
-    /**
-     * Method for setting common pool of threads for all fishes
-     */
     public void setMoveFishes(List<MoveFish> moveFishes) {
         this.moveFishes = moveFishes;
     }
 
-    /**
-     * Method for getting ocean size to positioning fish inside it
-     */
     public Rectangle2D getOceanSize() {
         return oceanShape;
     }
-
 
     public List<DrawFish> getDrawFishes() {
         return drawFishes;
     }
 
-    //Get ocean for repaint particular fish in it
     public Ocean getOcean() {
         return ocean;
     }
 
-    //Get common thread pool for all fishes
     public ExecutorService getExecutor() {
         return executor;
     }
 
-    //Get container with moving fishes
     public List<MoveFish> getMoveFishes() {
         return moveFishes;
     }
@@ -158,19 +136,28 @@ public abstract class Fish extends OceanShape {
         this.mainFrame = mainFrame;
     }
 
+    /**
+     * Method for getting common delta that shows where ocean is started
+     */
     public int getPointYDelta() {
         return pointYDelta;
     }
 
+    /**
+     * Method for setting common delta that shows where ocean is started
+     */
     public void setPointYDelta(int pointYDelta) {
         this.pointYDelta = pointYDelta;
     }
 
-    public void setLifeDays(int lifeDays) {
+    protected void setLifeDays(int lifeDays) {
         this.lifeDays = lifeDays;
     }
 
-    public void setNewFishDays(int newFishDays) {
+    /**
+     * Method for setting days before current fish will make new fish
+     */
+    protected void setNewFishDays(int newFishDays) {
         this.newFishDays = newFishDays;
     }
 
@@ -178,14 +165,24 @@ public abstract class Fish extends OceanShape {
         return lifeDays;
     }
 
+    /**
+     * Method that takes fish closer to death :(
+     */
     protected void deathCounter(){
         lifeDays--;
     }
 
+    /**
+     * Method that takes fish closer to bring new life :)
+     */
     protected void newFishCounter() {
         newFishDays--;
     }
 
+    /**
+     * Method that check if future direction of fish is in bounds of the ocean
+     * if not changes direction
+     */
     protected void checkOceanBounds(int xDirection, int yDirection) {
         if (getOceanSize().getMaxX() <= getXPoint() + xDirection + getWidth()
                 || getOceanSize().getMaxX() - getOceanSize().getWidth() >= getXPoint() + xDirection) {
@@ -202,6 +199,9 @@ public abstract class Fish extends OceanShape {
         }
     }
 
+    /**
+     * Method that makes fish sleep for a while
+     */
     protected void holdNextStep() {
         try {
             TimeUnit.MILLISECONDS.sleep(2000);

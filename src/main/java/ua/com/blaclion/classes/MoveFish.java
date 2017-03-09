@@ -3,6 +3,9 @@ package ua.com.blaclion.classes;
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.Fish;
 
+/**
+ * Class that moves fish in its own thread
+ */
 public class MoveFish implements Runnable {
     private Fish fish;
     private Ocean ocean;

@@ -5,6 +5,9 @@ import ua.com.blaclion.abstract_classes.OceanShape;
 
 import java.awt.*;
 
+/**
+ * Class that create barrier like algae
+ */
 public class Algae extends OceanShape {
     private Logger logger = Logger.getLogger(this.getClass());
     private Color algaeColor;

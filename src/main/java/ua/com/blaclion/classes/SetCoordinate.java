@@ -7,6 +7,9 @@ import ua.com.blaclion.frames.MainFrame;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
+/**
+ * Class that set up starts coordinates and corrects them if they lay not int the ocean shape
+ */
 public class SetCoordinate {
     private Rectangle2D oceanSize;
     private OceanShape oceanShape;
@@ -30,6 +33,9 @@ public class SetCoordinate {
         checkMaxYBound = false;
     }
 
+    /**
+     * Method that set up start X coordinate in shape of the ocean
+     */
     public void setStartX () {
         Random xStartPoint = new Random(System.currentTimeMillis() * 2);
         transitPoint = xStartPoint.nextInt((int) oceanSize.getMaxX());
@@ -42,6 +48,9 @@ public class SetCoordinate {
         logger.info(oceanShape.getClass().getSimpleName() + " exemplar " + oceanShape.getExemplar() + " point x " + oceanShape.getXPoint());
     }
 
+    /**
+     * Method that set up start Y coordinate in shape of the ocean
+     */
     public void setStartY () {
         Random yStartPoint = new Random(System.currentTimeMillis() * 5);
         transitPoint = yStartPoint.nextInt((int) oceanSize.getMaxY() + oceanHeightDelta);
@@ -58,6 +67,10 @@ public class SetCoordinate {
         logger.info(oceanShape.getClass().getSimpleName() + " exemplar " + oceanShape.getExemplar() + " point y " + oceanShape.getYPoint());
     }
 
+    /**
+     * Method that corrects current X coordinate in shape of the ocean
+     * for not intersect with other objects
+     */
     public void correctXCoordinate() {
         int move = moveDelta;
 
@@ -76,6 +89,10 @@ public class SetCoordinate {
         logger.info(oceanShape.getXPoint());
     }
 
+    /**
+     * Method that corrects current Y coordinate in shape of the ocean
+     * for not intersect with other objects
+     */
     public void correctYCoordinate() {
         int move = moveDelta;
 
@@ -94,6 +111,10 @@ public class SetCoordinate {
         logger.info(oceanShape.getYPoint());
     }
 
+    /**
+     * Method that checks bounds and corrects while X coordinate
+     * if it is out of the ocean width
+     */
     private void checkXBounds() {
         while (oceanSize.getMaxX() < pointUnbounded) {
             pointUnbounded -= moveDelta;
@@ -110,6 +131,10 @@ public class SetCoordinate {
         }
     }
 
+    /**
+     * Method that checks bounds and corrects while Y coordinate
+     * if it is out of the ocean width
+     */
     private void checkYBounds() {
         while (mainFrame.getHeight() < pointUnbounded) {
             pointUnbounded -= moveDelta;

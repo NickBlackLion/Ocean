@@ -5,6 +5,9 @@ import org.apache.log4j.Logger;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * Class that create algae shape
+ */
 public class DrawAlgae {
     private Algae algae;
     private Rectangle2D algaeShape;

@@ -12,6 +12,9 @@ import java.awt.geom.Rectangle2D;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Common class for drawing ocean and all its components
+ */
 public class Ocean extends JComponent {
     private int mainPanelWidth;
     private int mainPanelHeight;
@@ -84,6 +87,11 @@ public class Ocean extends JComponent {
         pointContainer.setObject(oceanShape.getExemplar(), oceanShape);
     }
 
+    /**
+     * Method that draw rocks in the ocean
+     * @param rect
+     * @param g2
+     */
     private void drawRocksOnPanel(Rectangle2D rect, Graphics2D g2) {
         for (DrawRock drawRock: drawRocks) {
             Rock rock = drawRock.getRock();
@@ -100,6 +108,11 @@ public class Ocean extends JComponent {
         }
     }
 
+    /**
+     * Method that draw algae in the ocean
+     * @param rect
+     * @param g2
+     */
     private void drawAlgaeOnPanel(Rectangle2D rect, Graphics2D g2) {
         for (DrawAlgae drawAlgae: drawAlgae) {
             Algae algae = drawAlgae.getAlgae();
@@ -116,6 +129,11 @@ public class Ocean extends JComponent {
         }
     }
 
+    /**
+     * Method that draw fishes and predators in the ocean
+     * @param rect
+     * @param g2
+     */
     private void drawFishesOnPanel(Rectangle2D rect, Graphics2D g2) {
         for (DrawFish drawFish: drawFishes) {
             Fish fish = drawFish.getFish();
@@ -137,6 +155,12 @@ public class Ocean extends JComponent {
         }
     }
 
+    /**
+     * Method that makes first draw and positioning components in ocean
+     * that they are not intersect each other
+     * @param rect
+     * @param oceanShape
+     */
     private void firstDrawMethod(Rectangle2D rect, OceanShape oceanShape) {
         if (!firstDraw) {
             SetCoordinate startCoordinate = new SetCoordinate(mainFrame, rect, oceanShape, deltaY);
@@ -145,12 +169,12 @@ public class Ocean extends JComponent {
 
             Point2D thisObjectPoint = new Point2D.Double(oceanShape.getXPoint(), oceanShape.getYPoint());
 
-            while (pointContainer.isPointNear(thisObjectPoint, oceanShape)) {
+            while (pointContainer.isSomeObjectNear(thisObjectPoint, oceanShape)) {
                 startCoordinate.correctXCoordinate();
                 thisObjectPoint.setLocation(oceanShape.getXPoint(), oceanShape.getYPoint());
             }
 
-            while (pointContainer.isPointNear(thisObjectPoint, oceanShape)) {
+            while (pointContainer.isSomeObjectNear(thisObjectPoint, oceanShape)) {
                 if (oceanShape.getClass() != Rock.class) {
                     startCoordinate.correctYCoordinate();
                     thisObjectPoint.setLocation(oceanShape.getXPoint(), oceanShape.getYPoint());

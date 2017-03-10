@@ -17,15 +17,11 @@ public class DrawFish {
     public DrawFish(Fish fish) {
         logger.info("Create DrawFish");
         this.fish = fish;
+        fishShape = new Ellipse2D.Double();
     }
 
     public Ellipse2D getFishShape() {
-        fishShape = new Ellipse2D.Double(fish.getXPoint(),
-                fish.getYPoint(),
-                fish.getWidth(),
-                fish.getHeight()
-        );
-
+        fishShape.setFrame(fish.getXPoint(), fish.getYPoint(), fish.getWidth(), fish.getHeight());
         return fishShape;
     }
 

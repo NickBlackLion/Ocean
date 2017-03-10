@@ -16,14 +16,13 @@ public class DrawRock {
     public DrawRock(Rock rock) {
         logger.info("Create DrawRock");
         this.rock = rock;
+        rockShape = new Arc2D.Double(Arc2D.PIE);
+        rockShape.setAngleStart(0);
+        rockShape.setAngleExtent(180);
     }
 
     public Arc2D getRockShape() {
-        rockShape = new Arc2D.Double(Arc2D.PIE);
         rockShape.setFrame(rock.getXPoint(), rock.getYPoint(), rock.getWidth(), rock.getHeight());
-        rockShape.setAngleStart(0);
-        rockShape.setAngleExtent(180);
-
         return rockShape;
     }
 

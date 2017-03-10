@@ -16,12 +16,11 @@ public class DrawAlgae {
     public DrawAlgae(Algae algae) {
         logger.info("Create DrawAlgae");
         this.algae = algae;
+        algaeShape = new Rectangle2D.Double();
     }
 
     public Rectangle2D getAlgaeShape() {
-        algaeShape = new Rectangle2D.Double();
         algaeShape.setFrame(algae.getXPoint(), algae.getYPoint(), algae.getWidth(), algae.getHeight());
-
         return algaeShape;
     }
 

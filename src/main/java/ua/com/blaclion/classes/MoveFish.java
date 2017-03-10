@@ -22,6 +22,7 @@ public class MoveFish implements Runnable {
     public void run() {
         while(isRunning) {
             fish.swim();
+            logger.info(fish.getExemplar() + " " + Thread.currentThread());
             ocean.repaint();
         }
     }

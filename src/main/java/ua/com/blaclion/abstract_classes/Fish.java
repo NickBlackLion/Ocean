@@ -5,7 +5,6 @@ import ua.com.blaclion.frames.MainFrame;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -15,10 +14,10 @@ import java.util.concurrent.TimeUnit;
 */
 public abstract class Fish extends OceanShape {
     private Rectangle2D oceanShape;
-    private java.util.List<DrawFish> drawFishes;
+    private SafetyList<DrawFish> drawFishes;
     private Ocean ocean;
     private ExecutorService executor;
-    private List<MoveFish> moveFishes;
+    private SafetyList<MoveFish> moveFishes;
     private MainFrame mainFrame;
     private int pointYDelta;
     private int lifeDays;
@@ -53,9 +52,8 @@ public abstract class Fish extends OceanShape {
 
             //Check if coordinate of new fish inside the ocean
             //If not then correct coordinate
-            setCoordinate = new SetCoordinate(getMainFrame(), getOceanSize(), newFish, getPointYDelta());
-            while (newFish.getXPoint() + newFish.getWidth() >= getOceanSize().getMaxX()) {
-                setCoordinate.correctXCoordinate();
+            if (newFishPoint.getX() + this.getWidth() >= getOceanSize().getMaxX()) {
+                newFishPoint.setLocation(this.getXPoint() - this.getWidth(), this.getYPoint());
             }
 
             //Set up all needing containers, objects and corrected coordinate
@@ -66,6 +64,7 @@ public abstract class Fish extends OceanShape {
             newFish.setExecutor(getExecutor());
             newFish.setOceanSize(getOceanSize());
             newFish.setMoveFishes(getMoveFishes());
+            newFish.setOcean(getOcean());
 
             //Add new fish to common fish's container
             getDrawFishes().add(new DrawFish(newFish));
@@ -92,7 +91,7 @@ public abstract class Fish extends OceanShape {
         this.oceanShape = oceanShape;
     }
 
-    public void setDrawFishes(List<DrawFish> drawFishes) {
+    public void setDrawFishes(SafetyList<DrawFish> drawFishes) {
         this.drawFishes = drawFishes;
     }
 
@@ -104,7 +103,7 @@ public abstract class Fish extends OceanShape {
         this.executor = executor;
     }
 
-    public void setMoveFishes(List<MoveFish> moveFishes) {
+    public void setMoveFishes(SafetyList<MoveFish> moveFishes) {
         this.moveFishes = moveFishes;
     }
 
@@ -112,7 +111,7 @@ public abstract class Fish extends OceanShape {
         return oceanShape;
     }
 
-    public List<DrawFish> getDrawFishes() {
+    public SafetyList<DrawFish> getDrawFishes() {
         return drawFishes;
     }
 
@@ -124,7 +123,7 @@ public abstract class Fish extends OceanShape {
         return executor;
     }
 
-    public List<MoveFish> getMoveFishes() {
+    public SafetyList<MoveFish> getMoveFishes() {
         return moveFishes;
     }
 

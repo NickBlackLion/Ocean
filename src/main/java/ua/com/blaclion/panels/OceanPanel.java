@@ -9,7 +9,6 @@ import ua.com.blaclion.frames.MainFrame;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 /**
  * Class that create the ocean, random amount of all objects in the ocean
@@ -20,10 +19,10 @@ public class OceanPanel {
     private JPanel insPanel;
     private Ocean ocean;
     private Logger logger = Logger.getLogger(this.getClass());
-    private List<DrawFish> drawFishes;
-    private List<DrawRock> drawRocks;
-    private List<DrawAlgae> drawAlgaes;
-    private List<MoveFish> moveFishes;
+    private SafetyList<DrawFish> drawFishes;
+    private SafetyList<DrawRock> drawRocks;
+    private SafetyList<DrawAlgae> drawAlgaes;
+    private SafetyList<MoveFish> moveFishes;
     private int startAmountOfBarriers = 0;
     private PointsCommonContainer pointsContainer;
 
@@ -31,17 +30,17 @@ public class OceanPanel {
         ocean = new Ocean();
         ocean.setMainFrame(frame);
 
-        int amountOfFishes = new Random(System.currentTimeMillis()).nextInt(10);
-        int amountOfRocks = new Random(System.currentTimeMillis()).nextInt(5);
-        int amountOfAlgaes = new Random(System.currentTimeMillis()).nextInt(10);
-        int amountOfPredators = new Random(System.currentTimeMillis()).nextInt(5);
+        int amountOfFishes = 10; //new Random(System.currentTimeMillis()).nextInt(10);
+        int amountOfRocks = 3; //new Random(System.currentTimeMillis()).nextInt(5);
+        int amountOfAlgaes = 8; //new Random(System.currentTimeMillis()).nextInt(10);
+        int amountOfPredators = 5; //new Random(System.currentTimeMillis()).nextInt(5);
 
         pointsContainer = new PointsCommonContainer();
         ocean.setPointContainer(pointsContainer);
 
-        moveFishes = new ArrayList<>();
+        moveFishes = new SafetyList<>();
 
-        drawFishes = new ArrayList<>();
+        drawFishes = new SafetyList<>();
         for (int i = 0; i < amountOfFishes; i++) {
             Fish fish = new FishFactory().getNewFish(GoldFish.class);
             drawFishes.add(new DrawFish(fish));
@@ -64,7 +63,7 @@ public class OceanPanel {
             Fish.increaseAmountOfPredators();
         }
 
-        drawRocks = new ArrayList<>();
+        drawRocks = new SafetyList<>();
         for (int i = 0; i < amountOfRocks; i++) {
             OceanShape oceanBarrier = new BarrierFactory().getNewShape(Rock.class);
             Rock rock = (Rock) oceanBarrier;
@@ -73,7 +72,7 @@ public class OceanPanel {
             startAmountOfBarriers++;
         }
 
-        drawAlgaes = new ArrayList<>();
+        drawAlgaes = new SafetyList<>();
         for (int i = 0; i < amountOfAlgaes; i++) {
             OceanShape oceanBarrier = new BarrierFactory().getNewShape(Algae.class);
             Algae algae = (Algae) oceanBarrier;
@@ -94,7 +93,7 @@ public class OceanPanel {
         return startAmountOfBarriers;
     }
 
-    public List<MoveFish> getMoveFishes() {
+    public SafetyList<MoveFish> getMoveFishes() {
         return moveFishes;
     }
 

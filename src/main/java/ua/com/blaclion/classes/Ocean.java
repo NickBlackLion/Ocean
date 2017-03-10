@@ -9,8 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.*;
-import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Common class for drawing ocean and all its components
@@ -20,15 +20,16 @@ public class Ocean extends JComponent {
     private int mainPanelHeight;
     private Logger logger = Logger.getLogger(this.getClass());
     private MainFrame mainFrame;
-    private List<DrawFish> drawFishes;
-    private List<DrawRock> drawRocks;
-    private List<DrawAlgae> drawAlgae;
+    private SafetyList<DrawFish> drawFishes;
+    private SafetyList<DrawRock> drawRocks;
+    private SafetyList<DrawAlgae> drawAlgae;
     private boolean firstDraw = false;
     private PointsCommonContainer pointContainer;
     private int deltaY;
+    private Lock lock;
 
     public Ocean() {
-        drawFishes = new ArrayList<>();
+        lock = new ReentrantLock();
     }
 
     @Override
@@ -65,15 +66,15 @@ public class Ocean extends JComponent {
         this.mainFrame = mainFrame;
     }
 
-    public void setDrawFishes(java.util.List<DrawFish> drawFishes) {
+    public void setDrawFishes(SafetyList<DrawFish> drawFishes) {
         this.drawFishes = drawFishes;
     }
 
-    public void setDrawRocks(List<DrawRock> drawRocks) {
+    public void setDrawRocks(SafetyList<DrawRock> drawRocks) {
         this.drawRocks = drawRocks;
     }
 
-    public void setDrawAlgae(List<DrawAlgae> drawAlgae) {
+    public void setDrawAlgae(SafetyList<DrawAlgae> drawAlgae) {
         this.drawAlgae = drawAlgae;
     }
 

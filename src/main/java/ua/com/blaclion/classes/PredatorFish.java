@@ -24,9 +24,9 @@ public class PredatorFish extends Fish {
 
         fishColor = Color.RED;
 
-        setLifeDays(new Random(System.currentTimeMillis()).nextInt(300));
+        setLifeDays(new Random(System.currentTimeMillis()).nextInt(500));
 
-        setNewFishDays(new Random(System.currentTimeMillis()).nextInt(100));
+        setNewFishDays(new Random(System.currentTimeMillis()).nextInt(200));
 
         logger.info("Fish created " + getExemplar());
 
@@ -122,7 +122,7 @@ public class PredatorFish extends Fish {
      * Method that set up steps counter to death moment
      */
     private void setToHungryDeath() {
-        hungryDeath = 30;
+        hungryDeath = 100;
     }
 
     /**

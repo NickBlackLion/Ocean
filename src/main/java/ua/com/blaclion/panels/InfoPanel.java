@@ -37,13 +37,10 @@ public class InfoPanel {
 
     public InfoPanel() {
         executor = Executors.newCachedThreadPool();
-        period = new Random(System.currentTimeMillis()).nextInt(200000);
         timer = new Timer();
 
         //Run all fishes move threads and show current info
         startFishesButton.addActionListener(e -> {
-            reSetUpTask(0);
-
             logger.info("Start pressed");
             moveFishes = oceanPanel.getMoveFishes();
             if (!started) {
@@ -51,6 +48,9 @@ public class InfoPanel {
                     moveFish.wakeUp();
                     executor.execute(moveFish);
                 }
+
+                period = new Random(System.currentTimeMillis()).nextInt(200000);
+                reSetUpTask(0);
             }
 
             startAmountFishes.setText(Fish.getAmountOfFishes().toString());
@@ -62,13 +62,7 @@ public class InfoPanel {
         //Stop all fishes move threads and show current info
         stopFishesButton.addActionListener(e -> {
             logger.info("Stop pressed");
-            for (MoveFish moveFish : moveFishes) {
-                moveFish.kill();
-            }
-
-            finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
-            finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
-            started = false;
+            killAllFishesProcess();
         });
 
         nextDayButton.addActionListener(e -> {
@@ -93,6 +87,23 @@ public class InfoPanel {
         period -= mul;
         timer.schedule(task, period);
         logger.info("Period " + period);
+    }
+
+    private class UnitTimer extends TimerTask {
+        @Override
+        public void run() {
+            killAllFishesProcess();
+        }
+    }
+
+    private void killAllFishesProcess() {
+        for (MoveFish moveFish : moveFishes) {
+            moveFish.kill();
+        }
+
+        finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
+        finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
+        started = false;
     }
 
     {
@@ -171,14 +182,4 @@ public class InfoPanel {
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }
-
-    private class UnitTimer extends TimerTask {
-        @Override
-        public void run() {
-            for (MoveFish moveFish : moveFishes) {
-                moveFish.kill();
-            }
-        }
-    }
-
 }

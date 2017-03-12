@@ -6,6 +6,9 @@ import ua.com.blaclion.classes.MoveFish;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
+import java.util.List;
+import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -25,16 +28,22 @@ public class InfoPanel {
     private JButton stopFishesButton;
 
     private Logger logger = Logger.getLogger(this.getClass());
-    private java.util.List<MoveFish> moveFishes;
+    private List<MoveFish> moveFishes;
     private OceanPanel oceanPanel;
     private boolean started = false;
     private ExecutorService executor;
+    private Timer timer;
+    private int period;
 
     public InfoPanel() {
         executor = Executors.newCachedThreadPool();
+        period = new Random(System.currentTimeMillis()).nextInt(200000);
+        timer = new Timer();
 
         //Run all fishes move threads and show current info
         startFishesButton.addActionListener(e -> {
+            reSetUpTask(0);
+
             logger.info("Start pressed");
             moveFishes = oceanPanel.getMoveFishes();
             if (!started) {
@@ -66,6 +75,8 @@ public class InfoPanel {
             for (MoveFish moveFish : moveFishes) {
                 moveFish.setTimeOutToZero();
             }
+
+            reSetUpTask(1000);
         });
     }
 
@@ -75,6 +86,13 @@ public class InfoPanel {
 
     public ExecutorService getExecutor() {
         return executor;
+    }
+
+    private void reSetUpTask(int mul) {
+        TimerTask task = new UnitTimer();
+        period -= mul;
+        timer.schedule(task, period);
+        logger.info("Period " + period);
     }
 
     {
@@ -153,4 +171,14 @@ public class InfoPanel {
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }
+
+    private class UnitTimer extends TimerTask {
+        @Override
+        public void run() {
+            for (MoveFish moveFish : moveFishes) {
+                moveFish.kill();
+            }
+        }
+    }
+
 }

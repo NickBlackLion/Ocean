@@ -14,7 +14,6 @@ public class GoldFish extends Fish {
     private Logger logger = Logger.getLogger(this.getClass());
     private Color fishColor;
     private DrawFish thisDrawFish;
-    private MoveFish thisMoveFish;
 
     public GoldFish() {
         setWidth(20);

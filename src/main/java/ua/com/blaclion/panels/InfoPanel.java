@@ -36,16 +36,13 @@ public class InfoPanel {
 
     public InfoPanel() {
         period = new Random(System.currentTimeMillis()).nextInt(200000);
+        timer = new Timer();
 
         //Run all fishes move threads and show current info
         startFishesButton.addActionListener(e -> {
             logger.info("Start pressed");
-            timer = new Timer();
-            TimerTask task = new UnitTimer();
 
-            timer.schedule(task, period);
-
-            logger.info("Period " + period + " timer " + timer.toString());
+            reSetUpTimer(0);
 
             if (!started) {
                 executor = Executors.newSingleThreadExecutor();
@@ -74,13 +71,8 @@ public class InfoPanel {
         });
 
         nextDayButton.addActionListener(e -> {
-            timer.cancel();
             moveFish.setTimeOutToZero();
-            period -= 1000;
-            timer = new Timer();
-            TimerTask task = new UnitTimer();
-            timer.schedule(task, period);
-            logger.info("Period " + period + " timer " + timer.toString());
+            reSetUpTimer(1000);
         });
     }
 
@@ -90,6 +82,13 @@ public class InfoPanel {
 
     public void setMoveFish(MoveFish moveFish) {
         this.moveFish = moveFish;
+    }
+
+    private void reSetUpTimer(int mul) {
+        TimerTask task = new UnitTimer();
+        period -= mul;
+        timer.schedule(task, period);
+        logger.info("Period " + period);
     }
 
     {

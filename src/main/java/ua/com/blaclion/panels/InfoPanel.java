@@ -6,6 +6,8 @@ import ua.com.blaclion.classes.MoveFish;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
+import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,11 +31,21 @@ public class InfoPanel {
     private OceanPanel oceanPanel;
     private boolean started = false;
     private ExecutorService executor;
+    private int period;
+    private Timer timer;
 
     public InfoPanel() {
+        period = new Random(System.currentTimeMillis()).nextInt(200000);
+
         //Run all fishes move threads and show current info
         startFishesButton.addActionListener(e -> {
             logger.info("Start pressed");
+            timer = new Timer();
+            TimerTask task = new UnitTimer();
+
+            timer.schedule(task, period);
+
+            logger.info("Period " + period + " timer " + timer.toString());
 
             if (!started) {
                 executor = Executors.newSingleThreadExecutor();
@@ -61,7 +73,15 @@ public class InfoPanel {
             started = false;
         });
 
-        nextDayButton.addActionListener(e -> moveFish.setTimeOutToZero());
+        nextDayButton.addActionListener(e -> {
+            timer.cancel();
+            moveFish.setTimeOutToZero();
+            period -= 1000;
+            timer = new Timer();
+            TimerTask task = new UnitTimer();
+            timer.schedule(task, period);
+            logger.info("Period " + period + " timer " + timer.toString());
+        });
     }
 
     public void setStartAmounts(OceanPanel oceanPanel) {
@@ -147,5 +167,14 @@ public class InfoPanel {
      */
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
+    }
+
+    private class UnitTimer extends TimerTask {
+        @Override
+        public void run() {
+            moveFish.kill();
+            finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
+            finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
+        }
     }
 }

@@ -35,19 +35,18 @@ public class InfoPanel {
     private Timer timer;
 
     public InfoPanel() {
-        period = new Random(System.currentTimeMillis()).nextInt(200000);
         timer = new Timer();
 
         //Run all fishes move threads and show current info
         startFishesButton.addActionListener(e -> {
             logger.info("Start pressed");
 
-            reSetUpTimer(0);
-
             if (!started) {
                 executor = Executors.newSingleThreadExecutor();
                 moveFish.wakeUp();
                 executor.execute(moveFish);
+                period = new Random(System.currentTimeMillis()).nextInt(200000);
+                reSetUpTimer(0);
             }
 
             startAmountFishes.setText(Fish.getAmountOfFishes().toString());
@@ -61,13 +60,8 @@ public class InfoPanel {
             logger.info("Stop pressed");
 
             if (started) {
-                moveFish.kill();
-                executor.shutdown();
-                finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
-                finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
+                killFishesThread();
             }
-
-            started = false;
         });
 
         nextDayButton.addActionListener(e -> {
@@ -171,9 +165,16 @@ public class InfoPanel {
     private class UnitTimer extends TimerTask {
         @Override
         public void run() {
-            moveFish.kill();
-            finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
-            finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
+            killFishesThread();
         }
     }
+
+    private void killFishesThread() {
+        moveFish.kill();
+        executor.shutdown();
+        finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
+        finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
+        started = false;
+    }
+
 }

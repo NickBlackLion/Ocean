@@ -61,6 +61,12 @@ public class InfoPanel {
             finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
             started = false;
         });
+
+        nextDayButton.addActionListener(e -> {
+            for (MoveFish moveFish : moveFishes) {
+                moveFish.setTimeOutToZero();
+            }
+        });
     }
 
     public void setStartAmounts(OceanPanel oceanPanel) {

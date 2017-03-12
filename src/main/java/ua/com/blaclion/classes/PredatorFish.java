@@ -74,16 +74,12 @@ public class PredatorFish extends Fish {
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + getExemplar());
-
-            holdNextStep();
         }
 
         checkOceanBounds(xDirection, yDirection);
 
         Point2D currentFishPoint = new Point2D.Double(getXPoint(), getYPoint());
         getContainer().setPoint(this.getExemplar(), currentFishPoint);
-
-        holdNextStep();
     }
 
     public Color getColor() {

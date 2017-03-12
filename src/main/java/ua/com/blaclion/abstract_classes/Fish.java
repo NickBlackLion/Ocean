@@ -198,17 +198,6 @@ public abstract class Fish extends OceanShape {
         }
     }
 
-    /**
-     * Method that makes fish sleep for a while
-     */
-    protected void holdNextStep() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static Integer getAmountOfFishes() {
         return amountOfFishes;
     }

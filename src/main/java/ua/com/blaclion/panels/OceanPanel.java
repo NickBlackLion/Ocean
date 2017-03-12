@@ -8,7 +8,6 @@ import ua.com.blaclion.frames.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 
 /**
  * Class that create the ocean, random amount of all objects in the ocean
@@ -22,11 +21,11 @@ public class OceanPanel {
     private SafetyList<DrawFish> drawFishes;
     private SafetyList<DrawRock> drawRocks;
     private SafetyList<DrawAlgae> drawAlgaes;
-    private SafetyList<MoveFish> moveFishes;
     private int startAmountOfBarriers = 0;
     private PointsCommonContainer pointsContainer;
+    private MoveFish moveFish;
 
-    public OceanPanel(MainFrame frame, InfoPanel infoPanel) {
+    public OceanPanel(MainFrame frame) {
         ocean = new Ocean();
         ocean.setMainFrame(frame);
 
@@ -38,7 +37,7 @@ public class OceanPanel {
         pointsContainer = new PointsCommonContainer();
         ocean.setPointContainer(pointsContainer);
 
-        moveFishes = new SafetyList<>();
+        moveFish = new MoveFish(ocean);
 
         drawFishes = new SafetyList<>();
         for (int i = 0; i < amountOfFishes; i++) {
@@ -46,9 +45,8 @@ public class OceanPanel {
             drawFishes.add(new DrawFish(fish));
             fish.setDrawFishes(drawFishes);
             fish.setContainer(pointsContainer);
-            fish.setExecutor(infoPanel.getExecutor());
-            fish.setMoveFishes(moveFishes);
-            moveFishes.add(new MoveFish(fish, ocean));
+            moveFish.addToMoveList(fish);
+            fish.setMoveFish(moveFish);
             Fish.increaseAmountOfFishes();
         }
 
@@ -57,9 +55,8 @@ public class OceanPanel {
             drawFishes.add(new DrawFish(fish));
             fish.setDrawFishes(drawFishes);
             fish.setContainer(pointsContainer);
-            fish.setExecutor(infoPanel.getExecutor());
-            fish.setMoveFishes(moveFishes);
-            moveFishes.add(new MoveFish(fish, ocean));
+            moveFish.addToMoveList(fish);
+            fish.setMoveFish(moveFish);
             Fish.increaseAmountOfPredators();
         }
 
@@ -93,8 +90,8 @@ public class OceanPanel {
         return startAmountOfBarriers;
     }
 
-    public SafetyList<MoveFish> getMoveFishes() {
-        return moveFishes;
+    public MoveFish getMoveFish() {
+        return moveFish;
     }
 
     {

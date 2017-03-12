@@ -44,15 +44,6 @@ public class GoldFish extends Fish {
             }
         }
 
-        //Find this fish in common container of moving fishes
-        if(thisMoveFish == null){
-            for (MoveFish moveFish: getMoveFishes()) {
-                if (moveFish.getFish().equals(this)) {
-                    thisMoveFish = moveFish;
-                }
-            }
-        }
-
         deathCounter();
         newFishCounter();
 
@@ -66,16 +57,12 @@ public class GoldFish extends Fish {
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + getExemplar());
-
-            holdNextStep();
         }
 
         checkOceanBounds(xDirection, yDirection);
 
         Point2D currentFishPoint = new Point2D.Double(getXPoint(), getYPoint());
         getContainer().setPoint(this.getExemplar(), currentFishPoint);
-
-        holdNextStep();
     }
 
     public Color getColor() {
@@ -119,7 +106,7 @@ public class GoldFish extends Fish {
      *kill this fish
      */
     public void fishAte() {
-        kill();
+        killForGoldFish();
     }
 
     /**
@@ -127,19 +114,13 @@ public class GoldFish extends Fish {
      */
     private void killFish() {
         if (getLifeDays() == 0) {
-            kill();
+            killForGoldFish();
         }
     }
 
-    /**
-     * Delete this fish from all common containers and stop is thread
-     */
-    private void kill() {
-        thisMoveFish.kill();
-        getContainer().remove(getExemplar());
+    private void killForGoldFish() {
+        kill();
         getDrawFishes().remove(thisDrawFish);
-        getMoveFishes().remove(thisMoveFish);
         decreaseAmountOfFishes();
-        logger.info("Exemplar " + this.getExemplar() + " is dead");
     }
 }

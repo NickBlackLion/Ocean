@@ -114,11 +114,9 @@ public class PointsCommonContainer {
                 if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D,
                         oceanShape.getWidth(), oceanShape.getHeight(),
                         oceanShapeFromContainer.getWidth(), oceanShapeFromContainer.getHeight())
-                        && oceanShape.getClass() == PredatorFish.class
-                        && oceanShapeFromContainer.getClass() == GoldFish.class) {
+                        && oceanShape.getClass() == PredatorFish.class) {
                     return oceanShapeFromContainer;
                 }
-
             }
         } finally {
             lock.unlock();

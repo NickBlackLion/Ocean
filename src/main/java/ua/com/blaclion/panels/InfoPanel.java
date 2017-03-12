@@ -25,23 +25,20 @@ public class InfoPanel {
     private JButton stopFishesButton;
 
     private Logger logger = Logger.getLogger(this.getClass());
-    private java.util.List<MoveFish> moveFishes;
+    private MoveFish moveFish;
     private OceanPanel oceanPanel;
     private boolean started = false;
     private ExecutorService executor;
 
     public InfoPanel() {
-        executor = Executors.newCachedThreadPool();
-
         //Run all fishes move threads and show current info
         startFishesButton.addActionListener(e -> {
             logger.info("Start pressed");
-            moveFishes = oceanPanel.getMoveFishes();
+
             if (!started) {
-                for (MoveFish moveFish : moveFishes) {
-                    moveFish.wakeUp();
-                    executor.execute(moveFish);
-                }
+                executor = Executors.newSingleThreadExecutor();
+                moveFish.wakeUp();
+                executor.execute(moveFish);
             }
 
             startAmountFishes.setText(Fish.getAmountOfFishes().toString());
@@ -53,22 +50,26 @@ public class InfoPanel {
         //Stop all fishes move threads and show current info
         stopFishesButton.addActionListener(e -> {
             logger.info("Stop pressed");
-            for (MoveFish moveFish : moveFishes) {
+
+            if (started) {
                 moveFish.kill();
+                executor.shutdown();
+                finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
+                finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
             }
 
-            finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
-            finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
             started = false;
         });
+
+        nextDayButton.addActionListener(e -> moveFish.setTimeOutToZero());
     }
 
     public void setStartAmounts(OceanPanel oceanPanel) {
         this.oceanPanel = oceanPanel;
     }
 
-    public ExecutorService getExecutor() {
-        return executor;
+    public void setMoveFish(MoveFish moveFish) {
+        this.moveFish = moveFish;
     }
 
     {

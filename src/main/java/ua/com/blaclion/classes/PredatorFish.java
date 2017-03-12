@@ -38,18 +38,11 @@ public class PredatorFish extends Fish {
         int xDirection = (int)(Math.random()*20 - 10);
         int yDirection = (int)(Math.random()*20 - 10);
 
+        //Find this fish in common container of drew fishes
         if(thisDrawFish == null){
             for (DrawFish drawFish: getDrawFishes()) {
                 if (drawFish.getFish().equals(this)) {
                     thisDrawFish = drawFish;
-                }
-            }
-        }
-
-        if(thisMoveFish == null){
-            for (MoveFish moveFish: getMoveFishes()) {
-                if (moveFish.getFish().equals(this)) {
-                    thisMoveFish = moveFish;
                 }
             }
         }
@@ -66,24 +59,22 @@ public class PredatorFish extends Fish {
 
         OceanShape maybeGoldFish = getContainer().isPredatorNearGoldFish(fishCurrentPoint, fishNextPoint, this);
         if (maybeGoldFish != null) {
-            GoldFish goldFish = (GoldFish) maybeGoldFish;
-            goldFish.fishAte();
-            setToHungryDeath();
-            logger.info("Fish " + goldFish.getExemplar() + " has eaten");
-        } else if (getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this)) {
-            xDirection = 0;
-            yDirection = 0;
-            logger.info("It's existed fish near exemplar " + getExemplar());
-
-            holdNextStep();
+            if (maybeGoldFish.getClass() == GoldFish.class) {
+                GoldFish goldFish = (GoldFish) maybeGoldFish;
+                goldFish.fishAte();
+                setToHungryDeath();
+                logger.info("Fish " + goldFish.getExemplar() + " has eaten");
+            } else {
+                xDirection = 0;
+                yDirection = 0;
+                logger.info("It's existed fish near exemplar " + getExemplar());
+            }
         }
 
         checkOceanBounds(xDirection, yDirection);
 
         Point2D currentFishPoint = new Point2D.Double(getXPoint(), getYPoint());
         getContainer().setPoint(this.getExemplar(), currentFishPoint);
-
-        holdNextStep();
     }
 
     public Color getColor() {
@@ -123,6 +114,17 @@ public class PredatorFish extends Fish {
     }
 
     /**
+     * Delete this fish from all common containers and stop is thread
+     */
+    private void killFish() {
+        if (getLifeDays() == 0 || hungryDeath == 0) {
+            kill();
+            getDrawFishes().remove(thisDrawFish);
+            decreaseAmountOfPredators();
+        }
+    }
+
+    /**
      * Method that set up steps counter to death moment
      */
     private void setToHungryDeath() {
@@ -134,18 +136,5 @@ public class PredatorFish extends Fish {
      */
     private void hungryDeathCounter() {
         hungryDeath--;
-    }
-
-    /**
-     * Delete this fish from all common containers and stop is thread
-     */
-    private void killFish() {
-        if (getLifeDays() == 0 || hungryDeath == 0) {
-            getDrawFishes().remove(thisDrawFish);
-            getMoveFishes().remove(thisMoveFish);
-            thisMoveFish.kill();
-            decreaseAmountOfPredators();
-            logger.info("Exemplar " + this.getExemplar() + " is dead");
-        }
     }
 }

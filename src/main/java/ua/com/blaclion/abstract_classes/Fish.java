@@ -1,13 +1,12 @@
 package ua.com.blaclion.abstract_classes;
 
+import org.apache.log4j.Logger;
 import ua.com.blaclion.classes.*;
 import ua.com.blaclion.frames.MainFrame;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Parent class for all fishes in the ocean
@@ -16,15 +15,15 @@ public abstract class Fish extends OceanShape {
     private Rectangle2D oceanShape;
     private SafetyList<DrawFish> drawFishes;
     private Ocean ocean;
-    private ExecutorService executor;
-    private SafetyList<MoveFish> moveFishes;
     private MainFrame mainFrame;
     private int pointYDelta;
     private int lifeDays;
     private int newFishDays;
-    private SetCoordinate setCoordinate;
+    private MoveFish moveFish;
     private static int amountOfFishes;
     private static int amountOfPredators;
+    private Logger logger = Logger.getLogger(this.getClass());
+    private boolean kill = false;
 
     /**
      * Implement method for particular type of fish
@@ -36,6 +35,9 @@ public abstract class Fish extends OceanShape {
      */
     protected void makeNewFish() {
         Point2D newFishPoint = new Point2D.Double(this.getXPoint() + this.getWidth(), this.getYPoint());
+        if (newFishPoint.getX() + this.getWidth() >= getOceanSize().getMaxX()) {
+            newFishPoint.setLocation(this.getXPoint() - this.getWidth(), this.getYPoint());
+        }
 
         if (newFishDays == 0 && !getContainer().isSomeObjectNear(newFishPoint, this)) {
             Fish newFish = new FishFactory().getNewFish(getClass());
@@ -50,21 +52,15 @@ public abstract class Fish extends OceanShape {
                 Fish.increaseAmountOfPredators();
             }
 
-            //Check if coordinate of new fish inside the ocean
-            //If not then correct coordinate
-            if (newFishPoint.getX() + this.getWidth() >= getOceanSize().getMaxX()) {
-                newFishPoint.setLocation(this.getXPoint() - this.getWidth(), this.getYPoint());
-            }
-
             //Set up all needing containers, objects and corrected coordinate
             newFish.setXPoint((int) newFishPoint.getX());
             newFish.setYPoint((int) newFishPoint.getY());
             newFish.setDrawFishes(getDrawFishes());
             newFish.setContainer(getContainer());
-            newFish.setExecutor(getExecutor());
             newFish.setOceanSize(getOceanSize());
-            newFish.setMoveFishes(getMoveFishes());
             newFish.setOcean(getOcean());
+            newFish.setMoveFish(moveFish);
+            getMoveFish().addToMoveList(newFish);
 
             //Add new fish to common fish's container
             getDrawFishes().add(new DrawFish(newFish));
@@ -72,11 +68,6 @@ public abstract class Fish extends OceanShape {
             //Add new fish to common container of all objects in the ocean
             getContainer().setPoint(newFish.getExemplar(), new Point2D.Double(newFish.getXPoint(), newFish.getYPoint()));
             getContainer().setObject(newFish.getExemplar(), newFish);
-
-            //Make new fish move
-            MoveFish moveFish = new MoveFish(newFish, getOcean());
-            getMoveFishes().add(moveFish);
-            getExecutor().execute(moveFish);
 
             //Set upp for current fish new makeFish timer
             newFishDays = new Random(System.currentTimeMillis()).nextInt(100);
@@ -99,14 +90,6 @@ public abstract class Fish extends OceanShape {
         this.ocean = ocean;
     }
 
-    public void setExecutor(ExecutorService executor) {
-        this.executor = executor;
-    }
-
-    public void setMoveFishes(SafetyList<MoveFish> moveFishes) {
-        this.moveFishes = moveFishes;
-    }
-
     public Rectangle2D getOceanSize() {
         return oceanShape;
     }
@@ -117,14 +100,6 @@ public abstract class Fish extends OceanShape {
 
     public Ocean getOcean() {
         return ocean;
-    }
-
-    public ExecutorService getExecutor() {
-        return executor;
-    }
-
-    public SafetyList<MoveFish> getMoveFishes() {
-        return moveFishes;
     }
 
     public MainFrame getMainFrame() {
@@ -198,15 +173,26 @@ public abstract class Fish extends OceanShape {
         }
     }
 
+    public void setMoveFish(MoveFish moveFish) {
+        this.moveFish = moveFish;
+    }
+
+    public MoveFish getMoveFish() {
+        return moveFish;
+    }
+
     /**
-     * Method that makes fish sleep for a while
+     * Delete this fish from containers
      */
-    protected void holdNextStep() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    protected void kill() {
+        getContainer().remove(getExemplar());
+        getMoveFish().removeFromMoveList(this);
+        logger.info("Exemplar " + this.getExemplar() + " is dead");
+        kill = true;
+    }
+
+    public boolean isKill() {
+        return kill;
     }
 
     public static Integer getAmountOfFishes() {

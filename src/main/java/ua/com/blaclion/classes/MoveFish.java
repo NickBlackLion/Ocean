@@ -14,12 +14,14 @@ public class MoveFish implements Runnable {
     private Logger logger = Logger.getLogger(this.getClass());
     private boolean isRunning = false;
     private int timeOut;
+    private int circle;
 
     public MoveFish(Fish fish, Ocean ocean) {
         this.fish = fish;
         this.ocean = ocean;
         isRunning = true;
         timeOut = 3000;
+        circle = 0;
     }
 
     @Override
@@ -29,7 +31,13 @@ public class MoveFish implements Runnable {
             logger.info(fish.getExemplar() + " " + Thread.currentThread());
             ocean.repaint();
             holdNextStep();
-            setTimeOutToNorm();
+            if (timeOut == 0) {
+                circle++;
+            }
+            if (circle == 2) {
+                setTimeOutToNorm();
+                circle = 0;
+            }
         }
     }
 

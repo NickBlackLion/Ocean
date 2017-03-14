@@ -26,6 +26,7 @@ public class InfoPanel {
     private JLabel finishAmountPredators;
     private JButton startFishesButton;
     private JButton stopFishesButton;
+    private JLabel isStartedLabel;
 
     private Logger logger = Logger.getLogger(this.getClass());
     private List<MoveFish> moveFishes;
@@ -37,7 +38,6 @@ public class InfoPanel {
 
     public InfoPanel() {
         executor = Executors.newCachedThreadPool();
-        timer = new Timer();
 
         //Run all fishes move threads and show current info
         startFishesButton.addActionListener(e -> {
@@ -49,6 +49,7 @@ public class InfoPanel {
                     executor.execute(moveFish);
                 }
 
+                timer = new Timer();
                 period = new Random(System.currentTimeMillis()).nextInt(200000);
                 reSetUpTask(0);
             }
@@ -57,20 +58,25 @@ public class InfoPanel {
             startAmountPredators.setText(Fish.getAmountOfPredators().toString());
             startAmountBarriers.setText(oceanPanel.getAmountOfBarriers().toString());
             started = true;
+
+            isStartedLabel.setText("The Ocean has started");
         });
 
         //Stop all fishes move threads and show current info
         stopFishesButton.addActionListener(e -> {
             logger.info("Stop pressed");
             killAllFishesProcess();
+            isStartedLabel.setText("The Ocean has stopped");
         });
 
         nextDayButton.addActionListener(e -> {
-            for (MoveFish moveFish : moveFishes) {
-                moveFish.setTimeOutToZero();
-            }
+            if (started) {
+                for (MoveFish moveFish : moveFishes) {
+                    moveFish.setTimeOutToZero();
+                }
 
-            reSetUpTask(1000);
+                reSetUpTask(1000);
+            }
         });
     }
 
@@ -84,7 +90,13 @@ public class InfoPanel {
 
     private void reSetUpTask(int mul) {
         TimerTask task = new UnitTimer();
-        period -= mul;
+
+        if (period > 1000) {
+            period -= mul;
+        } else {
+            period = 0;
+        }
+
         timer.schedule(task, period);
         logger.info("Period " + period);
     }
@@ -105,7 +117,9 @@ public class InfoPanel {
      */
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
-        mainPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(13, 2, new Insets(10, 10, 10, 10), -1, -1));
+        mainPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(15, 2, new Insets(10, 10, 10, 10), -1, -1));
+        mainPanel.setMinimumSize(new Dimension(230, 426));
+        mainPanel.setPreferredSize(new Dimension(230, 426));
         final JLabel label1 = new JLabel();
         label1.setText("Start parameters");
         mainPanel.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -157,6 +171,11 @@ public class InfoPanel {
         stopFishesButton = new JButton();
         stopFishesButton.setText("Stop ocean");
         mainPanel.add(stopFishesButton, new com.intellij.uiDesigner.core.GridConstraints(11, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        isStartedLabel = new JLabel();
+        isStartedLabel.setText("");
+        mainPanel.add(isStartedLabel, new com.intellij.uiDesigner.core.GridConstraints(13, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final com.intellij.uiDesigner.core.Spacer spacer2 = new com.intellij.uiDesigner.core.Spacer();
+        mainPanel.add(spacer2, new com.intellij.uiDesigner.core.GridConstraints(14, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
@@ -170,6 +189,7 @@ public class InfoPanel {
         @Override
         public void run() {
             killAllFishesProcess();
+            isStartedLabel.setText("The Ocean has stopped");
         }
     }
 
@@ -180,6 +200,7 @@ public class InfoPanel {
 
         finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
         finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
+        timer.cancel();
         started = false;
     }
 

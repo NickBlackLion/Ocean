@@ -8,7 +8,6 @@ import ua.com.blaclion.frames.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 
 /**
  * Class that create the ocean, random amount of all objects in the ocean
@@ -42,7 +41,7 @@ public class OceanPanel {
 
         drawFishes = new SafetyList<>();
         for (int i = 0; i < amountOfFishes; i++) {
-            Fish fish = new FishFactory().getNewFish(GoldFish.class);
+            Fish fish = FishFactory.getNewFish(GoldFish.class);
             drawFishes.add(new DrawFish(fish));
             fish.setDrawFishes(drawFishes);
             fish.setContainer(pointsContainer);
@@ -53,7 +52,7 @@ public class OceanPanel {
         }
 
         for (int i = 0; i < amountOfPredators; i++) {
-            Fish fish = new FishFactory().getNewFish(PredatorFish.class);
+            Fish fish = FishFactory.getNewFish(PredatorFish.class);
             drawFishes.add(new DrawFish(fish));
             fish.setDrawFishes(drawFishes);
             fish.setContainer(pointsContainer);
@@ -65,7 +64,7 @@ public class OceanPanel {
 
         drawRocks = new SafetyList<>();
         for (int i = 0; i < amountOfRocks; i++) {
-            OceanShape oceanBarrier = new BarrierFactory().getNewShape(Rock.class);
+            OceanShape oceanBarrier = BarrierFactory.getNewShape(Rock.class);
             Rock rock = (Rock) oceanBarrier;
             drawRocks.add(new DrawRock(rock));
             rock.setContainer(pointsContainer);
@@ -74,7 +73,7 @@ public class OceanPanel {
 
         drawAlgaes = new SafetyList<>();
         for (int i = 0; i < amountOfAlgaes; i++) {
-            OceanShape oceanBarrier = new BarrierFactory().getNewShape(Algae.class);
+            OceanShape oceanBarrier = BarrierFactory.getNewShape(Algae.class);
             Algae algae = (Algae) oceanBarrier;
             drawAlgaes.add(new DrawAlgae(algae));
             algae.setContainer(pointsContainer);

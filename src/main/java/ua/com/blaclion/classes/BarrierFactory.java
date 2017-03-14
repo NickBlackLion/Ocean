@@ -9,7 +9,7 @@ import ua.com.blaclion.abstract_classes.OceanShape;
 public class BarrierFactory {
     private Logger logger = Logger.getLogger(this.getClass());
 
-    public OceanShape getNewShape(Class<?> barrierClass){
+    public static OceanShape getNewShape(Class<?> barrierClass){
         OceanShape insBarrier = null;
 
         if (barrierClass == Rock.class){

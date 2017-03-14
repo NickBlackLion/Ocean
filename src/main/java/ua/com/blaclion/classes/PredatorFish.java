@@ -35,8 +35,8 @@ public class PredatorFish extends Fish {
 
     @Override
     public void swim() {
-        int xDirection = (int)(Math.random()*20 - 10);
-        int yDirection = (int)(Math.random()*20 - 10);
+        int xDirection = new Random(System.currentTimeMillis()).nextInt(20) - 10;
+        int yDirection = new Random(System.currentTimeMillis()).nextInt(20) - 10;
 
         if(thisDrawFish == null){
             for (DrawFish drawFish: getDrawFishes()) {

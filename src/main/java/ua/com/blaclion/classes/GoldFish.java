@@ -32,8 +32,8 @@ public class GoldFish extends Fish {
 
     @Override
     public void swim(){
-        int xDirection = (int)(Math.random()*20 - 10);
-        int yDirection = (int)(Math.random()*20 - 10);
+        int xDirection = new Random(System.currentTimeMillis()).nextInt(20) - 10;
+        int yDirection = new Random(System.currentTimeMillis()).nextInt(20) - 10;
 
         //Find this fish in common container of drew fishes
         if(thisDrawFish == null){

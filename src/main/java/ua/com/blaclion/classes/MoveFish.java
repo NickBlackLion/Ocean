@@ -37,9 +37,7 @@ public class MoveFish {
     public void restart() {
         timer.cancel();
 
-        swimFish();
-
-        setTimer(2000);
+        setTimer(0);
     }
 
     public Fish getFish() {

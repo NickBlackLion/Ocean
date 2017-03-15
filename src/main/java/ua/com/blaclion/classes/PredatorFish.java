@@ -38,6 +38,7 @@ public class PredatorFish extends Fish {
         int xDirection = new Random(System.currentTimeMillis()).nextInt(20) - 10;
         int yDirection = new Random(System.currentTimeMillis()).nextInt(20) - 10;
 
+        //Find this fish in common container of drew fishes
         if(thisDrawFish == null){
             for (DrawFish drawFish: getDrawFishes()) {
                 if (drawFish.getFish().equals(this)) {
@@ -46,10 +47,11 @@ public class PredatorFish extends Fish {
             }
         }
 
+        //Find this fish in common container of moving fishes
         if(thisMoveFish == null){
-            for (MoveFish moveFish: getMoveFishes()) {
-                if (moveFish.getFish().equals(this)) {
-                    thisMoveFish = moveFish;
+            for (int i = 0; i < getMoveFishes().size(); i++) {
+                if (getMoveFishes().get(i).getFish().equals(this)) {
+                    thisMoveFish = getMoveFishes().get(i);
                 }
             }
         }

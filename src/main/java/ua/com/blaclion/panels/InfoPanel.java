@@ -44,8 +44,8 @@ public class InfoPanel {
             moveFishes = oceanPanel.getMoveFishes();
 
             if (!started) {
-                for (MoveFish moveFish : moveFishes) {
-                    moveFish.run();
+                for (int i = 0; i < moveFishes.size(); i++) {
+                    moveFishes.get(i).run();
                 }
 
                 timer = new Timer();
@@ -71,8 +71,8 @@ public class InfoPanel {
 
         nextDayButton.addActionListener(e -> {
             if (started) {
-                for (MoveFish moveFish : moveFishes) {
-                    moveFish.restart();
+                for (int i = 0; i < moveFishes.size(); i++) {
+                    moveFishes.get(i).restart();
                 }
 
                 reSetUpTask(1000);
@@ -190,8 +190,8 @@ public class InfoPanel {
     }
 
     private void killAllFishesProcess() {
-        for (MoveFish moveFish : moveFishes) {
-            moveFish.stop();
+        for (int i = 0; i < moveFishes.size(); i++) {
+            moveFishes.get(i).stop();
         }
 
         finishAmountFishes.setText(Fish.getAmountOfFishes().toString());

@@ -46,9 +46,9 @@ public class GoldFish extends Fish {
 
         //Find this fish in common container of moving fishes
         if(thisMoveFish == null){
-            for (MoveFish moveFish: getMoveFishes()) {
-                if (moveFish.getFish().equals(this)) {
-                    thisMoveFish = moveFish;
+            for (int i = 0; i < getMoveFishes().size(); i++) {
+                if (getMoveFishes().get(i).getFish().equals(this)) {
+                    thisMoveFish = getMoveFishes().get(i);
                 }
             }
         }

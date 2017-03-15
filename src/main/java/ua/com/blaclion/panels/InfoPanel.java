@@ -55,7 +55,7 @@ public class InfoPanel {
             logger.info("Stop pressed");
 
             if (started) {
-                moveFish.stopFishes();
+                killFishesThread();
             }
         });
 
@@ -165,6 +165,8 @@ public class InfoPanel {
     }
 
     private void killFishesThread() {
+        moveFish.stopFishes();
+
         finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
         finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
         started = false;

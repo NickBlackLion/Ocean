@@ -56,8 +56,7 @@ public class PointsCommonContainer {
                 Point2D point2D = pointsOfObjectsInSea.get(entry.getKey());
 
                 if (currentPoint != point2D && CheckObjectNear.isObjectNear(currentPoint, point2D,
-                        oceanShape.getWidth(), oceanShape.getHeight(),
-                        oceanShapeFromContainer.getWidth(), oceanShapeFromContainer.getHeight())) {
+                        oceanShape, oceanShapeFromContainer)) {
                     return true;
                 }
             }
@@ -84,8 +83,7 @@ public class PointsCommonContainer {
                 Point2D point2D = pointsOfObjectsInSea.get(entry.getKey());
 
                 if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D,
-                        oceanShape.getWidth(), oceanShape.getHeight(),
-                        oceanShapeFromContainer.getWidth(), oceanShapeFromContainer.getHeight())) {
+                        oceanShape, oceanShapeFromContainer)) {
                     return true;
                 }
             }
@@ -112,9 +110,7 @@ public class PointsCommonContainer {
                 Point2D point2D = pointsOfObjectsInSea.get(entry.getKey());
 
                 if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D,
-                        oceanShape.getWidth(), oceanShape.getHeight(),
-                        oceanShapeFromContainer.getWidth(), oceanShapeFromContainer.getHeight())
-                        && oceanShape.getClass() == PredatorFish.class) {
+                        oceanShape, oceanShapeFromContainer)) {
                     return oceanShapeFromContainer;
                 }
             }

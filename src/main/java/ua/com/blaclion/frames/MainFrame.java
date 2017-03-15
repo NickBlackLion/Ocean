@@ -10,7 +10,7 @@ import java.awt.*;
  * Main run class for all application
  */
 public class MainFrame extends JFrame {
-    private final int WIDTH = 900;
+    private final int WIDTH = 1100;
     private final int HEIGHT = 400;
     private InfoPanel infoPanel;
     private OceanPanel oceanPanel;

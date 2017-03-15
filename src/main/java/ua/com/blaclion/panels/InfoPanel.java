@@ -23,6 +23,7 @@ public class InfoPanel {
     private JLabel finishAmountPredators;
     private JButton startFishesButton;
     private JButton stopFishesButton;
+    private JLabel isStartedLabel;
 
     private Logger logger = Logger.getLogger(this.getClass());
     private MoveFish moveFish;
@@ -42,11 +43,13 @@ public class InfoPanel {
                 moveFish.runFishes();
                 period = new Random(System.currentTimeMillis()).nextInt(200000);
                 reSetUpTimer(0);
+
+                startAmountFishes.setText(Fish.getAmountOfFishes().toString());
+                startAmountPredators.setText(Fish.getAmountOfPredators().toString());
+                startAmountBarriers.setText(oceanPanel.getAmountOfBarriers().toString());
+                isStartedLabel.setText("The Ocean has started");
             }
 
-            startAmountFishes.setText(Fish.getAmountOfFishes().toString());
-            startAmountPredators.setText(Fish.getAmountOfPredators().toString());
-            startAmountBarriers.setText(oceanPanel.getAmountOfBarriers().toString());
             started = true;
         });
 
@@ -98,7 +101,9 @@ public class InfoPanel {
      */
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
-        mainPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(13, 2, new Insets(10, 10, 10, 10), -1, -1));
+        mainPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(15, 2, new Insets(10, 10, 10, 10), -1, -1));
+        mainPanel.setMinimumSize(new Dimension(200, 426));
+        mainPanel.setPreferredSize(new Dimension(200, 426));
         final JLabel label1 = new JLabel();
         label1.setText("Start parameters");
         mainPanel.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -150,6 +155,11 @@ public class InfoPanel {
         stopFishesButton = new JButton();
         stopFishesButton.setText("Stop ocean");
         mainPanel.add(stopFishesButton, new com.intellij.uiDesigner.core.GridConstraints(11, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        isStartedLabel = new JLabel();
+        isStartedLabel.setText("");
+        mainPanel.add(isStartedLabel, new com.intellij.uiDesigner.core.GridConstraints(13, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final com.intellij.uiDesigner.core.Spacer spacer2 = new com.intellij.uiDesigner.core.Spacer();
+        mainPanel.add(spacer2, new com.intellij.uiDesigner.core.GridConstraints(14, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
@@ -171,6 +181,7 @@ public class InfoPanel {
 
         finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
         finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
+        isStartedLabel.setText("The Ocean has stopped");
         started = false;
     }
 

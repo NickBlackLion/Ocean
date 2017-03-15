@@ -16,7 +16,6 @@ public abstract class Fish extends OceanShape {
     private Rectangle2D oceanShape;
     private SafetyList<DrawFish> drawFishes;
     private Ocean ocean;
-    private ExecutorService executor;
     private SafetyList<MoveFish> moveFishes;
     private MainFrame mainFrame;
     private int pointYDelta;
@@ -60,7 +59,6 @@ public abstract class Fish extends OceanShape {
             newFish.setYPoint((int) newFishPoint.getY());
             newFish.setDrawFishes(getDrawFishes());
             newFish.setContainer(getContainer());
-            newFish.setExecutor(getExecutor());
             newFish.setOceanSize(getOceanSize());
             newFish.setMoveFishes(getMoveFishes());
             newFish.setOcean(getOcean());
@@ -75,7 +73,6 @@ public abstract class Fish extends OceanShape {
             //Make new fish move
             MoveFish moveFish = new MoveFish(newFish, getOcean());
             getMoveFishes().add(moveFish);
-            getExecutor().execute(moveFish);
 
             //Set upp for current fish new makeFish timer
             newFishDays = new Random(System.currentTimeMillis()).nextInt(100);
@@ -98,10 +95,6 @@ public abstract class Fish extends OceanShape {
         this.ocean = ocean;
     }
 
-    public void setExecutor(ExecutorService executor) {
-        this.executor = executor;
-    }
-
     public void setMoveFishes(SafetyList<MoveFish> moveFishes) {
         this.moveFishes = moveFishes;
     }
@@ -116,10 +109,6 @@ public abstract class Fish extends OceanShape {
 
     public Ocean getOcean() {
         return ocean;
-    }
-
-    public ExecutorService getExecutor() {
-        return executor;
     }
 
     public SafetyList<MoveFish> getMoveFishes() {

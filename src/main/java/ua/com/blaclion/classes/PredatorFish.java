@@ -66,14 +66,16 @@ public class PredatorFish extends Fish {
 
         OceanShape maybeGoldFish = getContainer().isPredatorNearGoldFish(fishCurrentPoint, fishNextPoint, this);
         if (maybeGoldFish != null) {
-            GoldFish goldFish = (GoldFish) maybeGoldFish;
-            goldFish.fishAte();
-            setToHungryDeath();
-            logger.info("Fish " + goldFish.getExemplar() + " has eaten");
-        } else if (getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this)) {
-            xDirection = 0;
-            yDirection = 0;
-            logger.info("It's existed fish near exemplar " + getExemplar());
+            if (maybeGoldFish.getClass() == GoldFish.class) {
+                GoldFish goldFish = (GoldFish) maybeGoldFish;
+                goldFish.fishAte();
+                setToHungryDeath();
+                logger.info("Fish " + goldFish.getExemplar() + " has eaten");
+            } else {
+                xDirection = 0;
+                yDirection = 0;
+                logger.info("It's existed fish near exemplar " + getExemplar());
+            }
         }
 
         checkOceanBounds(xDirection, yDirection);
@@ -139,7 +141,7 @@ public class PredatorFish extends Fish {
         if (getLifeDays() == 0 || hungryDeath == 0) {
             getDrawFishes().remove(thisDrawFish);
             getMoveFishes().remove(thisMoveFish);
-            thisMoveFish.kill();
+            thisMoveFish.stop();
             decreaseAmountOfPredators();
             logger.info("Exemplar " + this.getExemplar() + " is dead");
         }

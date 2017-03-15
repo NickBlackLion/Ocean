@@ -45,7 +45,6 @@ public class OceanPanel {
             drawFishes.add(new DrawFish(fish));
             fish.setDrawFishes(drawFishes);
             fish.setContainer(pointsContainer);
-            fish.setExecutor(infoPanel.getExecutor());
             fish.setMoveFishes(moveFishes);
             moveFishes.add(new MoveFish(fish, ocean));
             Fish.increaseAmountOfFishes();
@@ -56,7 +55,6 @@ public class OceanPanel {
             drawFishes.add(new DrawFish(fish));
             fish.setDrawFishes(drawFishes);
             fish.setContainer(pointsContainer);
-            fish.setExecutor(infoPanel.getExecutor());
             fish.setMoveFishes(moveFishes);
             moveFishes.add(new MoveFish(fish, ocean));
             Fish.increaseAmountOfPredators();

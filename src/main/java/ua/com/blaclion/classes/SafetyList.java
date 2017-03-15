@@ -3,7 +3,6 @@ package ua.com.blaclion.classes;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -44,16 +43,6 @@ public class SafetyList<T> extends ArrayList<T> {
         lock.lock();
         try {
             return super.remove(o);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public Iterator<T> iterator() {
-        lock.lock();
-        try {
-            return super.iterator();
         } finally {
             lock.unlock();
         }

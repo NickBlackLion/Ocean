@@ -131,7 +131,7 @@ public class GoldFish extends Fish {
      * Delete this fish from all common containers and stop is thread
      */
     private void kill() {
-        thisMoveFish.kill();
+        thisMoveFish.stop();
         getContainer().remove(getExemplar());
         getDrawFishes().remove(thisDrawFish);
         getMoveFishes().remove(thisMoveFish);

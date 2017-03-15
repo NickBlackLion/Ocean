@@ -94,7 +94,8 @@ public class Ocean extends JComponent {
      * @param g2
      */
     private void drawRocksOnPanel(Rectangle2D rect, Graphics2D g2) {
-        for (DrawRock drawRock: drawRocks) {
+        for (int i = 0; i < drawRocks.size(); i++) {
+            DrawRock drawRock = drawRocks.get(i);
             Rock rock = drawRock.getRock();
 
             firstDrawMethod(rect, rock);
@@ -136,7 +137,8 @@ public class Ocean extends JComponent {
      * @param g2
      */
     private void drawFishesOnPanel(Rectangle2D rect, Graphics2D g2) {
-        for (DrawFish drawFish: drawFishes) {
+        for (int i = 0; i < drawFishes.size(); i++) {
+            DrawFish drawFish = drawFishes.get(i);
             Fish fish = drawFish.getFish();
             if (!firstDraw) {
                 fish.setOceanSize(rect);

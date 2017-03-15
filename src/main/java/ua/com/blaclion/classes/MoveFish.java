@@ -3,72 +3,64 @@ package ua.com.blaclion.classes;
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.Fish;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Class that moves fish in its own thread
  */
-public class MoveFish implements Runnable {
+public class MoveFish {
     private Fish fish;
     private Ocean ocean;
     private Logger logger = Logger.getLogger(this.getClass());
-    private boolean isRunning = false;
     private int timeOut;
-    private int circle;
+    private Timer timer;
+    private MoveFishTask moveFishTask;
 
     public MoveFish(Fish fish, Ocean ocean) {
         this.fish = fish;
         this.ocean = ocean;
-        isRunning = true;
-        timeOut = 3000;
-        circle = 0;
+        timeOut = 2000;
+        timer = new Timer();
+        moveFishTask = new MoveFishTask();
     }
 
-    @Override
     public void run() {
-        while(isRunning) {
-            fish.swim();
-            logger.info(fish.getExemplar() + " " + Thread.currentThread());
-            ocean.repaint();
-            holdNextStep();
-            if (timeOut == 0) {
-                circle++;
-            }
-            if (circle == 2) {
-                setTimeOutToNorm();
-                circle = 0;
-            }
-        }
+        setTimer(0);
     }
 
-    public void kill(){
-        isRunning = false;
+    public void stop() {
+        timer.cancel();
     }
 
-    public void wakeUp(){
-        isRunning = true;
+    public void restart() {
+        timer.cancel();
+
+        swimFish();
+
+        setTimer(2000);
     }
 
     public Fish getFish() {
         return fish;
     }
 
-    /**
-     * Method that makes fish sleep for a while
-     */
-    public void holdNextStep() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(timeOut);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private class MoveFishTask extends TimerTask {
+        @Override
+        public void run() {
+            swimFish();
         }
     }
 
-    public void setTimeOutToZero() {
-        timeOut = 0;
+    private void setTimer(int delay) {
+        timer = new Timer();
+        moveFishTask = new MoveFishTask();
+        timer.scheduleAtFixedRate(moveFishTask, delay, timeOut);
     }
 
-    private void setTimeOutToNorm() {
-        timeOut = 3000;
+    private void swimFish() {
+        fish.swim();
+        ocean.repaint();
     }
 }

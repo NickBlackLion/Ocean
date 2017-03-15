@@ -3,6 +3,7 @@ package ua.com.blaclion.panels;
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.Fish;
 import ua.com.blaclion.classes.MoveFish;
+import ua.com.blaclion.classes.SafetyList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,34 +30,33 @@ public class InfoPanel {
     private JLabel isStartedLabel;
 
     private Logger logger = Logger.getLogger(this.getClass());
-    private List<MoveFish> moveFishes;
+    private SafetyList<MoveFish> moveFishes;
     private OceanPanel oceanPanel;
     private boolean started = false;
-    private ExecutorService executor;
     private Timer timer;
     private int period;
 
     public InfoPanel() {
-        executor = Executors.newCachedThreadPool();
 
         //Run all fishes move threads and show current info
         startFishesButton.addActionListener(e -> {
             logger.info("Start pressed");
             moveFishes = oceanPanel.getMoveFishes();
+
             if (!started) {
                 for (MoveFish moveFish : moveFishes) {
-                    moveFish.wakeUp();
-                    executor.execute(moveFish);
+                    moveFish.run();
                 }
 
                 timer = new Timer();
                 period = new Random(System.currentTimeMillis()).nextInt(200000);
                 reSetUpTask(0);
+
+                startAmountFishes.setText(Fish.getAmountOfFishes().toString());
+                startAmountPredators.setText(Fish.getAmountOfPredators().toString());
+                startAmountBarriers.setText(oceanPanel.getAmountOfBarriers().toString());
             }
 
-            startAmountFishes.setText(Fish.getAmountOfFishes().toString());
-            startAmountPredators.setText(Fish.getAmountOfPredators().toString());
-            startAmountBarriers.setText(oceanPanel.getAmountOfBarriers().toString());
             started = true;
 
             isStartedLabel.setText("The Ocean has started");
@@ -72,7 +72,7 @@ public class InfoPanel {
         nextDayButton.addActionListener(e -> {
             if (started) {
                 for (MoveFish moveFish : moveFishes) {
-                    moveFish.setTimeOutToZero();
+                    moveFish.restart();
                 }
 
                 reSetUpTask(1000);
@@ -82,10 +82,6 @@ public class InfoPanel {
 
     public void setStartAmounts(OceanPanel oceanPanel) {
         this.oceanPanel = oceanPanel;
-    }
-
-    public ExecutorService getExecutor() {
-        return executor;
     }
 
     private void reSetUpTask(int mul) {
@@ -195,7 +191,7 @@ public class InfoPanel {
 
     private void killAllFishesProcess() {
         for (MoveFish moveFish : moveFishes) {
-            moveFish.kill();
+            moveFish.stop();
         }
 
         finishAmountFishes.setText(Fish.getAmountOfFishes().toString());

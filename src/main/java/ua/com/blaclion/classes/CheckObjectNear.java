@@ -39,37 +39,36 @@ public class CheckObjectNear {
 
     private static boolean isObjectAround(Point2D futurePoint, Point2D pointFromContainer,
                                           OceanShape currentFigure, OceanShape figureFromContainer) {
-        int width = 100;
-        int height = 100;
+        int buff = 100;
 
         if (futurePoint.getX() >= pointFromContainer.getX()
-                && futurePoint.getX() <= pointFromContainer.getX() + width
+                && futurePoint.getX() <= pointFromContainer.getX() + buff
                 && futurePoint.getY() >= pointFromContainer.getY()
-                && futurePoint.getY() <= pointFromContainer.getY() + height) {
+                && futurePoint.getY() <= pointFromContainer.getY() + buff) {
             logger.info("First if " + futurePoint + " " + pointFromContainer);
             return isObjectAroundAccuracy(futurePoint, pointFromContainer, currentFigure, figureFromContainer);
         }
 
-        if (futurePoint.getX() + width >= pointFromContainer.getX()
-                && futurePoint.getX() + width <= pointFromContainer.getX() + width
+        if (futurePoint.getX() + buff >= pointFromContainer.getX()
+                && futurePoint.getX() + buff <= pointFromContainer.getX() + buff
                 && futurePoint.getY() >= pointFromContainer.getY()
-                && futurePoint.getY() <= pointFromContainer.getY() + height){
+                && futurePoint.getY() <= pointFromContainer.getY() + buff){
             logger.info("Second if " + futurePoint + " " + pointFromContainer);
             return isObjectAroundAccuracy(futurePoint, pointFromContainer, currentFigure, figureFromContainer);
         }
 
         if (futurePoint.getX() >= pointFromContainer.getX()
-                && futurePoint.getX() <= pointFromContainer.getX() + width
-                && futurePoint.getY() + height >= pointFromContainer.getY()
-                && futurePoint.getY() + height <= pointFromContainer.getY() + height){
+                && futurePoint.getX() <= pointFromContainer.getX() + buff
+                && futurePoint.getY() + buff >= pointFromContainer.getY()
+                && futurePoint.getY() + buff <= pointFromContainer.getY() + buff){
             logger.info("Third if " + futurePoint + " " + pointFromContainer);
             return isObjectAroundAccuracy(futurePoint, pointFromContainer, currentFigure, figureFromContainer);
         }
 
-        if (futurePoint.getX() + width >= pointFromContainer.getX()
-                && futurePoint.getX() + width <= pointFromContainer.getX() + width
-                && futurePoint.getY() + height >= pointFromContainer.getY()
-                && futurePoint.getY() + height <= pointFromContainer.getY() + height){
+        if (futurePoint.getX() + buff >= pointFromContainer.getX()
+                && futurePoint.getX() + buff <= pointFromContainer.getX() + buff
+                && futurePoint.getY() + buff >= pointFromContainer.getY()
+                && futurePoint.getY() + buff <= pointFromContainer.getY() + buff){
             logger.info("Fourth if " + futurePoint + " " + pointFromContainer);
             return isObjectAroundAccuracy(futurePoint, pointFromContainer, currentFigure, figureFromContainer);
         }

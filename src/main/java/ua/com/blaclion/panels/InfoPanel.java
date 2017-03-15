@@ -75,8 +75,10 @@ public class InfoPanel {
 
     private void reSetUpTimer(int mul) {
         TimerTask task = new UnitTimer();
-        period -= mul;
-        timer.schedule(task, period);
+        if (period >= 1000) {
+            period -= mul;
+            timer.schedule(task, period);
+        }
         logger.info("Period " + period);
     }
 

@@ -1,5 +1,6 @@
 package ua.com.blaclion.classes;
 
+import javafx.util.Pair;
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.Fish;
 import ua.com.blaclion.abstract_classes.OceanShape;
@@ -56,17 +57,20 @@ public class PredatorFish extends Fish {
         Point2D fishNextPoint = new Point2D.Double(getXPoint() + xDirection, getYPoint() + yDirection);
         Point2D fishCurrentPoint = new Point2D.Double(getXPoint(), getYPoint());
 
-        OceanShape maybeGoldFish = getContainer().isPredatorNearGoldFish(fishCurrentPoint, fishNextPoint, this);
-        if (maybeGoldFish != null) {
-            if (maybeGoldFish.getClass() == GoldFish.class) {
-                GoldFish goldFish = (GoldFish) maybeGoldFish;
+
+        if (getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this)) {
+            xDirection = 0;
+            yDirection = 0;
+            logger.info("It's existed fish near exemplar " + getExemplar());
+        } else {
+            Pair<Point2D, OceanShape> pair = getContainer().makeNewPredatorPath(fishCurrentPoint, this);
+            if (pair != null) {
+                setXPoint((int) pair.getKey().getX());
+                setYPoint((int) pair.getKey().getY());
+                GoldFish goldFish = (GoldFish) pair.getValue();
                 goldFish.fishAte();
                 setToHungryDeath();
-                logger.info("Fish " + goldFish.getExemplar() + " has eaten");
-            } else {
-                xDirection = 0;
-                yDirection = 0;
-                logger.info("It's existed fish near exemplar " + getExemplar());
+                logger.info("Exemplar " + goldFish.getExemplar() + " ate by " + getExemplar());
             }
         }
 

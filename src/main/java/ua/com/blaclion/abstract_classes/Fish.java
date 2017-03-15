@@ -102,19 +102,8 @@ public abstract class Fish extends OceanShape {
         return ocean;
     }
 
-    public MainFrame getMainFrame() {
-        return mainFrame;
-    }
-
     public void setMainFrame(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-    }
-
-    /**
-     * Method for getting common delta that shows where ocean is started
-     */
-    public int getPointYDelta() {
-        return pointYDelta;
     }
 
     /**

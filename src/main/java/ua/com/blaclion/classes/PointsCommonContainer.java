@@ -1,5 +1,6 @@
 package ua.com.blaclion.classes;
 
+import javafx.util.Pair;
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.OceanShape;
 
@@ -94,27 +95,20 @@ public class PointsCommonContainer {
         return false;
     }
 
-    /**
-     * Method checks is predator future point near gold fish
-     * @param currentPoint point of current object
-     * @param futurePoint future point of current object
-     * @param oceanShape current checked object
-     * @return
-     */
-    public OceanShape isPredatorNearGoldFish(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
+    public Pair<Point2D, OceanShape> makeNewPredatorPath(Point2D currentPoint, PredatorFish predatorFish) {
         lock.lock();
         try {
             for (Map.Entry<Integer, OceanShape> entry: whatObjectClass.entrySet()) {
-                OceanShape oceanShapeFromContainer = entry.getValue();
-
-                Point2D point2D = pointsOfObjectsInSea.get(entry.getKey());
-
-                if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D,
-                        oceanShape, oceanShapeFromContainer)) {
-                    return oceanShapeFromContainer;
+                if (entry.getValue().getClass() == GoldFish.class) {
+                    Point2D point = pointsOfObjectsInSea.get(entry.getKey());
+                    if (CheckObjectNear.isObjectAroundAccuracyPredator(currentPoint, point, predatorFish, entry.getValue())) {
+                        logger.info(currentPoint + " " + point);
+                        return new Pair<>(point, entry.getValue());
+                    }
                 }
             }
-        } finally {
+        }
+        finally {
             lock.unlock();
         }
 

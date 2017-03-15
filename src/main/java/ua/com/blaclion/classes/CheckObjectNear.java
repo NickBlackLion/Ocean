@@ -16,8 +16,8 @@ public class CheckObjectNear {
         return isObjectAround(futurePoint, pointFromContainer, currentFigure, figureFromContainer);
     }
 
-
-    private static boolean isObjectAroundAccuracy(Point2D futurePoint, Point2D pointFromContainer, OceanShape currentFigure, OceanShape figureFromContainer) {
+    private static boolean isObjectAroundAccuracy(Point2D futurePoint, Point2D pointFromContainer,
+                                                  OceanShape currentFigure, OceanShape figureFromContainer) {
 
         for (int i = 0; i < currentFigure.getWidth(); i++) {
             for (int j = 0; j < currentFigure.getHeight(); j++) {
@@ -71,6 +71,48 @@ public class CheckObjectNear {
                 && futurePoint.getY() + buff <= pointFromContainer.getY() + buff){
             logger.info("Fourth if " + futurePoint + " " + pointFromContainer);
             return isObjectAroundAccuracy(futurePoint, pointFromContainer, currentFigure, figureFromContainer);
+        }
+
+        return false;
+    }
+
+    public static boolean isObjectAroundAccuracyPredator(Point2D currentPredatorPoint, Point2D pointFromContainer,
+                                                  OceanShape predatorShape, OceanShape shapeFromContainer) {
+
+        Point2D point2D = new Point2D.Double(currentPredatorPoint.getX() - predatorShape.getWidth(),
+                currentPredatorPoint.getY() - predatorShape.getHeight());
+
+        for (int i = 0; i < predatorShape.getWidth(); i++) {
+            for (int j = 0; j < predatorShape.getHeight(); j++) {
+                Point2D currentDelta = new Point2D.Double(point2D.getX() + i, point2D.getY() + j);
+                if (currentDelta.getX() >= pointFromContainer.getX()
+                        && currentDelta.getX() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
+                        && currentDelta.getY() >= pointFromContainer.getY()
+                        && currentDelta.getY() <= pointFromContainer.getY() + shapeFromContainer.getHeight()) {
+                    return true;
+                }
+
+                if (currentDelta.getX() + predatorShape.getWidth() >= pointFromContainer.getX()
+                        && currentDelta.getX() + predatorShape.getWidth() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
+                        && currentDelta.getY() >= pointFromContainer.getY()
+                        && currentDelta.getY() <= pointFromContainer.getY() + shapeFromContainer.getHeight()){
+                    return true;
+                }
+
+                if (currentDelta.getX() >= pointFromContainer.getX()
+                        && currentDelta.getX() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
+                        && currentDelta.getY() + predatorShape.getHeight() >= pointFromContainer.getY()
+                        && currentDelta.getY() + predatorShape.getHeight() <= pointFromContainer.getY() + shapeFromContainer.getHeight()){
+                    return true;
+                }
+
+                if (currentDelta.getX() + predatorShape.getWidth() >= pointFromContainer.getX()
+                        && currentDelta.getX() + predatorShape.getWidth() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
+                        && currentDelta.getY() + predatorShape.getHeight() >= pointFromContainer.getY()
+                        && currentDelta.getY() + predatorShape.getHeight() <= pointFromContainer.getY() + shapeFromContainer.getHeight()){
+                    return true;
+                }
+            }
         }
 
         return false;

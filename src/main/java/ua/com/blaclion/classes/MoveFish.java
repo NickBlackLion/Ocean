@@ -16,24 +16,20 @@ public class MoveFish {
     private SafetyList<Fish> fishes;
     private Ocean ocean;
     private Logger logger = Logger.getLogger(this.getClass());
-    private boolean isRunning = false;
     private Lock lock;
     private int timeOut;
     private Timer timer;
     private TimerTask timerTask;
-    private boolean restart;
 
     public MoveFish(Ocean ocean) {
         this.ocean = ocean;
-        isRunning = true;
         fishes = new SafetyList<>();
         timeOut = 3000;
         lock = new ReentrantLock();
-        restart = false;
     }
 
     public void runFishes() {
-        createNewTimerAndTask(0);
+        createNewTimerAndTask();
     }
 
     public void stopFishes() {
@@ -43,9 +39,7 @@ public class MoveFish {
     public void restartFishesMove() {
         timer.cancel();
 
-        moveAllFishes();
-
-        createNewTimerAndTask(2000);
+        createNewTimerAndTask();
     }
 
     public void addToMoveList(Fish fish) {
@@ -87,9 +81,9 @@ public class MoveFish {
         ocean.repaint();
     }
 
-    private void createNewTimerAndTask(int delay) {
+    private void createNewTimerAndTask() {
         timer = new Timer(true);
         timerTask = new MoveFishTask();
-        timer.scheduleAtFixedRate(timerTask, delay, timeOut);
+        timer.scheduleAtFixedRate(timerTask, 0, timeOut);
     }
 }

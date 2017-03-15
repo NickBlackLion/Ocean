@@ -3,6 +3,8 @@ package ua.com.blaclion.classes;
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.Fish;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -10,44 +12,40 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Class that moves fish in its own thread
  */
-public class MoveFish implements Runnable {
+public class MoveFish {
     private SafetyList<Fish> fishes;
     private Ocean ocean;
     private Logger logger = Logger.getLogger(this.getClass());
     private boolean isRunning = false;
     private Lock lock;
     private int timeOut;
+    private Timer timer;
+    private TimerTask timerTask;
+    private boolean restart;
 
     public MoveFish(Ocean ocean) {
         this.ocean = ocean;
         isRunning = true;
         fishes = new SafetyList<>();
-        timeOut = 2000;
+        timeOut = 3000;
         lock = new ReentrantLock();
+        restart = false;
     }
 
-    @Override
-    public void run() {
-        while(isRunning) {
-            for (int i = 0; i < fishes.size(); i++) {
-                Fish fish = fishes.get(i);
-                fish.swim();
-                if (fish.isKill()) {
-                    fish.getMoveFish().removeFromMoveList(fish);
-                }
-            }
-            ocean.repaint();
-            holdNextStep();
-            setTimeOutToNormal();
-        }
+    public void runFishes() {
+        createNewTimerAndTask(0);
     }
 
-    public void kill() {
-        isRunning = false;
+    public void stopFishes() {
+        timer.cancel();
     }
 
-    public void wakeUp() {
-        isRunning = true;
+    public void restartFishesMove() {
+        timer.cancel();
+
+        moveAllFishes();
+
+        createNewTimerAndTask(2000);
     }
 
     public void addToMoveList(Fish fish) {
@@ -70,22 +68,28 @@ public class MoveFish implements Runnable {
         }
     }
 
-    /**
-     * Method that makes fish sleep for a while
-     */
-    protected void holdNextStep() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(timeOut);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private class MoveFishTask extends TimerTask {
+        @Override
+        public void run() {
+            moveAllFishes();
         }
     }
 
-    public void setTimeOutToZero() {
-        timeOut = 0;
+    private void moveAllFishes() {
+        for (int i = 0; i < fishes.size(); i++) {
+            Fish fish = fishes.get(i);
+            fish.swim();
+            if (fish.isKill()) {
+                fish.getMoveFish().removeFromMoveList(fish);
+            }
+        }
+
+        ocean.repaint();
     }
 
-    private void setTimeOutToNormal() {
-        timeOut = 2000;
+    private void createNewTimerAndTask(int delay) {
+        timer = new Timer(true);
+        timerTask = new MoveFishTask();
+        timer.scheduleAtFixedRate(timerTask, delay, timeOut);
     }
 }

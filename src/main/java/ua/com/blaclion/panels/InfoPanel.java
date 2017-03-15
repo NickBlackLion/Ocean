@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.Timer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Class that makes right panel with buttons and
@@ -30,7 +28,6 @@ public class InfoPanel {
     private MoveFish moveFish;
     private OceanPanel oceanPanel;
     private boolean started = false;
-    private ExecutorService executor;
     private int period;
     private Timer timer;
 
@@ -42,9 +39,7 @@ public class InfoPanel {
             logger.info("Start pressed");
 
             if (!started) {
-                executor = Executors.newSingleThreadExecutor();
-                moveFish.wakeUp();
-                executor.execute(moveFish);
+                moveFish.runFishes();
                 period = new Random(System.currentTimeMillis()).nextInt(200000);
                 reSetUpTimer(0);
             }
@@ -60,12 +55,12 @@ public class InfoPanel {
             logger.info("Stop pressed");
 
             if (started) {
-                killFishesThread();
+                moveFish.stopFishes();
             }
         });
 
         nextDayButton.addActionListener(e -> {
-            moveFish.setTimeOutToZero();
+            moveFish.restartFishesMove();
             reSetUpTimer(1000);
         });
     }
@@ -170,8 +165,6 @@ public class InfoPanel {
     }
 
     private void killFishesThread() {
-        moveFish.kill();
-        executor.shutdown();
         finishAmountFishes.setText(Fish.getAmountOfFishes().toString());
         finishAmountPredators.setText(Fish.getAmountOfPredators().toString());
         started = false;

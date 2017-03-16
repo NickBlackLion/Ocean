@@ -75,7 +75,7 @@ public class PointsCommonContainer {
      * @param oceanShape current checked object
      * @return
      */
-    public boolean isFuturePosNearSomeObject(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
+    public OceanShape isFuturePosNearSomeObject(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
         lock.lock();
         try {
             for (Map.Entry<Integer, OceanShape> entry: whatObjectClass.entrySet()) {
@@ -85,14 +85,14 @@ public class PointsCommonContainer {
 
                 if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D,
                         oceanShape, oceanShapeFromContainer)) {
-                    return true;
+                    return oceanShapeFromContainer;
                 }
             }
         } finally {
             lock.unlock();
         }
 
-        return false;
+        return null;
     }
 
     public Pair<Point2D, OceanShape> makeNewPredatorPath(Point2D currentPoint, PredatorFish predatorFish) {
@@ -101,7 +101,7 @@ public class PointsCommonContainer {
             for (Map.Entry<Integer, OceanShape> entry: whatObjectClass.entrySet()) {
                 if (entry.getValue().getClass() == GoldFish.class) {
                     Point2D point = pointsOfObjectsInSea.get(entry.getKey());
-                    if (CheckObjectNear.isObjectAroundAccuracyPredator(currentPoint, point, predatorFish, entry.getValue())) {
+                    if (CheckObjectNear.isGoldFishAroundPredator(currentPoint, point, predatorFish, entry.getValue())) {
                         logger.info(currentPoint + " " + point);
                         return new Pair<>(point, entry.getValue());
                     }

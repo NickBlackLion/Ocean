@@ -76,7 +76,7 @@ public class CheckObjectNear {
         return false;
     }
 
-    public static boolean isObjectAroundAccuracyPredator(Point2D currentPredatorPoint, Point2D pointFromContainer,
+    public static boolean isGoldFishAroundPredator(Point2D currentPredatorPoint, Point2D pointFromContainer,
                                                   OceanShape predatorShape, OceanShape shapeFromContainer) {
 
         Point2D point2D = new Point2D.Double(currentPredatorPoint.getX() - predatorShape.getWidth(),

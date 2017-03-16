@@ -2,6 +2,7 @@ package ua.com.blaclion.classes;
 
 import org.apache.log4j.Logger;
 import ua.com.blaclion.abstract_classes.Fish;
+import ua.com.blaclion.abstract_classes.OceanShape;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -52,7 +53,8 @@ public class GoldFish extends Fish {
         Point2D fishNextPoint = new Point2D.Double(getXPoint() + xDirection, getYPoint() + yDirection);
         Point2D fishCurrentPoint = new Point2D.Double(getXPoint(), getYPoint());
 
-        if (getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this)){
+        OceanShape shape = getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this);
+        if (shape != null){
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + getExemplar());

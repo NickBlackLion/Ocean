@@ -82,8 +82,8 @@ public class CheckObjectNear {
         Point2D point2D = new Point2D.Double(currentPredatorPoint.getX() - predatorShape.getWidth(),
                 currentPredatorPoint.getY() - predatorShape.getHeight());
 
-        for (int i = 0; i < predatorShape.getWidth(); i++) {
-            for (int j = 0; j < predatorShape.getHeight(); j++) {
+        for (int i = 0; i < predatorShape.getWidth() * 3; i++) {
+            for (int j = 0; j < predatorShape.getHeight() * 3; j++) {
                 Point2D currentDelta = new Point2D.Double(point2D.getX() + i, point2D.getY() + j);
                 if (currentDelta.getX() >= pointFromContainer.getX()
                         && currentDelta.getX() <= pointFromContainer.getX() + shapeFromContainer.getWidth()

@@ -13,7 +13,7 @@ public class CheckDirection {
                                  int xDirection, int yDirection) {
 
         if (pointFromContainer.getX() - currentPoint.getX() >= currentObjectWidth
-                && pointFromContainer.getX() - currentPoint.getX() <= currentObjectHeight) {
+                && pointFromContainer.getY() - currentPoint.getY() <= currentObjectHeight) {
             if (xDirection < 0) {
                 xDirection *= -1;
             }
@@ -25,7 +25,7 @@ public class CheckDirection {
         }
 
         if (pointFromContainer.getX() - currentPoint.getX() <= currentObjectWidth
-                && pointFromContainer.getX() - currentPoint.getX() >= currentObjectHeight) {
+                && pointFromContainer.getY() - currentPoint.getY() >= currentObjectHeight) {
             if (xDirection > 0 || xDirection < 0) {
                 xDirection = 0;
             }
@@ -37,7 +37,7 @@ public class CheckDirection {
         }
 
         if (pointFromContainer.getX() - currentPoint.getX() >= currentObjectWidth
-                && pointFromContainer.getX() - currentPoint.getX() >= currentObjectHeight) {
+                && pointFromContainer.getY() - currentPoint.getY() >= currentObjectHeight) {
             if (xDirection < 0) {
                 xDirection *= -1;
             }
@@ -50,7 +50,7 @@ public class CheckDirection {
 
         //Next
         if (pointFromContainer.getX() - currentPoint.getX() <= currentObjectWidth
-                && pointFromContainer.getX() - currentPoint.getX() >= currentObjectHeight) {
+                && pointFromContainer.getY() - currentPoint.getY() >= currentObjectHeight) {
             if (xDirection > 0) {
                 xDirection *= -1;
             }
@@ -62,7 +62,7 @@ public class CheckDirection {
         }
 
         if (pointFromContainer.getX() - currentPoint.getX() >= currentObjectWidth
-                && pointFromContainer.getX() - currentPoint.getX() <= currentObjectHeight) {
+                && pointFromContainer.getY() - currentPoint.getY() <= currentObjectHeight) {
             if (xDirection > 0 || xDirection < 0) {
                 xDirection = 0;
             }
@@ -74,7 +74,7 @@ public class CheckDirection {
         }
 
         if (pointFromContainer.getX() - currentPoint.getX() <= currentObjectWidth
-                && pointFromContainer.getX() - currentPoint.getX() <= currentObjectHeight) {
+                && pointFromContainer.getY() - currentPoint.getY() <= currentObjectHeight) {
             if (xDirection > 0) {
                 xDirection *= -1;
             }

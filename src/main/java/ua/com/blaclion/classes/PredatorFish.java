@@ -73,12 +73,13 @@ public class PredatorFish extends Fish {
                     xDirection = directionPair.getKey();
                     yDirection = directionPair.getValue();
                 }
-                /*
-                    GoldFish goldFish = (GoldFish) pair.getValue();
+                OceanShape goldFishShape = getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this);
+                if (goldFishShape != null && goldFishShape.getClass() == GoldFish.class) {
+                    GoldFish goldFish = (GoldFish) shape;
                     goldFish.fishAte();
                     setToHungryDeath();
                     logger.info("Exemplar " + goldFish.getExemplar() + " ate by " + getExemplar());
-                */
+                }
             }
         }
 

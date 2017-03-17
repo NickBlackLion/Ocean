@@ -35,7 +35,7 @@ public class InfoPanel {
     public InfoPanel() {
         timer = new Timer();
 
-        //Run all fishes move threads and show current info
+        //Run all fishes and show current info
         startFishesButton.addActionListener(e -> {
             logger.info("Start pressed");
 
@@ -53,7 +53,7 @@ public class InfoPanel {
             started = true;
         });
 
-        //Stop all fishes move threads and show current info
+        //Stop all fishes and show current info
         stopFishesButton.addActionListener(e -> {
             logger.info("Stop pressed");
 
@@ -62,20 +62,33 @@ public class InfoPanel {
             }
         });
 
+        //Makes instant move of all fishes
         nextDayButton.addActionListener(e -> {
             moveFish.restartFishesMove();
             reSetUpTimer(1000);
         });
     }
 
+    /**
+     * Get current amount of ocean shapes and shows them
+     * @param oceanPanel
+     */
     public void setStartAmounts(OceanPanel oceanPanel) {
         this.oceanPanel = oceanPanel;
     }
 
+    /**
+     * Set moveFish class with fishes container
+     * @param moveFish
+     */
     public void setMoveFish(MoveFish moveFish) {
         this.moveFish = moveFish;
     }
 
+    /**
+     * Decrease amount of seconds that was set up for the Ocean one life circle
+     * @param mul
+     */
     private void reSetUpTimer(int mul) {
         TimerTask task = new UnitTimer();
         if (period >= 1000) {

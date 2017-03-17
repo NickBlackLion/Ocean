@@ -46,7 +46,7 @@ public class PointsCommonContainer {
      * Method checks is some another ocean object near current object
      * @param currentPoint point of current object
      * @param oceanShape current checked object
-     * @return
+     * @return True if some object near
      */
     public boolean isSomeObjectNear(Point2D currentPoint, OceanShape oceanShape) {
         lock.lock();
@@ -73,7 +73,7 @@ public class PointsCommonContainer {
      * @param currentPoint point of current object
      * @param futurePoint future point of current object
      * @param oceanShape current checked object
-     * @return
+     * @return Object that is near current object
      */
     public OceanShape isFuturePosNearSomeObject(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
         lock.lock();
@@ -95,6 +95,12 @@ public class PointsCommonContainer {
         return null;
     }
 
+    /**
+     * Method that makes predator chasing a gold fish
+     * @param currentPoint
+     * @param predatorFish
+     * @return pair with chasing object and it current point
+     */
     public Pair<Point2D, OceanShape> makeNewPredatorPath(Point2D currentPoint, PredatorFish predatorFish) {
         lock.lock();
         try {

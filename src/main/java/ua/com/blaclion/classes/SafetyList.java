@@ -48,14 +48,4 @@ public class SafetyList<T> extends ArrayList<T> {
             lock.unlock();
         }
     }
-
-    @Override
-    public Iterator<T> iterator() {
-        lock.lock();
-        try {
-            return super.iterator();
-        } finally {
-            lock.unlock();
-        }
-    }
 }

@@ -11,25 +11,62 @@ import java.awt.geom.Point2D;
 public class CheckObjectNear {
     private static Logger logger = Logger.getLogger(CheckObjectNear.class);
 
+    /**
+     * Method checks if some object near current object future position
+     * @param futurePoint Future object's position
+     * @param pointFromContainer Position with what will compare future point of current object
+     * @param currentFigure current object
+     * @param figureFromContainer object from container
+     * @return if object is near return true
+     */
     public static boolean isObjectNear(Point2D futurePoint, Point2D pointFromContainer, OceanShape currentFigure,
                                        OceanShape figureFromContainer) {
         return isObjectAround(futurePoint, pointFromContainer, currentFigure, figureFromContainer);
     }
 
-    private static boolean isObjectAroundAccuracy(Point2D futurePoint, Point2D pointFromContainer,
-                                                  OceanShape currentFigure, OceanShape figureFromContainer) {
+    /**
+     * Method checks if gold fish near predator
+     * @param currentPredatorPoint Current predator point
+     * @param pointFromContainer Current gold fish point from container
+     * @param predatorShape predator object
+     * @param shapeFromContainer gold fish object
+     * @return if object is near return true
+     */
+    public static boolean isGoldFishAroundPredator(Point2D currentPredatorPoint, Point2D pointFromContainer,
+                                                   OceanShape predatorShape, OceanShape shapeFromContainer) {
 
-        for (int i = 0; i < currentFigure.getWidth(); i++) {
-            for (int j = 0; j < currentFigure.getHeight(); j++) {
-                Point2D currentDelta = new Point2D.Double(futurePoint.getX() + i, futurePoint.getY() + j);
-                for (int k = 0; k < figureFromContainer.getWidth(); k++){
-                    for (int r = 0; r < figureFromContainer.getHeight(); r++) {
-                        Point2D prevDelta = new Point2D.Double(pointFromContainer.getX() + k, pointFromContainer.getY() + r);
-                        if (currentDelta.getX() == prevDelta.getX() && currentDelta.getY() == prevDelta.getY()) {
-                            logger.info(String.format("True i = %d j = %d k = %d r = %d", i, j, k, r));
-                            return true;
-                        }
-                    }
+        Point2D point2D = new Point2D.Double(currentPredatorPoint.getX() - predatorShape.getWidth(),
+                currentPredatorPoint.getY() - predatorShape.getHeight());
+
+        for (int i = 0; i < predatorShape.getWidth() * 3; i++) {
+            for (int j = 0; j < predatorShape.getHeight() * 3; j++) {
+                Point2D currentDelta = new Point2D.Double(point2D.getX() + i, point2D.getY() + j);
+                if (currentDelta.getX() >= pointFromContainer.getX()
+                        && currentDelta.getX() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
+                        && currentDelta.getY() >= pointFromContainer.getY()
+                        && currentDelta.getY() <= pointFromContainer.getY() + shapeFromContainer.getHeight()) {
+                    return true;
+                }
+
+                if (currentDelta.getX() + predatorShape.getWidth() >= pointFromContainer.getX()
+                        && currentDelta.getX() + predatorShape.getWidth() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
+                        && currentDelta.getY() >= pointFromContainer.getY()
+                        && currentDelta.getY() <= pointFromContainer.getY() + shapeFromContainer.getHeight()){
+                    return true;
+                }
+
+                if (currentDelta.getX() >= pointFromContainer.getX()
+                        && currentDelta.getX() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
+                        && currentDelta.getY() + predatorShape.getHeight() >= pointFromContainer.getY()
+                        && currentDelta.getY() + predatorShape.getHeight() <= pointFromContainer.getY() + shapeFromContainer.getHeight()){
+                    return true;
+                }
+
+                if (currentDelta.getX() + predatorShape.getWidth() >= pointFromContainer.getX()
+                        && currentDelta.getX() + predatorShape.getWidth() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
+                        && currentDelta.getY() + predatorShape.getHeight() >= pointFromContainer.getY()
+                        && currentDelta.getY() + predatorShape.getHeight() <= pointFromContainer.getY() + shapeFromContainer.getHeight()){
+                    return true;
                 }
             }
         }
@@ -37,6 +74,15 @@ public class CheckObjectNear {
         return false;
     }
 
+    /**
+     * Method is implemented buffer that makes check if some object
+     * is around future point of current object
+     * @param futurePoint Future object's position
+     * @param pointFromContainer Position with what will compare future point of current object
+     * @param currentFigure current object
+     * @param figureFromContainer object from container
+     * @return if object is near return true
+     */
     private static boolean isObjectAround(Point2D futurePoint, Point2D pointFromContainer,
                                           OceanShape currentFigure, OceanShape figureFromContainer) {
         int buff = 100;
@@ -76,41 +122,28 @@ public class CheckObjectNear {
         return false;
     }
 
-    public static boolean isGoldFishAroundPredator(Point2D currentPredatorPoint, Point2D pointFromContainer,
-                                                  OceanShape predatorShape, OceanShape shapeFromContainer) {
+    /**
+     * Method that accuracy checks if future point and point of object from container is intersect
+     * @param futurePoint Future object's position
+     * @param pointFromContainer Position with what will compare future point of current object
+     * @param currentFigure current object
+     * @param figureFromContainer object from container
+     * @return True if object will intersect
+     */
+    private static boolean isObjectAroundAccuracy(Point2D futurePoint, Point2D pointFromContainer,
+                                                  OceanShape currentFigure, OceanShape figureFromContainer) {
 
-        Point2D point2D = new Point2D.Double(currentPredatorPoint.getX() - predatorShape.getWidth(),
-                currentPredatorPoint.getY() - predatorShape.getHeight());
-
-        for (int i = 0; i < predatorShape.getWidth() * 3; i++) {
-            for (int j = 0; j < predatorShape.getHeight() * 3; j++) {
-                Point2D currentDelta = new Point2D.Double(point2D.getX() + i, point2D.getY() + j);
-                if (currentDelta.getX() >= pointFromContainer.getX()
-                        && currentDelta.getX() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
-                        && currentDelta.getY() >= pointFromContainer.getY()
-                        && currentDelta.getY() <= pointFromContainer.getY() + shapeFromContainer.getHeight()) {
-                    return true;
-                }
-
-                if (currentDelta.getX() + predatorShape.getWidth() >= pointFromContainer.getX()
-                        && currentDelta.getX() + predatorShape.getWidth() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
-                        && currentDelta.getY() >= pointFromContainer.getY()
-                        && currentDelta.getY() <= pointFromContainer.getY() + shapeFromContainer.getHeight()){
-                    return true;
-                }
-
-                if (currentDelta.getX() >= pointFromContainer.getX()
-                        && currentDelta.getX() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
-                        && currentDelta.getY() + predatorShape.getHeight() >= pointFromContainer.getY()
-                        && currentDelta.getY() + predatorShape.getHeight() <= pointFromContainer.getY() + shapeFromContainer.getHeight()){
-                    return true;
-                }
-
-                if (currentDelta.getX() + predatorShape.getWidth() >= pointFromContainer.getX()
-                        && currentDelta.getX() + predatorShape.getWidth() <= pointFromContainer.getX() + shapeFromContainer.getWidth()
-                        && currentDelta.getY() + predatorShape.getHeight() >= pointFromContainer.getY()
-                        && currentDelta.getY() + predatorShape.getHeight() <= pointFromContainer.getY() + shapeFromContainer.getHeight()){
-                    return true;
+        for (int i = 0; i < currentFigure.getWidth(); i++) {
+            for (int j = 0; j < currentFigure.getHeight(); j++) {
+                Point2D currentDelta = new Point2D.Double(futurePoint.getX() + i, futurePoint.getY() + j);
+                for (int k = 0; k < figureFromContainer.getWidth(); k++){
+                    for (int r = 0; r < figureFromContainer.getHeight(); r++) {
+                        Point2D prevDelta = new Point2D.Double(pointFromContainer.getX() + k, pointFromContainer.getY() + r);
+                        if (currentDelta.getX() == prevDelta.getX() && currentDelta.getY() == prevDelta.getY()) {
+                            logger.info(String.format("True i = %d j = %d k = %d r = %d", i, j, k, r));
+                            return true;
+                        }
+                    }
                 }
             }
         }

@@ -10,7 +10,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Class that moves fish in its own thread
+ * Class that moves all fishes in thread
  */
 public class MoveFish {
     private SafetyList<Fish> fishes;

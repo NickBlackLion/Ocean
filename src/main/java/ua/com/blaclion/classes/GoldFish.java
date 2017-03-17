@@ -9,7 +9,8 @@ import java.awt.geom.Point2D;
 import java.util.*;
 
 /**
- * Class that create gold fish
+ * Class that create gold fish and implement necessary method for it
+ * functioning
  */
 public class GoldFish extends Fish {
     private Logger logger = Logger.getLogger(this.getClass());

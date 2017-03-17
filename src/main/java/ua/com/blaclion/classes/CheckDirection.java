@@ -5,6 +5,10 @@ import org.apache.log4j.Logger;
 
 import java.awt.geom.Point2D;
 
+/**
+ * Class that compute in what direction should swim predator when it chases gold fish
+ */
+
 public class CheckDirection {
     private static Logger logger = Logger.getLogger(CheckDirection.class);
 

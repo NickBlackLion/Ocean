@@ -10,7 +10,8 @@ import java.awt.geom.Point2D;
 import java.util.Random;
 
 /**
- * Class that create predator fish
+ * Class that create predator fish and implement necessary method for it
+ * functioning
  */
 public class PredatorFish extends Fish {
     private Logger logger = Logger.getLogger(this.getClass());

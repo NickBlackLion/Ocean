@@ -90,7 +90,7 @@ public class Ocean extends JComponent {
 
     /**
      * Method that draw rocks in the ocean
-     * @param rect
+     * @param rect Shape of the Ocean
      * @param g2
      */
     private void drawRocksOnPanel(Rectangle2D rect, Graphics2D g2) {
@@ -111,7 +111,7 @@ public class Ocean extends JComponent {
 
     /**
      * Method that draw algae in the ocean
-     * @param rect
+     * @param rect Shape of the Ocean
      * @param g2
      */
     private void drawAlgaeOnPanel(Rectangle2D rect, Graphics2D g2) {
@@ -131,8 +131,8 @@ public class Ocean extends JComponent {
     }
 
     /**
-     * Method that draw fishes and predators in the ocean
-     * @param rect
+     * Method that draw gold fishes and predators in the ocean
+     * @param rect  Shape of the Ocean
      * @param g2
      */
     private void drawFishesOnPanel(Rectangle2D rect, Graphics2D g2) {

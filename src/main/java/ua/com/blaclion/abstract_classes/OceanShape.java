@@ -5,6 +5,9 @@ import ua.com.blaclion.classes.PointsCommonContainer;
 
 import java.awt.*;
 
+/**
+ * Common class for all shapes in yhe Ocean
+ */
 public abstract class OceanShape {
     private Logger logger = Logger.getLogger(this.getClass());
     private int width;

@@ -7,9 +7,9 @@ import ua.com.blaclion.abstract_classes.Fish;
  * Factory for creating fishes and predators
  */
 public class FishFactory {
-    private Logger logger = Logger.getLogger(this.getClass());
+    private static Logger logger = Logger.getLogger(FishFactory.class);
 
-    public Fish getNewFish(Class<?> fishClass){
+    public static Fish getNewFish(Class<?> fishClass){
         Fish insFish = null;
 
         if (fishClass == GoldFish.class){

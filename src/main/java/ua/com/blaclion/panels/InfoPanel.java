@@ -64,8 +64,10 @@ public class InfoPanel {
 
         //Makes instant move of all fishes
         nextDayButton.addActionListener(e -> {
-            moveFish.restartFishesMove();
-            reSetUpTimer(1000);
+            if (started) {
+                moveFish.restartFishesMove();
+                reSetUpTimer(1000);
+            }
         });
     }
 

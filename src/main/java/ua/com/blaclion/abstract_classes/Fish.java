@@ -40,7 +40,7 @@ public abstract class Fish extends OceanShape {
         }
 
         if (newFishDays == 0 && !getContainer().isSomeObjectNear(newFishPoint, this)) {
-            Fish newFish = new FishFactory().getNewFish(getClass());
+            Fish newFish = FishFactory.getNewFish(getClass());
 
             //Increase counter for Gold fishes
             if (newFish.getClass() == GoldFish.class) {

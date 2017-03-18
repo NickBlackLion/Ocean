@@ -58,8 +58,8 @@ public class PredatorFish extends Fish {
         Point2D fishNextPoint = new Point2D.Double(getXPoint() + xDirection, getYPoint() + yDirection);
         Point2D fishCurrentPoint = new Point2D.Double(getXPoint(), getYPoint());
 
-        OceanShape shape = getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this);
-        if (shape != null && shape.getClass() != GoldFish.class) {
+        OceanShape shape = getContainer().isFuturePosNearPredator(fishCurrentPoint, fishNextPoint, this);
+        if (shape != null) {
             xDirection = 0;
             yDirection = 0;
             logger.info("It's existed fish near exemplar " + getExemplar());
@@ -74,9 +74,10 @@ public class PredatorFish extends Fish {
                     xDirection = directionPair.getKey();
                     yDirection = directionPair.getValue();
                 }
+
                 OceanShape goldFishShape = getContainer().isFuturePosNearSomeObject(fishCurrentPoint, fishNextPoint, this);
                 if (goldFishShape != null && goldFishShape.getClass() == GoldFish.class) {
-                    GoldFish goldFish = (GoldFish) shape;
+                    GoldFish goldFish = (GoldFish) goldFishShape;
                     goldFish.fishAte();
                     setToHungryDeath();
                     logger.info("Exemplar " + goldFish.getExemplar() + " ate by " + getExemplar());

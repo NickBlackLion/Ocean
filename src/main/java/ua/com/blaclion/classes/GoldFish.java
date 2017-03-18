@@ -36,15 +36,6 @@ public class GoldFish extends Fish {
         int xDirection = (int)(Math.random()*20 - 10);
         int yDirection = (int)(Math.random()*20 - 10);
 
-        //Find this fish in common container of drew fishes
-        if(thisDrawFish == null){
-            for (DrawFish drawFish: getDrawFishes()) {
-                if (drawFish.getFish().equals(this)) {
-                    thisDrawFish = drawFish;
-                }
-            }
-        }
-
         deathCounter();
         newFishCounter();
 
@@ -122,6 +113,14 @@ public class GoldFish extends Fish {
 
     private void killForGoldFish() {
         kill();
+        //Find this fish in common container of drew fishes
+        if(thisDrawFish == null){
+            for (DrawFish drawFish: getDrawFishes()) {
+                if (drawFish.getFish().equals(this)) {
+                    thisDrawFish = drawFish;
+                }
+            }
+        }
         getDrawFishes().remove(thisDrawFish);
         decreaseAmountOfFishes();
     }

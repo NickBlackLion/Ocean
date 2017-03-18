@@ -95,6 +95,26 @@ public class PointsCommonContainer {
         return null;
     }
 
+    public OceanShape isFuturePosNearPredator(Point2D currentPoint, Point2D futurePoint, OceanShape oceanShape) {
+        lock.lock();
+        try {
+            for (Map.Entry<Integer, OceanShape> entry: whatObjectClass.entrySet()) {
+                OceanShape oceanShapeFromContainer = entry.getValue();
+
+                Point2D point2D = pointsOfObjectsInSea.get(entry.getKey());
+
+                if (!currentPoint.equals(point2D) && CheckObjectNear.isObjectNear(futurePoint, point2D,
+                        oceanShape, oceanShapeFromContainer) && oceanShapeFromContainer.getClass() != GoldFish.class) {
+                    return oceanShapeFromContainer;
+                }
+            }
+        } finally {
+            lock.unlock();
+        }
+
+        return null;
+    }
+
     /**
      * Method that makes predator chasing a gold fish
      * @param currentPoint
